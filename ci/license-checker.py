@@ -125,7 +125,12 @@ def main():
 
     print('OK')
     print()
+    prev_to_str = ''
     for l in sorted(libraries, key=lambda x: x['fullname']):
+        now_to_str = str(l)
+        if (prev_to_str == now_to_str):
+            continue
+        prev_to_str = now_to_str
         print(l["fullname"] + "version " + l['version'])
         print("  " + str(l))
 
