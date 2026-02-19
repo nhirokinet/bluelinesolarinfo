@@ -39,40 +39,79 @@
         android:layout_height="wrap_content"
         />
     <EditText
+        android:id="@+id/each_region_setting_region_name_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/each_region_setting_region_name_edit_text"
         />
     <TextView
         android:text="@string/each_region_activity_longitude_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
-    <EditText
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/each_region_setting_longitude_edit_text"
-        />
+        android:orientation="horizontal"
+        >
+        <EditText
+            android:id="@+id/each_region_setting_longitude_edit_text"
+            android:inputType="numberDecimal|numberSigned"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            />
+        <TextView
+            android:text="@string/unit_angle_deg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+    </LinearLayout>
     <TextView
         android:text="@string/each_region_activity_latitude_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
-    <EditText
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/each_region_setting_latitude_edit_text"
-        />
+        android:orientation="horizontal"
+        >
+        <EditText
+            android:id="@+id/each_region_setting_latitude_edit_text"
+            android:inputType="numberDecimal|numberSigned"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            />
+        <TextView
+            android:text="@string/unit_angle_deg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+    </LinearLayout>
     <TextView
         android:text="@string/each_region_activity_elevation_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
-    <EditText
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/each_region_setting_elevation_edit_text"
-        />
+        android:orientation="horizontal"
+        >
+        <EditText
+            android:id="@+id/each_region_setting_elevation_edit_text"
+            android:inputType="numberDecimal|numberSigned"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            />
+        <TextView
+            android:text="@string/unit_angle_meter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+    </LinearLayout>
     <TextView
         android:text="@string/each_region_activity_timezone_label"
         android:layout_width="wrap_content"

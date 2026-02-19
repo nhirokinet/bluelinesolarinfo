@@ -33,16 +33,16 @@ public class RegionsSettingActivity extends AppCompatActivity {
             }
             ((TextView)convertView.findViewById(R.id.listviewitem_region_name)).setText(item.getName());
             ((TextView)convertView.findViewById(R.id.listviewitem_region_timezone)).setText(
-                    getString(R.string.regions_setting_timezone_label, item.getZoneId().toString())
+                    getString(R.string.format_regions_setting_timezone_label, item.getZoneId().toString())
             );
             long longitudeAbs = (long) Math.floor(Math.abs(item.getLocationOnTheEarth().getLongitudeDeg()) * 36000.0);
             long latitudeAbs = (long) Math.floor(Math.abs(item.getLocationOnTheEarth().getLatitudeDeg()) * 36000.0);
             ((TextView)convertView.findViewById(R.id.listviewitem_region_coordinates)).setText(
                     getString(R.string.main_activity_location_coordinates_format,
                             item.getLocationOnTheEarth().getLongitudeDeg() >= 0.0 ? getString(R.string.coordinate_display_east) : getString(R.string.coordinate_display_west),
-                            getString(R.string.unit_angle_dms, longitudeAbs / 36000, (longitudeAbs % 36000) / 600, (longitudeAbs % 600) / 10, longitudeAbs % 10),
+                            getString(R.string.format_unit_angle_dms, longitudeAbs / 36000, (longitudeAbs % 36000) / 600, (longitudeAbs % 600) / 10, longitudeAbs % 10),
                             item.getLocationOnTheEarth().getLatitudeDeg() >= 0.0 ? getString(R.string.coordinate_display_north) : getString(R.string.coordinate_display_south),
-                            getString(R.string.unit_angle_dms, latitudeAbs / 36000, (latitudeAbs % 36000) / 600, (latitudeAbs % 600) / 10, latitudeAbs % 10)
+                            getString(R.string.format_unit_angle_dms, latitudeAbs / 36000, (latitudeAbs % 36000) / 600, (latitudeAbs % 600) / 10, latitudeAbs % 10)
                     )
             );
             ((TextView)convertView.findViewById(R.id.listviewitem_region_elevation)).setText(
@@ -113,7 +113,7 @@ public class RegionsSettingActivity extends AppCompatActivity {
         RegionOnTheEarth defaultRegion = DataStore.getInstance(getApplicationContext()).getDefaultRegion();
         CharSequence defaultRegionName = (defaultRegion == null) ? getString(R.string.main_activity_current_location) : defaultRegion.getName();
 
-        ((TextView) findViewById(R.id.regions_setting_default_region_text)).setText(getString(R.string.regions_setting_default_region_label, defaultRegionName));
+        ((TextView) findViewById(R.id.regions_setting_default_region_text)).setText(getString(R.string.format_regions_setting_default_region_label, defaultRegionName));
         listAdapter.clear();
         listAdapter.addAll(regions);
     }

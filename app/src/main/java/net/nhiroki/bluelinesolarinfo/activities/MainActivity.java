@@ -32,8 +32,6 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        this.regionOnTheEarth = DataStore.getInstance(getApplicationContext()).getDefaultRegion();
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -107,6 +105,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        this.regionOnTheEarth = DataStore.getInstance(getApplicationContext()).getDefaultRegion();
+
         updateSolarInfo();
     }
 
@@ -136,9 +136,9 @@ public class MainActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.main_view_region_coordinates_text)).setText(
                 getString(R.string.main_activity_location_coordinates_format,
                         regionOnTheEarth.getLocationOnTheEarth().getLongitudeDeg() >= 0.0 ? getString(R.string.coordinate_display_east) : getString(R.string.coordinate_display_west),
-                        getString(R.string.unit_angle_dms, longitudeAbs / 36000, (longitudeAbs % 36000) / 600, (longitudeAbs % 600) / 10, longitudeAbs % 10),
+                        getString(R.string.format_unit_angle_dms, longitudeAbs / 36000, (longitudeAbs % 36000) / 600, (longitudeAbs % 600) / 10, longitudeAbs % 10),
                         regionOnTheEarth.getLocationOnTheEarth().getLatitudeDeg() >= 0.0 ? getString(R.string.coordinate_display_north) : getString(R.string.coordinate_display_south),
-                        getString(R.string.unit_angle_dms, latitudeAbs / 36000, (latitudeAbs % 36000) / 600, (latitudeAbs % 600) / 10, latitudeAbs % 10)
+                        getString(R.string.format_unit_angle_dms, latitudeAbs / 36000, (latitudeAbs % 36000) / 600, (latitudeAbs % 600) / 10, latitudeAbs % 10)
                         )
         );
         ((TextView) findViewById(R.id.main_view_region_elevation_text)).setText(

@@ -229,7 +229,7 @@ public class AppInfoActivity extends AppCompatActivity {
         });
 
         ((TextView) findViewById(R.id.app_info_version_name)).setText(
-                getString(R.string.app_info_version, BuildConfig.VERSION_NAME)
+                getString(R.string.format_app_info_version, BuildConfig.VERSION_NAME)
         );
         ((TextView) findViewById(R.id.app_info_apache_license_full_text)).setText(APACHE_LICENSE_VERSION_2_FULL_TEXT);
 
