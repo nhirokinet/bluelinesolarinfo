@@ -1,3 +1,64 @@
 <resources>
     <string name="app_name">Blue Line Solar Info</string>
+    <!-- Loaded from app/src/main/res/layout/activity_app_info.xml, and don't forget to change the icon when changing author info -->
+    <string name="author_name" translatable="false">nhirokinet</string>
+    <string name="author_description" translatable="false">https://nhiroki.net/</string>
+    <string name="source_code_url" translatable="false">https://github.com/nhirokinet/bluelinesolarinfo</string>
+
+    <string name="unit_angle_dms">%1$d°%2$02d\'%3$02d.%4$01d\"</string>
+    <string name="coordinate_display_north">N</string>
+    <string name="coordinate_display_south">S</string>
+    <string name="coordinate_display_east">E</string>
+    <string name="coordinate_display_west">W</string>
+
+    <string name="main_activity_today_format">%1$s (today)</string>
+    <string name="main_activity_current_location">Current location</string>
+    <string name="main_activity_region_not_set">Region not set</string>
+    <string name="main_activity_location_coordinates_format">%1$s %2$s %3$s %4$s</string>
+    <string name="main_activity_location_elevation_meters">Elevation %1$.1fm</string>
+
+    <string name="main_activity_region_select_dialog_title">Select region</string>
+
+    <string name="menu_item_regions_setting">Regions setting</string>
+    <string name="menu_item_app_info">App info</string>
+
+    <string name="regions_setting_activity_title">Regions setting</string>
+    <string name="regions_setting_default_region_label">Default: %1$s</string>
+    <string name="regions_setting_change_default_region_button">Change default region</string>
+    <string name="regions_setting_timezone_label">Timezone: %1$s</string>
+    <string name="regions_setting_add_region_button">Add region</string>
+    <string name="regions_setting_dialog_default_region_select_title">Select default region</string>
+
+    <string name="each_region_activity_title">Configure region</string>
+    <string name="each_region_activity_delete_region_button">Delete</string>
+    <string name="each_region_activity_save_region_button">Save</string>
+    <string name="each_region_activity_region_name_label">Region name</string>
+    <string name="each_region_activity_longitude_label">Longitude</string>
+    <string name="each_region_activity_latitude_label">Latitude</string>
+    <string name="each_region_activity_elevation_label">Elevation</string>
+    <string name="each_region_activity_timezone_label">Timezone</string>
+    <string name="each_region_activity_change_timezone_button">Change</string>
+    <string name="each_region_activity_dialog_timezone_select_title">Select timezone</string>
+
+    <string name="app_info_version">Version %1$s</string>
+    <string name="app_info_source_code">Source code</string>
+    <string name="app_info_author">Author</string>
+
+    <!-- License information, untranslatable not to make the slightest difference -->
+    <string name="licensing_notice_header" translatable="false">License information</string>
+    <string name="licensing_notice_body" translatable="false">
+        Blue Line Solar Info is licensed under the Apache License, Version 2.0.
+        \n
+        \nBlue Line Solar Info contains code from the following libraries, which Apache License, Version 2.0, is applied to.
+        \n
+        \n- Android Jetpack
+        \n- JetBrains Java Annotations
+        \n- Kotlin Stdlib
+        \n- Coroutines support libraries for Kotlin
+        \n- kotlinx-coroutines-android
+        \n- Google Guava
+    </string>
+    <string name="license_apache_license_v2.0_name" translatable="false">Apache License, Version 2.0</string>
+    <string name="license_apache_license_v2.0_url" translatable="false">https://www.apache.org/licenses/LICENSE-2.0.txt</string>
+
 </resources>
