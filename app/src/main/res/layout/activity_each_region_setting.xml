@@ -35,6 +35,7 @@
     </LinearLayout>
     <TextView
         android:text="@string/each_region_activity_region_name_label"
+        android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
@@ -45,6 +46,12 @@
         />
     <TextView
         android:text="@string/each_region_activity_longitude_label"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <TextView
+        android:text="@string/each_region_activity_longitude_hint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
@@ -68,6 +75,12 @@
     </LinearLayout>
     <TextView
         android:text="@string/each_region_activity_latitude_label"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <TextView
+        android:text="@string/each_region_activity_latitude_hint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
@@ -91,6 +104,7 @@
     </LinearLayout>
     <TextView
         android:text="@string/each_region_activity_elevation_label"
+        android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
@@ -114,6 +128,7 @@
     </LinearLayout>
     <TextView
         android:text="@string/each_region_activity_timezone_label"
+        android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
@@ -121,13 +136,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:paddingBottom="10sp"
         >
-        <TextView
-            android:id="@+id/each_region_setting_timezone_text_view"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_weight="1.0"
-            />
+            >
+            <TextView
+                android:id="@+id/each_region_setting_timezone_human_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+            <TextView
+                android:id="@+id/each_region_setting_timezone_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+        </LinearLayout>
         <Button
             android:id="@+id/each_region_setting_change_timezone_button"
             android:text="@string/each_region_activity_change_timezone_button"
@@ -135,4 +162,10 @@
             android:layout_height="wrap_content"
             />
     </LinearLayout>
+    <CheckBox
+        android:id="@+id/each_region_setting_default_region_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/each_region_activity_checkbox_default_region"
+        />
 </LinearLayout>

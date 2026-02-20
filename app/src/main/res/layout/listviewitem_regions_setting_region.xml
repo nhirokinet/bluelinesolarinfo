@@ -14,12 +14,6 @@
         android:textStyle="bold"
         />
     <TextView
-        android:id="@+id/listviewitem_region_timezone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingStart="8sp"
-        />
-    <TextView
         android:id="@+id/listviewitem_region_coordinates"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,6 +21,12 @@
         />
     <TextView
         android:id="@+id/listviewitem_region_elevation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="8sp"
+        />
+    <TextView
+        android:id="@+id/listviewitem_region_timezone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingStart="8sp"

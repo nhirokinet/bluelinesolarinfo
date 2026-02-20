@@ -16,6 +16,7 @@ import net.nhiroki.bluelinesolarinfo.R;
 import net.nhiroki.bluelinesolarinfo.region.RegionOnTheEarth;
 import net.nhiroki.bluelinesolarinfo.storage.DataStore;
 
+import java.time.format.TextStyle;
 import java.util.List;
 
 public class RegionsSettingActivity extends AppCompatActivity {
@@ -33,7 +34,10 @@ public class RegionsSettingActivity extends AppCompatActivity {
             }
             ((TextView)convertView.findViewById(R.id.listviewitem_region_name)).setText(item.getName());
             ((TextView)convertView.findViewById(R.id.listviewitem_region_timezone)).setText(
-                    getString(R.string.format_regions_setting_timezone_label, item.getZoneId().toString())
+                    getString(R.string.format_regions_setting_timezone_label,
+                              item.getZoneId().getDisplayName(TextStyle.FULL_STANDALONE, getResources().getConfiguration().getLocales().get(0)),
+                              item.getZoneId().toString()
+                    )
             );
             long longitudeAbs = (long) Math.floor(Math.abs(item.getLocationOnTheEarth().getLongitudeDeg()) * 36000.0);
             long latitudeAbs = (long) Math.floor(Math.abs(item.getLocationOnTheEarth().getLatitudeDeg()) * 36000.0);

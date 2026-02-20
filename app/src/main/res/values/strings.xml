@@ -18,6 +18,9 @@
     <string name="main_activity_region_not_set">Region not set</string>
     <string name="main_activity_location_coordinates_format">%1$s %2$s %3$s %4$s</string>
     <string name="main_activity_location_elevation_meters">Elevation %1$.1fm</string>
+    <string name="main_activity_region_timezone">Timezone: %1$s (%2$s)</string>
+    <string name="main_activity_first_guide_add_region_text">No region is set yet. You can configure regions via top-right menu button.</string>
+    <string name="main_activity_first_guest_add_region_now_button">Add region now</string>
 
     <string name="main_activity_region_select_dialog_title">Select region</string>
 
@@ -27,7 +30,7 @@
     <string name="regions_setting_activity_title">Regions setting</string>
     <string name="format_regions_setting_default_region_label">Default: %1$s</string>
     <string name="regions_setting_change_default_region_button">Change default region</string>
-    <string name="format_regions_setting_timezone_label">Timezone: %1$s</string>
+    <string name="format_regions_setting_timezone_label">Timezone: %1$s (%2$s)</string>
     <string name="regions_setting_add_region_button">Add region</string>
     <string name="regions_setting_dialog_default_region_select_title">Select default region</string>
 
@@ -36,11 +39,14 @@
     <string name="each_region_activity_save_region_button">Save</string>
     <string name="each_region_activity_region_name_label">Region name</string>
     <string name="each_region_activity_longitude_label">Longitude</string>
+    <string name="each_region_activity_longitude_hint">+:East, -:West</string>
     <string name="each_region_activity_latitude_label">Latitude</string>
+    <string name="each_region_activity_latitude_hint">+:North, -:South</string>
     <string name="each_region_activity_elevation_label">Elevation</string>
     <string name="each_region_activity_timezone_label">Timezone</string>
     <string name="each_region_activity_change_timezone_button">Change</string>
     <string name="each_region_activity_dialog_timezone_select_title">Select timezone</string>
+    <string name="each_region_activity_checkbox_default_region">Set as default region</string>
 
     <string name="each_region_activity_error_dialog_title">Error</string>
     <string name="each_region_activity_error_dialog_message_name_empty">Name is empty</string>

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -18,8 +19,12 @@ import net.nhiroki.bluelinesolarinfo.R;
 import net.nhiroki.bluelinesolarinfo.region.RegionOnTheEarth;
 import net.nhiroki.bluelinesolarinfo.storage.DataStore;
 
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -77,6 +82,10 @@ public class MainActivity extends AppCompatActivity {
 
             builder.create().show();
         });
+
+        findViewById(R.id.main_view_first_guide_add_region_button).setOnClickListener(view -> {
+            startActivity(new android.content.Intent(this, EachRegionSettingActivity.class));
+        });
     }
 
     @Override
@@ -114,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         LocalDate today = regionOnTheEarth != null ? LocalDate.now(regionOnTheEarth.getZoneId()) : LocalDate.now();
         LocalDate date = (targetDate == null) ? today : targetDate;
 
-        String todayString = date.toString();
+        String todayString = date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG).withLocale(getResources().getConfiguration().getLocales().get(0)));
         if (date.equals(today)) {
             ((TextView) findViewById(R.id.main_view_date_view)).setText(getString(R.string.main_activity_today_format, todayString));
         } else {
@@ -127,8 +136,18 @@ public class MainActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.main_view_region_text)).setText(R.string.main_activity_region_not_set);
             ((TextView) findViewById(R.id.main_view_region_coordinates_text)).setText("");
             ((TextView) findViewById(R.id.main_view_region_elevation_text)).setText("");
+            ((TextView) findViewById(R.id.main_view_region_timezone_text)).setText(
+                    getString(R.string.format_regions_setting_timezone_label,
+                            ZoneId.systemDefault().getDisplayName(java.time.format.TextStyle.FULL_STANDALONE, getResources().getConfiguration().getLocales().get(0)),
+                            ZoneId.systemDefault().toString()
+                    )
+            );
+
+            boolean regionRegistered = DataStore.getInstance(getApplicationContext()).getRegions().size() > 0;
+            findViewById(R.id.main_view_first_guide_area).setVisibility(regionRegistered ? android.view.View.GONE : android.view.View.VISIBLE);
             return;
         }
+        findViewById(R.id.main_view_first_guide_area).setVisibility(android.view.View.GONE);
 
         ((TextView) findViewById(R.id.main_view_region_text)).setText(regionOnTheEarth.getName());
         long longitudeAbs = (long) Math.floor(Math.abs(regionOnTheEarth.getLocationOnTheEarth().getLongitudeDeg()) * 36000.0);
@@ -143,6 +162,12 @@ public class MainActivity extends AppCompatActivity {
         );
         ((TextView) findViewById(R.id.main_view_region_elevation_text)).setText(
                 getString(R.string.main_activity_location_elevation_meters, regionOnTheEarth.getLocationOnTheEarth().getElevationMeters())
+        );
+        ((TextView) findViewById(R.id.main_view_region_timezone_text)).setText(
+                getString(R.string.format_regions_setting_timezone_label,
+                        regionOnTheEarth.getZoneId().getDisplayName(java.time.format.TextStyle.FULL_STANDALONE, getResources().getConfiguration().getLocales().get(0)),
+                        regionOnTheEarth.getZoneId().toString()
+                )
         );
 
         Instant t = date.atStartOfDay(regionOnTheEarth.getZoneId()).toInstant();

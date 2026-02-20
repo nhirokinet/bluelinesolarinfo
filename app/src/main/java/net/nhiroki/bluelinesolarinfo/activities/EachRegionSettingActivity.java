@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -41,6 +42,9 @@ public class EachRegionSettingActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.each_region_setting_delete_region_button).setOnClickListener(view -> {
+            if (DataStore.getInstance(EachRegionSettingActivity.this.getApplicationContext()).getDefaultRegion().getId() == regionId) {
+                DataStore.getInstance(EachRegionSettingActivity.this.getApplicationContext()).setDefaultRegion(null);
+            }
             DataStore.getInstance(EachRegionSettingActivity.this.getApplicationContext()).removeRegionById(regionId);
             EachRegionSettingActivity.this.finish();
         });
@@ -100,9 +104,20 @@ public class EachRegionSettingActivity extends AppCompatActivity {
                     regionId, regionName, zoneId, new LocationOnTheEarth(longitudeDeg, latitudeDeg, elevationMeters)
             );
             if (isNewRegion) {
-                DataStore.getInstance(EachRegionSettingActivity.this.getApplicationContext()).createRegion(region);
+                long savedId = DataStore.getInstance(EachRegionSettingActivity.this.getApplicationContext()).createRegion(region);
+                if (((CheckBox)findViewById(R.id.each_region_setting_default_region_checkbox)).isChecked()) {
+                    DataStore.getInstance(EachRegionSettingActivity.this.getApplicationContext()).setDefaultRegion(DataStore.getInstance(EachRegionSettingActivity.this.getApplicationContext()).getRegionById(savedId));
+                }
             } else {
                 DataStore.getInstance(EachRegionSettingActivity.this.getApplicationContext()).updateRegion(region);
+                if (((CheckBox)findViewById(R.id.each_region_setting_default_region_checkbox)).isChecked()) {
+                    DataStore.getInstance(EachRegionSettingActivity.this.getApplicationContext()).setDefaultRegion(region);
+                } else {
+                    RegionOnTheEarth defaultRegion = DataStore.getInstance(EachRegionSettingActivity.this.getApplicationContext()).getDefaultRegion();
+                    if (defaultRegion != null && defaultRegion.getId() == regionId) {
+                        DataStore.getInstance(EachRegionSettingActivity.this.getApplicationContext()).setDefaultRegion(null);
+                    }
+                }
             }
             EachRegionSettingActivity.this.finish();
         });
@@ -137,6 +152,7 @@ public class EachRegionSettingActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     ((TextView)EachRegionSettingActivity.this.findViewById(R.id.each_region_setting_timezone_text_view)).setText(tzList[which]);
+                    ((TextView)EachRegionSettingActivity.this.findViewById(R.id.each_region_setting_timezone_human_view)).setText(ZoneId.of(tzList[which]).getDisplayName(TextStyle.FULL_STANDALONE, getResources().getConfiguration().getLocales().get(0)));
                 }
             };
             AlertDialog.Builder builder = new AlertDialog.Builder(EachRegionSettingActivity.this);
@@ -164,6 +180,8 @@ public class EachRegionSettingActivity extends AppCompatActivity {
             ((TextView)findViewById(R.id.each_region_setting_latitude_edit_text)).setText(Double.toString(locationOnTheEarth.getLatitudeDeg()));
             ((TextView)findViewById(R.id.each_region_setting_elevation_edit_text)).setText(Double.toString(locationOnTheEarth.getElevationMeters()));
             ((TextView)findViewById(R.id.each_region_setting_timezone_text_view)).setText(region.getZoneId().toString());
+            ((TextView)findViewById(R.id.each_region_setting_timezone_human_view)).setText(region.getZoneId().getDisplayName(TextStyle.FULL_STANDALONE, getResources().getConfiguration().getLocales().get(0)));
+            ((CheckBox)findViewById(R.id.each_region_setting_default_region_checkbox)).setChecked(DataStore.getInstance(getApplicationContext()).getDefaultRegion() != null && DataStore.getInstance(getApplicationContext()).getDefaultRegion().getId() == regionId);
 
         } else {
             this.isNewRegion = true;
@@ -174,8 +192,10 @@ public class EachRegionSettingActivity extends AppCompatActivity {
             ((TextView)findViewById(R.id.each_region_setting_region_name_edit_text)).setText("");
             ((TextView)findViewById(R.id.each_region_setting_longitude_edit_text)).setText("");
             ((TextView)findViewById(R.id.each_region_setting_latitude_edit_text)).setText("");
-            ((TextView)findViewById(R.id.each_region_setting_elevation_edit_text)).setText("");
+            ((TextView)findViewById(R.id.each_region_setting_elevation_edit_text)).setText("0");
             ((TextView)findViewById(R.id.each_region_setting_timezone_text_view)).setText(ZoneId.systemDefault().toString());
+            ((TextView)findViewById(R.id.each_region_setting_timezone_human_view)).setText(ZoneId.systemDefault().getDisplayName(TextStyle.FULL_STANDALONE, getResources().getConfiguration().getLocales().get(0)));
+            ((CheckBox)findViewById(R.id.each_region_setting_default_region_checkbox)).setChecked(DataStore.getInstance(getApplicationContext()).getRegions().size() == 0);
         }
     }
 }

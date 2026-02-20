@@ -126,14 +126,14 @@ public class DataStore extends SQLiteOpenHelper {
         }
     }
 
-    public void createRegion(RegionOnTheEarth region) {
+    public long createRegion(RegionOnTheEarth region) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", region.getName());
         contentValues.put("timezone", region.getZoneId().toString());
         contentValues.put("longitude", region.getLocationOnTheEarth().getLongitudeDeg());
         contentValues.put("latitude", region.getLocationOnTheEarth().getLatitudeDeg());
         contentValues.put("elevation", region.getLocationOnTheEarth().getElevationMeters());
-        getWritableDatabase().insert("regions", null, contentValues);
+        return getWritableDatabase().insert("regions", null, contentValues);
     }
 
     public void updateRegion(RegionOnTheEarth region) {
