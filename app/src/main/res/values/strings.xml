@@ -15,12 +15,18 @@
 
     <string name="main_activity_today_format">%1$s (today)</string>
     <string name="main_activity_current_location">Current location</string>
-    <string name="main_activity_region_not_set">Region not set</string>
+    <string name="main_activity_message_location_fetching">Positioning...</string>
+    <string name="main_activity_message_location_fetch_error">Failed to get the current location</string>
+    <string name="main_activity_message_error_permission_location_fetch">App has no permission to get the current position</string>
     <string name="main_activity_location_coordinates_format">%1$s %2$s %3$s %4$s</string>
     <string name="main_activity_location_elevation_meters">Elevation %1$.1fm</string>
+    <string name="main_activity_location_elevation_meters_unknown">Elevation -.-m</string>
     <string name="main_activity_region_timezone">Timezone: %1$s (%2$s)</string>
     <string name="main_activity_first_guide_add_region_text">No region is set yet. You can configure regions via top-right menu button.</string>
     <string name="main_activity_first_guest_add_region_now_button">Add region now</string>
+    <string name="main_activity_config_location_measure_use_elevation">Consider elevation in calculation</string>
+    <string name="main_activity_nolocpriv_add_location_privilege_text">This app currently does not have privilege to fetch the current location. If you want to display according to device location, please grant the privilege. You can add region from menu to use without location permission.</string>
+    <string name="main_activity_nolocpriv_add_location_privilege_button">Grant location access</string>
 
     <string name="main_activity_region_select_dialog_title">Select region</string>
 
@@ -43,6 +49,7 @@
     <string name="each_region_activity_latitude_label">Latitude</string>
     <string name="each_region_activity_latitude_hint">+:North, -:South</string>
     <string name="each_region_activity_elevation_label">Elevation</string>
+    <string name="each_region_activity_elevation_hint">In calculation of sunrise/sunset, elevation is often assumed as 0m. If you like to assume elevation 0m, input 0 here.</string>
     <string name="each_region_activity_timezone_label">Timezone</string>
     <string name="each_region_activity_change_timezone_button">Change</string>
     <string name="each_region_activity_dialog_timezone_select_title">Select timezone</string>
