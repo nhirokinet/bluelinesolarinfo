@@ -17,6 +17,27 @@ public class AstronomicalObjectCalculator {
     public enum ReferencePoint { TOP, CENTER, BOTTOM };
 
 
+    public static boolean isObjectAboveHorizon(AstronomicalObject astronomicalObject, Instant time,
+                                               LocationOnTheEarth locationOnTheEarth, boolean horizonByElevation,
+                                               ReferencePoint referencePoint) throws UnsupportedDateRangeException, AstronomicalPhenomenonComputationException {
+        double hourAngle = new TimePointOnTheEarth(time).calculateSiderealTimeRad(locationOnTheEarth.getLongitudeRad()) - astronomicalObject.calculateRightAscensionRad(time);
+        double declination = astronomicalObject.calculateDeclinationRad(time);
+
+        int posReference = 0;
+        if (referencePoint == ReferencePoint.TOP) {
+            posReference = 1;
+        } else if (referencePoint == ReferencePoint.CENTER) {
+            posReference = 0;
+        } else if (referencePoint == ReferencePoint.BOTTOM) {
+            posReference = -1;
+        }
+
+        double height = CoordinateConversion.calculateHeightRadFromHourAngle(hourAngle, declination, locationOnTheEarth.getLatitudeRad());
+        double heightStandard = calculateActualCenterHeightRad(time, locationOnTheEarth.getElevationMeters(), astronomicalObject, posReference, true,  -Math.toRadians(Earth.ATMOSPHERIC_REFRACTION_AT_HORIZON_DEC_SEC / 3600.0));
+
+        return height > heightStandard;
+    }
+
     /**
      * Return time of rise of @estronomialObject from within 24 hours.<br>
      * <br>

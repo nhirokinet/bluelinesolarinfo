@@ -7,6 +7,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,7 +27,14 @@ import net.nhiroki.bluelinesolarinfo.R;
 import net.nhiroki.bluelinesolarinfo.region.RegionOnTheEarth;
 import net.nhiroki.bluelinesolarinfo.storage.AppPreferences;
 import net.nhiroki.bluelinesolarinfo.storage.DataStore;
+import net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects.Moon;
+import net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects.Sun;
+import net.nhiroki.lib.bluelineastrolib.earth.TimePointOnTheEarth;
+import net.nhiroki.lib.bluelineastrolib.exceptions.AstronomicalPhenomenonComputationException;
+import net.nhiroki.lib.bluelineastrolib.exceptions.UnsupportedDateRangeException;
 import net.nhiroki.lib.bluelineastrolib.location.LocationOnTheEarth;
+import net.nhiroki.lib.bluelineastrolib.logic.AstronomicalObjectCalculator;
+import net.nhiroki.lib.bluelineastrolib.tool.MoonTool;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -33,6 +42,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private enum LocationMeasureStatus { UNKNOWN, NO_PERMISSION, FETCHING, SUCCESS, ERROR };
@@ -49,12 +59,18 @@ public class MainActivity extends AppCompatActivity {
     private LocationListener locationListener = null;
     private boolean locationListenerInUse = false;
 
+    private Handler refreshHandler;
+    private Runnable refreshRunnable;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+        this.refreshHandler = new Handler(Looper.getMainLooper());
+        this.refreshRunnable = () -> MainActivity.this.periodicRefresh();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -181,6 +197,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
 
+        this.refreshHandler.removeCallbacks(this.refreshRunnable);
         if (this.locationListenerInUse && this.locationManager != null) {
             this.locationManager.removeUpdates(this.locationListener);
             this.locationListenerInUse = false;
@@ -194,6 +211,25 @@ public class MainActivity extends AppCompatActivity {
         this.currentLocation = null;
         this.locationMeasureStatus = LocationMeasureStatus.UNKNOWN;
         updateSolarInfo();
+    }
+
+    private ZoneId previousZoneIdForRefresh = null;
+    private LocationOnTheEarth previousLocationForRefresh = null;
+    private void periodicRefresh() {
+        if (this.previousLocationForRefresh != null && this.previousZoneIdForRefresh != null) {
+            Instant now = Instant.now();
+
+            LocalDate today = now.atZone(this.previousZoneIdForRefresh).toLocalDate();
+            LocalDate date = (targetDate == null) ? today : this.targetDate;
+
+            String todayString = date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG).withLocale(getResources().getConfiguration().getLocales().get(0)));
+            if (date.equals(today)) {
+                ((TextView) findViewById(R.id.main_view_date_view)).setText(getString(R.string.main_activity_today_format, todayString));
+            } else {
+                ((TextView) findViewById(R.id.main_view_date_view)).setText(todayString);
+            }
+            this.displayNowSolarInfo(now, this.previousLocationForRefresh, this.previousZoneIdForRefresh);
+        }
     }
 
     private void updateSolarInfo() {
@@ -310,6 +346,136 @@ public class MainActivity extends AppCompatActivity {
                 )
         );
 
+        if (locationOnTheEarth == null) {
+            findViewById(R.id.main_view_solar_info_today_area).setVisibility(View.GONE);
+            findViewById(R.id.main_view_solar_info_now_area).setVisibility(View.GONE);
+            return;
+        }
+
+        findViewById(R.id.main_view_solar_info_today_area).setVisibility(View.VISIBLE);
+
         Instant todayStart = date.atStartOfDay(zoneId).toInstant();
+        Instant midOfTheDay = date.atTime(12, 0).atZone(zoneId).toInstant();
+        this.displayTodaySolarInfo(todayStart, midOfTheDay, locationOnTheEarth, zoneId);
+
+        if (date.equals(today)) {
+            this.displayNowSolarInfo(now, locationOnTheEarth, zoneId);
+            findViewById(R.id.main_view_solar_info_now_area).setVisibility(View.VISIBLE);
+        } else {
+            findViewById(R.id.main_view_solar_info_now_area).setVisibility(View.GONE);
+            this.refreshHandler.removeCallbacks(this.refreshRunnable);
+        }
+    }
+
+    // Uses @midOfTheDay to calculate moon phase. Required because it can be 11 hours or 13 hours from @todayStart due to DST
+    private void displayTodaySolarInfo(Instant todayStart, Instant midOfTheDay, LocationOnTheEarth locationOnTheEarth, ZoneId zoneId) {
+        Sun sun = new Sun();
+        Moon moon = new Moon();
+
+        Locale locale = getResources().getConfiguration().getLocales().get(0);
+        boolean timeFormat24Hour = android.text.format.DateFormat.is24HourFormat(this.getApplicationContext());
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, timeFormat24Hour ? "Hm" : "hma"), locale);
+
+        try {
+            Instant sunrise = AstronomicalObjectCalculator.calculateRiseWithin24h(sun, todayStart, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP);
+            if (sunrise != null) {
+                ((TextView) findViewById(R.id.main_view_solar_info_today_sunrise_time)).setText(sunrise.atZone(zoneId).format(timeFormatter));
+            } else {
+                ((TextView) findViewById(R.id.main_view_solar_info_today_sunrise_time)).setText(R.string.main_activity_solar_info_today_time_placeholder_event_not_occur);
+            }
+
+            Instant sunculmination = AstronomicalObjectCalculator.calculateCulminationWithin24h(sun, todayStart, locationOnTheEarth);
+            if (sunculmination != null) {
+                ((TextView) findViewById(R.id.main_view_solar_info_today_sun_culmination_time)).setText(sunculmination.atZone(zoneId).format(timeFormatter));
+
+                if (AstronomicalObjectCalculator.isObjectAboveHorizon(sun, sunculmination, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP)) {
+                    ((TextView) findViewById(R.id.main_view_solar_info_today_sun_culmination_invisible_label)).setText("");
+                } else {
+                    ((TextView) findViewById(R.id.main_view_solar_info_today_sun_culmination_invisible_label)).setText(R.string.main_activity_solar_info_today_invisible_culmination_label);
+                }
+            } else {
+                ((TextView) findViewById(R.id.main_view_solar_info_today_sun_culmination_time)).setText(R.string.main_activity_solar_info_today_time_placeholder_event_not_occur);
+                ((TextView) findViewById(R.id.main_view_solar_info_today_sun_culmination_invisible_label)).setText("");
+            }
+
+            Instant sunset = AstronomicalObjectCalculator.calculateSetWithin24h(sun, todayStart, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP);
+            if (sunset != null) {
+                ((TextView) findViewById(R.id.main_view_solar_info_today_sunset_time)).setText(sunset.atZone(zoneId).format(timeFormatter));
+            } else {
+                ((TextView) findViewById(R.id.main_view_solar_info_today_sunset_time)).setText(R.string.main_activity_solar_info_today_time_placeholder_event_not_occur);
+            }
+
+            double moonPhaseDeg = MoonTool.calculateMoonPhaseDeg(midOfTheDay);
+            ((net.nhiroki.androidlib.bluelineastroandroidlib.views.MoonPhaseView) findViewById(R.id.main_view_solar_info_today_moon_phase_view)).setMoonPhaseDeg(moonPhaseDeg);
+
+            Instant prevNewMoon = MoonTool.calculatePreviousTimeOfMoonPhaseByDeg(midOfTheDay, 0.0);
+            double daysAfterPrevNewMoon = ((double)(midOfTheDay.toEpochMilli() - prevNewMoon.toEpochMilli())) / 86400000.0;
+            ((TextView) findViewById(R.id.main_view_solar_info_today_moon_phase_days_text)).setText(String.format("%.1f", daysAfterPrevNewMoon));
+
+            Instant moonrise = AstronomicalObjectCalculator.calculateRiseWithin24h(moon, todayStart, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.CENTER);
+            if (moonrise != null) {
+                ((TextView) findViewById(R.id.main_view_solar_info_today_moonrise_time)).setText(moonrise.atZone(zoneId).format(timeFormatter));
+            } else {
+                ((TextView) findViewById(R.id.main_view_solar_info_today_moonrise_time)).setText(R.string.main_activity_solar_info_today_time_placeholder_event_not_occur);
+            }
+
+            Instant moonculmination = AstronomicalObjectCalculator.calculateCulminationWithin24h(moon, todayStart, locationOnTheEarth);
+            if (moonculmination != null) {
+                ((TextView) findViewById(R.id.main_view_solar_info_today_moon_culmination_time)).setText(moonculmination.atZone(zoneId).format(timeFormatter));
+
+                if (AstronomicalObjectCalculator.isObjectAboveHorizon(moon, moonculmination, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.CENTER)) {
+                    ((TextView) findViewById(R.id.main_view_solar_info_today_moon_culmination_invisible_label)).setText("");
+                } else {
+                    ((TextView) findViewById(R.id.main_view_solar_info_today_moon_culmination_invisible_label)).setText(R.string.main_activity_solar_info_today_invisible_culmination_label);
+                }
+            } else {
+                ((TextView) findViewById(R.id.main_view_solar_info_today_moon_culmination_time)).setText(R.string.main_activity_solar_info_today_time_placeholder_event_not_occur);
+                ((TextView) findViewById(R.id.main_view_solar_info_today_moon_culmination_invisible_label)).setText("");
+            }
+
+            Instant moonset = AstronomicalObjectCalculator.calculateSetWithin24h(moon, todayStart, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.CENTER);
+            if (moonset != null) {
+                ((TextView) findViewById(R.id.main_view_solar_info_today_moonset_time)).setText(moonset.atZone(zoneId).format(timeFormatter));
+            } else {
+                ((TextView) findViewById(R.id.main_view_solar_info_today_moonset_time)).setText(R.string.main_activity_solar_info_today_time_placeholder_event_not_occur);
+            }
+
+        } catch (AstronomicalPhenomenonComputationException e) {
+            throw new RuntimeException(e);
+        } catch (UnsupportedDateRangeException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    private static String degTo24HStr(double deg) {
+        int sec = (int)(deg / 360.0 * 86400.0);
+        return String.format("%02d:%02d:%02d", sec / 3600, (sec % 3600) / 60, sec % 60);
+    };
+
+    private void displayNowSolarInfo(Instant now, LocationOnTheEarth locationOnTheEarth, ZoneId zoneId) {
+        TimePointOnTheEarth nowOnTheEarth = new TimePointOnTheEarth(now);
+
+        Locale locale = getResources().getConfiguration().getLocales().get(0);
+        boolean timeFormat24Hour = android.text.format.DateFormat.is24HourFormat(this.getApplicationContext());
+        DateTimeFormatter timeFormatterWithSec = DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, timeFormat24Hour ? "Hms" : "hmsa"), locale);
+
+        try {
+            ((TextView) findViewById(R.id.main_view_solar_info_now_greenwich_localtime)).setText(now.atZone(zoneId).format(timeFormatterWithSec));
+
+            double greenwichSideralTimeDeg = nowOnTheEarth.calculateSiderealTimeDeg(0.0);
+            ((TextView) findViewById(R.id.main_view_solar_info_now_greenwich_sidereal_time)).setText(degTo24HStr(greenwichSideralTimeDeg));
+
+            double localSideralTimeDeg = nowOnTheEarth.calculateSiderealTimeDeg(locationOnTheEarth.getLongitudeDeg());
+            ((TextView) findViewById(R.id.main_view_solar_info_now_local_sidereal_time)).setText(degTo24HStr(localSideralTimeDeg));
+
+        } catch (UnsupportedDateRangeException e) {
+            throw new RuntimeException(e);
+        }
+
+        this.previousLocationForRefresh = locationOnTheEarth;
+        this.previousZoneIdForRefresh = zoneId;
+
+        this.refreshHandler.postDelayed(this.refreshRunnable, 333);
     }
 }

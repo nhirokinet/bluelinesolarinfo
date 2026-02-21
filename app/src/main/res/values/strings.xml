@@ -28,6 +28,22 @@
     <string name="main_activity_nolocpriv_add_location_privilege_text">This app currently does not have privilege to fetch the current location. If you want to display according to device location, please grant the privilege. You can add region from menu to use without location permission.</string>
     <string name="main_activity_nolocpriv_add_location_privilege_button">Grant location access</string>
 
+    <string name="main_activity_solar_info_today_invisible_culmination_label">(Invisible)</string>
+    <string name="main_activity_solar_info_today_time_placeholder_event_not_occur">--:--</string>
+    <string name="main_activity_solar_info_today_sun_header">Sun</string>
+    <string name="main_activity_solar_info_today_sunrise">Sunrise:</string>
+    <string name="main_activity_solar_info_today_sun_culmination">Culmination:</string>
+    <string name="main_activity_solar_info_today_sunset">Sunset:</string>
+    <string name="main_activity_solar_info_today_moon_header">Moon</string>
+    <string name="main_activity_solar_info_today_moon_is_noon_info"> at noon</string>
+    <string name="main_activity_solar_info_today_moonrise">Moonrise:</string>
+    <string name="main_activity_solar_info_today_moon_culmination">Culmination:</string>
+    <string name="main_activity_solar_info_today_moonset">Moonset:</string>
+
+    <string name="main_activity_solar_info_now_localtime">Local time:</string>
+    <string name="main_activity_solar_info_now_sidereal_time_greenwich">Greenwich sidereal time:</string>
+    <string name="main_activity_solar_info_now_sidereal_time_local">Local sidereal time:</string>
+
     <string name="main_activity_region_select_dialog_title">Select region</string>
 
     <string name="menu_item_regions_setting">Regions setting</string>
