@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
     private @Nullable LocationManager locationManager = null;
     private LocationListener locationListener = null;
     private boolean locationListenerInUse = false;
+    private String locationPrevProvider = "";
+    private double locationPrevAccuracy = 1000000.0;
 
     private Handler refreshHandler;
     private Runnable refreshRunnable;
@@ -130,6 +132,14 @@ public class MainActivity extends AppCompatActivity {
         this.locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(android.location.Location location) {
+                if (MainActivity.this.currentLocation != null) {
+                    if (locationPrevProvider.equals(LocationManager.FUSED_PROVIDER) && !location.getProvider().equals(LocationManager.FUSED_PROVIDER)) {
+                        return;
+                    }
+                    if ((!locationPrevProvider.equals(location.getProvider())) && locationPrevAccuracy < location.getAccuracy()) {
+                        return;
+                    }
+                }
                 double height;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                     height = location.hasAltitude() ? (location.hasMslAltitude() ? location.getMslAltitudeMeters() : location.getAltitude()) : 0.0;
@@ -138,6 +148,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 MainActivity.this.currentLocation = new LocationOnTheEarth(location.getLongitude(), location.getLatitude(), height);
                 MainActivity.this.locationMeasureStatus = LocationMeasureStatus.SUCCESS;
+                MainActivity.this.locationPrevProvider = location.getProvider();
+                MainActivity.this.locationPrevAccuracy = location.getAccuracy();
                 MainActivity.this.updateSolarInfo();
             }
 
@@ -251,7 +263,11 @@ public class MainActivity extends AppCompatActivity {
 
                     this.currentLocation = null;
                     this.locationMeasureStatus = LocationMeasureStatus.FETCHING;
-                    this.locationManager.requestLocationUpdates(LocationManager.FUSED_PROVIDER, 3000l, 1.0f, this.locationListener);
+                    this.locationPrevProvider = "";
+                    this.locationPrevAccuracy = 1000000.0;
+                    for (String provider : this.locationManager.getProviders(true)) {
+                        this.locationManager.requestLocationUpdates(provider, 3000l, 1.0f, this.locationListener);
+                    }
                     this.locationListenerInUse = true;
                 }
 
