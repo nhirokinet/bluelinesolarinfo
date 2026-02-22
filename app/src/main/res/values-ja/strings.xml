@@ -85,7 +85,7 @@
     <string name="each_region_activity_error_dialog_message_coordinate_format">座標が正しくありません</string>
     <string name="each_region_activity_error_dialog_message_longitude_range">経度は -180.0 から 180.0 の間である必要があります</string>
     <string name="each_region_activity_error_dialog_message_latitude_range">緯度は -90.0 から 90.0 の間である必要があります</string>
-    <string name="each_region_activity_error_dialog_message_elevation_range">標高は正の値である必要があります</string>
+    <string name="each_region_activity_error_dialog_message_elevation_range">標高は非負の値である必要があります</string>
 
     <string name="format_app_info_version">バージョン %1$s</string>
     <string name="app_info_source_code">ソースコード</string>
