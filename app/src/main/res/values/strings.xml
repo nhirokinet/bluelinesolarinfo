@@ -6,6 +6,9 @@
     <string name="source_code_url" translatable="false">https://github.com/nhirokinet/bluelinesolarinfo</string>
 
     <string name="format_unit_angle_dms">%1$d°%2$02d\'%3$02d.%4$01d\"</string>
+    <string name="format_unit_angle_dm_3digits">%1$03d°%2$02d\'</string>
+    <string name="unit_angle_dm_invalid_3digits">---°--\'</string>
+    <string name="format_unit_angle_dm_signed">%1$s%2$d°%3$02d\'</string>
     <string name="unit_angle_deg">°</string>
     <string name="unit_angle_meter">m</string>
     <string name="coordinate_display_north">N</string>
@@ -31,18 +34,24 @@
     <string name="main_activity_solar_info_today_invisible_culmination_label">(Invisible)</string>
     <string name="main_activity_solar_info_today_time_placeholder_event_not_occur">--:--</string>
     <string name="main_activity_solar_info_today_sun_header">Sun</string>
-    <string name="main_activity_solar_info_today_sunrise">Sunrise:</string>
-    <string name="main_activity_solar_info_today_sun_culmination">Culmination:</string>
-    <string name="main_activity_solar_info_today_sunset">Sunset:</string>
+    <string name="main_activity_solar_info_today_sunrise">Sunrise</string>
+    <string name="main_activity_solar_info_today_sun_culmination">Culmination</string>
+    <string name="main_activity_solar_info_today_sunset">Sunset</string>
+    <string name="main_activity_solar_info_today_next_event_sunrise">Next sunrise:</string>
+    <string name="main_activity_solar_info_today_next_event_sunset">Next sunset:</string>
     <string name="main_activity_solar_info_today_moon_header">Moon</string>
     <string name="main_activity_solar_info_today_moon_is_noon_info"> at noon</string>
-    <string name="main_activity_solar_info_today_moonrise">Moonrise:</string>
-    <string name="main_activity_solar_info_today_moon_culmination">Culmination:</string>
-    <string name="main_activity_solar_info_today_moonset">Moonset:</string>
+    <string name="main_activity_solar_info_today_moonrise">Moonrise</string>
+    <string name="main_activity_solar_info_today_moon_culmination">Culmination</string>
+    <string name="main_activity_solar_info_today_moonset">Moonset</string>
+    <string name="main_activity_solar_info_today_next_event_moonrise">Next moonrise:</string>
+    <string name="main_activity_solar_info_today_next_event_moonset">Next moonset:</string>
 
-    <string name="main_activity_solar_info_now_localtime">Local time:</string>
-    <string name="main_activity_solar_info_now_sidereal_time_greenwich">Greenwich sidereal time:</string>
-    <string name="main_activity_solar_info_now_sidereal_time_local">Local sidereal time:</string>
+    <string name="main_activity_solar_info_now_localtime">Local time</string>
+    <string name="main_activity_solar_info_now_sidereal_time_greenwich">Greenwich sidereal time</string>
+    <string name="main_activity_solar_info_now_sidereal_time_local">Local sidereal time</string>
+    <string name="main_activity_solar_info_now_azimuth_label">Azimuth</string>
+    <string name="main_activity_solar_info_now_elevation_label">Elevation</string>
 
     <string name="main_activity_region_select_dialog_title">Select region</string>
 

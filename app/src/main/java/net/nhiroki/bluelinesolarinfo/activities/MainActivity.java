@@ -34,6 +34,7 @@ import net.nhiroki.lib.bluelineastrolib.exceptions.AstronomicalPhenomenonComputa
 import net.nhiroki.lib.bluelineastrolib.exceptions.UnsupportedDateRangeException;
 import net.nhiroki.lib.bluelineastrolib.location.LocationOnTheEarth;
 import net.nhiroki.lib.bluelineastrolib.logic.AstronomicalObjectCalculator;
+import net.nhiroki.lib.bluelineastrolib.logic.CoordinateConversion;
 import net.nhiroki.lib.bluelineastrolib.tool.MoonTool;
 
 import java.time.Instant;
@@ -312,6 +313,11 @@ public class MainActivity extends AppCompatActivity {
             locationOnTheEarth = regionOnTheEarth.getLocationOnTheEarth();
 
             findViewById(R.id.main_view_region_text_line2).setVisibility(locationOnTheEarth.getElevationMeters() == 0.0 ? View.GONE : View.VISIBLE);
+
+            if (this.locationListenerInUse && this.locationManager != null) {
+                this.locationManager.removeUpdates(this.locationListener);
+                this.locationListenerInUse = false;
+            }
         }
 
         if (locationOnTheEarth == null) {
@@ -372,7 +378,8 @@ public class MainActivity extends AppCompatActivity {
 
         Instant todayStart = date.atStartOfDay(zoneId).toInstant();
         Instant midOfTheDay = date.atTime(12, 0).atZone(zoneId).toInstant();
-        this.displayTodaySolarInfo(todayStart, midOfTheDay, locationOnTheEarth, zoneId);
+        Instant todayEnd = date.plusDays(1).atStartOfDay(zoneId).toInstant();
+        this.displayTodaySolarInfo(todayStart, midOfTheDay, todayEnd, locationOnTheEarth, zoneId);
 
         if (date.equals(today)) {
             this.displayNowSolarInfo(now, locationOnTheEarth, zoneId);
@@ -384,16 +391,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Uses @midOfTheDay to calculate moon phase. Required because it can be 11 hours or 13 hours from @todayStart due to DST
-    private void displayTodaySolarInfo(Instant todayStart, Instant midOfTheDay, LocationOnTheEarth locationOnTheEarth, ZoneId zoneId) {
+    // @endOfTheDay is assumed to be 23-25 hours from @todayStart
+    private void displayTodaySolarInfo(Instant todayStart, Instant midOfTheDay, Instant todayEnd, LocationOnTheEarth locationOnTheEarth, ZoneId zoneId) {
         Sun sun = new Sun();
         Moon moon = new Moon();
 
         Locale locale = getResources().getConfiguration().getLocales().get(0);
         boolean timeFormat24Hour = android.text.format.DateFormat.is24HourFormat(this.getApplicationContext());
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, timeFormat24Hour ? "Hm" : "hma"), locale);
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, timeFormat24Hour ? "yMdHm" : "yMdhma"), locale);
 
         try {
             Instant sunrise = AstronomicalObjectCalculator.calculateRiseWithin24h(sun, todayStart, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP);
+            if (sunrise == null && todayEnd.isAfter(todayStart.plusSeconds(86400))) {
+                sunrise = AstronomicalObjectCalculator.calculateRiseWithin24h(sun, todayEnd.minusSeconds(86400), locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP);
+            }
+            if (sunrise != null && sunrise.isAfter(todayEnd)) {
+                sunrise = null;
+            }
             if (sunrise != null) {
                 ((TextView) findViewById(R.id.main_view_solar_info_today_sunrise_time)).setText(sunrise.atZone(zoneId).format(timeFormatter));
             } else {
@@ -401,6 +416,12 @@ public class MainActivity extends AppCompatActivity {
             }
 
             Instant sunculmination = AstronomicalObjectCalculator.calculateCulminationWithin24h(sun, todayStart, locationOnTheEarth);
+            if (sunculmination == null && todayEnd.isAfter(todayStart.plusSeconds(86400))) {
+                sunculmination = AstronomicalObjectCalculator.calculateCulminationWithin24h(sun, todayEnd.minusSeconds(86400), locationOnTheEarth);
+            }
+            if (sunculmination != null && sunculmination.isAfter(todayEnd)) {
+                sunculmination = null;
+            }
             if (sunculmination != null) {
                 ((TextView) findViewById(R.id.main_view_solar_info_today_sun_culmination_time)).setText(sunculmination.atZone(zoneId).format(timeFormatter));
 
@@ -415,10 +436,65 @@ public class MainActivity extends AppCompatActivity {
             }
 
             Instant sunset = AstronomicalObjectCalculator.calculateSetWithin24h(sun, todayStart, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP);
+            if (sunset == null && todayEnd.isAfter(todayStart.plusSeconds(86400))) {
+                sunset = AstronomicalObjectCalculator.calculateSetWithin24h(sun, todayEnd.minusSeconds(86400), locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP);
+            }
+            if (sunset != null && sunset.isAfter(todayEnd)) {
+                sunset = null;
+            }
             if (sunset != null) {
                 ((TextView) findViewById(R.id.main_view_solar_info_today_sunset_time)).setText(sunset.atZone(zoneId).format(timeFormatter));
             } else {
                 ((TextView) findViewById(R.id.main_view_solar_info_today_sunset_time)).setText(R.string.main_activity_solar_info_today_time_placeholder_event_not_occur);
+            }
+
+            if (sunrise == null && sunset == null) {
+                Instant nextEventTime = null;
+                boolean nextEventIsRise = false;
+
+                Instant t = todayEnd.minusSeconds(1);
+                for (int i = 0; i < 270; ++i) {
+                    Instant sunriseCandidate = AstronomicalObjectCalculator.calculateRiseWithin24h(sun, t, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP);
+                    Instant sunsetCandidate = AstronomicalObjectCalculator.calculateSetWithin24h(sun, t, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP);
+
+                    if (sunriseCandidate != null || sunsetCandidate != null) {
+                        if (sunriseCandidate != null && sunsetCandidate != null) {
+                            if (sunriseCandidate.isBefore(sunsetCandidate)) {
+                                nextEventTime = sunriseCandidate;
+                                nextEventIsRise = true;
+                            } else {
+                                nextEventTime = sunsetCandidate;
+                                nextEventIsRise = false;
+                            }
+                        } else if (sunriseCandidate != null) {
+                            nextEventTime = sunriseCandidate;
+                            nextEventIsRise = true;
+                        } else {
+                            nextEventTime = sunsetCandidate;
+                            nextEventIsRise = false;
+                        }
+
+
+                        break;
+                    }
+
+                    t = t.plusSeconds(86399);
+                }
+
+                if (nextEventTime != null) {
+                    ((TextView) findViewById(R.id.main_view_solar_info_today_sun_next_event_title)).setText(nextEventIsRise ? R.string.main_activity_solar_info_today_next_event_sunrise : R.string.main_activity_solar_info_today_next_event_sunset);
+                    ((TextView) findViewById(R.id.main_view_solar_info_today_sun_next_event_time)).setText(nextEventTime.atZone(zoneId).format(dateTimeFormatter));
+
+                    findViewById(R.id.main_view_solar_info_today_sun_next_event_title).setVisibility(View.VISIBLE);
+                    findViewById(R.id.main_view_solar_info_today_sun_next_event_time).setVisibility(View.VISIBLE);
+                } else {
+                    findViewById(R.id.main_view_solar_info_today_sun_next_event_title).setVisibility(View.GONE);
+                    findViewById(R.id.main_view_solar_info_today_sun_next_event_time).setVisibility(View.GONE);
+
+                }
+            } else {
+                findViewById(R.id.main_view_solar_info_today_sun_next_event_title).setVisibility(View.GONE);
+                findViewById(R.id.main_view_solar_info_today_sun_next_event_time).setVisibility(View.GONE);
             }
 
             double moonPhaseDeg = MoonTool.calculateMoonPhaseDeg(midOfTheDay);
@@ -429,6 +505,12 @@ public class MainActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.main_view_solar_info_today_moon_phase_days_text)).setText(String.format("%.1f", daysAfterPrevNewMoon));
 
             Instant moonrise = AstronomicalObjectCalculator.calculateRiseWithin24h(moon, todayStart, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.CENTER);
+            if (moonrise == null && todayEnd.isAfter(todayStart.plusSeconds(86400))) {
+                moonrise = AstronomicalObjectCalculator.calculateRiseWithin24h(moon, todayEnd.minusSeconds(86400), locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.CENTER);
+            }
+            if (moonrise != null && moonrise.isAfter(todayEnd)) {
+                moonrise = null;
+            }
             if (moonrise != null) {
                 ((TextView) findViewById(R.id.main_view_solar_info_today_moonrise_time)).setText(moonrise.atZone(zoneId).format(timeFormatter));
             } else {
@@ -436,6 +518,12 @@ public class MainActivity extends AppCompatActivity {
             }
 
             Instant moonculmination = AstronomicalObjectCalculator.calculateCulminationWithin24h(moon, todayStart, locationOnTheEarth);
+            if (moonculmination == null && todayEnd.isAfter(todayStart.plusSeconds(86400))) {
+                moonculmination = AstronomicalObjectCalculator.calculateCulminationWithin24h(moon, todayEnd.minusSeconds(86400), locationOnTheEarth);
+            }
+            if (moonculmination != null && moonculmination.isAfter(todayEnd)) {
+                moonculmination = null;
+            }
             if (moonculmination != null) {
                 ((TextView) findViewById(R.id.main_view_solar_info_today_moon_culmination_time)).setText(moonculmination.atZone(zoneId).format(timeFormatter));
 
@@ -450,12 +538,66 @@ public class MainActivity extends AppCompatActivity {
             }
 
             Instant moonset = AstronomicalObjectCalculator.calculateSetWithin24h(moon, todayStart, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.CENTER);
+            if (moonset == null && todayEnd.isAfter(todayStart.plusSeconds(86400))) {
+                moonset = AstronomicalObjectCalculator.calculateSetWithin24h(moon, todayEnd.minusSeconds(86400), locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.CENTER);
+            }
+            if (moonset != null && moonset.isAfter(todayEnd)) {
+                moonset = null;
+            }
             if (moonset != null) {
                 ((TextView) findViewById(R.id.main_view_solar_info_today_moonset_time)).setText(moonset.atZone(zoneId).format(timeFormatter));
             } else {
                 ((TextView) findViewById(R.id.main_view_solar_info_today_moonset_time)).setText(R.string.main_activity_solar_info_today_time_placeholder_event_not_occur);
             }
 
+            if (moonrise == null && moonset == null) {
+                Instant nextEventTime = null;
+                boolean nextEventIsRise = false;
+
+                Instant t = todayEnd.minusSeconds(1);
+                for (int i = 0; i < 270; ++i) {
+                    Instant moonriseCandidate = AstronomicalObjectCalculator.calculateRiseWithin24h(moon, t, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP);
+                    Instant moonsetCandidate = AstronomicalObjectCalculator.calculateSetWithin24h(moon, t, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP);
+
+                    if (moonriseCandidate != null || moonsetCandidate != null) {
+                        if (moonriseCandidate != null && moonsetCandidate != null) {
+                            if (moonriseCandidate.isBefore(moonsetCandidate)) {
+                                nextEventTime = moonriseCandidate;
+                                nextEventIsRise = true;
+                            } else {
+                                nextEventTime = moonsetCandidate;
+                                nextEventIsRise = false;
+                            }
+                        } else if (moonriseCandidate != null) {
+                            nextEventTime = moonriseCandidate;
+                            nextEventIsRise = true;
+                        } else {
+                            nextEventTime = moonsetCandidate;
+                            nextEventIsRise = false;
+                        }
+
+
+                        break;
+                    }
+
+                    t = t.plusSeconds(86399);
+                }
+
+                if (nextEventTime != null) {
+                    ((TextView) findViewById(R.id.main_view_solar_info_today_moon_next_event_title)).setText(nextEventIsRise ? R.string.main_activity_solar_info_today_next_event_moonrise : R.string.main_activity_solar_info_today_next_event_moonset);
+                    ((TextView) findViewById(R.id.main_view_solar_info_today_moon_next_event_time)).setText(nextEventTime.atZone(zoneId).format(dateTimeFormatter));
+
+                    findViewById(R.id.main_view_solar_info_today_moon_next_event_title).setVisibility(View.VISIBLE);
+                    findViewById(R.id.main_view_solar_info_today_moon_next_event_time).setVisibility(View.VISIBLE);
+                } else {
+                    findViewById(R.id.main_view_solar_info_today_moon_next_event_title).setVisibility(View.GONE);
+                    findViewById(R.id.main_view_solar_info_today_moon_next_event_time).setVisibility(View.GONE);
+
+                }
+            } else {
+                findViewById(R.id.main_view_solar_info_today_moon_next_event_title).setVisibility(View.GONE);
+                findViewById(R.id.main_view_solar_info_today_moon_next_event_time).setVisibility(View.GONE);
+            }
         } catch (AstronomicalPhenomenonComputationException e) {
             throw new RuntimeException(e);
         } catch (UnsupportedDateRangeException e) {
@@ -476,6 +618,9 @@ public class MainActivity extends AppCompatActivity {
         boolean timeFormat24Hour = android.text.format.DateFormat.is24HourFormat(this.getApplicationContext());
         DateTimeFormatter timeFormatterWithSec = DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, timeFormat24Hour ? "Hms" : "hmsa"), locale);
 
+        Sun sun = new Sun();
+        Moon moon = new Moon();
+
         try {
             ((TextView) findViewById(R.id.main_view_solar_info_now_greenwich_localtime)).setText(now.atZone(zoneId).format(timeFormatterWithSec));
 
@@ -485,7 +630,40 @@ public class MainActivity extends AppCompatActivity {
             double localSideralTimeDeg = nowOnTheEarth.calculateSiderealTimeDeg(locationOnTheEarth.getLongitudeDeg());
             ((TextView) findViewById(R.id.main_view_solar_info_now_local_sidereal_time)).setText(degTo24HStr(localSideralTimeDeg));
 
+            double sunHourAngle = nowOnTheEarth.calculateSiderealTimeRad(locationOnTheEarth.getLongitudeRad()) - sun.calculateRightAscensionRad(now);
+            double sunDeclination = sun.calculateDeclinationRad(now);
+            double sunAzimuthRad = CoordinateConversion.calculateAzimuthRadFromHourAngle(sunHourAngle, sunDeclination, locationOnTheEarth.getLatitudeRad());
+            if (Double.isNaN(sunAzimuthRad)) {
+                ((TextView) findViewById(R.id.main_view_solar_info_now_sun_azimuth)).setText(R.string.unit_angle_dm_invalid_3digits);
+            } else {
+                long sunAzumithArcMin = (long) Math.floor(Math.toDegrees(sunAzimuthRad) * 60.0 + 0.5);
+                ((TextView) findViewById(R.id.main_view_solar_info_now_sun_azimuth)).setText(getString(R.string.format_unit_angle_dm_3digits, sunAzumithArcMin / 60, sunAzumithArcMin % 60));
+            }
+            double sunElevationRad = CoordinateConversion.calculateElevationRadFromHourAngle(sunHourAngle, sunDeclination, locationOnTheEarth.getLatitudeRad());
+            long sunElevationArcMin = (long) Math.floor(Math.toDegrees(sunElevationRad) * 60.0 + 0.5);
+            long sunElevationArcMinAbs = Math.abs(sunElevationArcMin);
+            String sunElevationSign = (sunElevationRad >= 0.0) ? "+" : "-";
+            ((TextView) findViewById(R.id.main_view_solar_info_now_sun_elevation)).setText(getString(R.string.format_unit_angle_dm_signed, sunElevationSign, sunElevationArcMinAbs / 60, sunElevationArcMinAbs % 60));
+
+
+            double moonHourAngle = nowOnTheEarth.calculateSiderealTimeRad(locationOnTheEarth.getLongitudeRad()) - moon.calculateRightAscensionRad(now);
+            double moonDeclination = moon.calculateDeclinationRad(now);
+            double moonAzimuthRad = CoordinateConversion.calculateAzimuthRadFromHourAngle(moonHourAngle, moonDeclination, locationOnTheEarth.getLatitudeRad());
+            if (Double.isNaN(moonAzimuthRad)) {
+                ((TextView) findViewById(R.id.main_view_solar_info_now_moon_azimuth)).setText(R.string.unit_angle_dm_invalid_3digits);
+            } else {
+                long moonAzumithArcMin = (long) Math.floor(Math.toDegrees(moonAzimuthRad) * 60.0 + 0.5);
+                ((TextView) findViewById(R.id.main_view_solar_info_now_moon_azimuth)).setText(getString(R.string.format_unit_angle_dm_3digits, moonAzumithArcMin / 60, moonAzumithArcMin % 60));
+            }
+            double moonElevationRad = CoordinateConversion.calculateElevationRadFromHourAngle(moonHourAngle, moonDeclination, locationOnTheEarth.getLatitudeRad());
+            long moonElevationArcMin = (long) Math.floor(Math.toDegrees(moonElevationRad) * 60.0 + 0.5);
+            long moonElevationArcMinAbs = Math.abs(moonElevationArcMin);
+            String moonElevationSign = (moonElevationRad >= 0.0) ? "+" : "-";
+            ((TextView) findViewById(R.id.main_view_solar_info_now_moon_elevation)).setText(getString(R.string.format_unit_angle_dm_signed, moonElevationSign, moonElevationArcMinAbs / 60, moonElevationArcMinAbs % 60));
+
         } catch (UnsupportedDateRangeException e) {
+            throw new RuntimeException(e);
+        } catch (AstronomicalPhenomenonComputationException e) {
             throw new RuntimeException(e);
         }
 

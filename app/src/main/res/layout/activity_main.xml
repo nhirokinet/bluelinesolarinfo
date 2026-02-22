@@ -29,12 +29,13 @@
         android:id="@+id/main_view_region_area"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         >
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
+            android:layout_weight="1.0"
             >
             <TextView
                 android:id="@+id/main_view_region_text"
@@ -42,36 +43,36 @@
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
                 />
-            <TextView
-                android:text=">"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="8sp"
-                android:textSize="24sp"
-                />
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:id="@+id/main_view_region_text_line1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+                <TextView
+                    android:id="@+id/main_view_region_text_line2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+                <TextView
+                    android:id="@+id/main_view_region_timezone_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:text="▼"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="8sp"
-            android:orientation="vertical"
-            >
-            <TextView
-                android:id="@+id/main_view_region_text_line1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-            <TextView
-                android:id="@+id/main_view_region_text_line2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-            <TextView
-                android:id="@+id/main_view_region_timezone_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-        </LinearLayout>
+            android:layout_gravity="center_vertical|end"
+            android:textSize="24sp"
+            />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -187,6 +188,12 @@
                             android:layout_height="wrap_content"
                             android:textSize="24sp"
                             android:paddingStart="8sp"
+                            android:layout_gravity="right"
+                            />
+                        <TextView
+                            android:text=""
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             />
                     </TableRow>
                     <TableRow>
@@ -197,25 +204,20 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
                             />
-                        <LinearLayout
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:id="@+id/main_view_solar_info_today_sun_culmination_time"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            >
-                            <TextView
-                                android:id="@+id/main_view_solar_info_today_sun_culmination_time"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="24sp"
-                                android:paddingStart="8sp"
-                                />
-                            <TextView
-                                android:id="@+id/main_view_solar_info_today_sun_culmination_invisible_label"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingStart="6sp"
-                                />
-                        </LinearLayout>
+                            android:textSize="24sp"
+                            android:paddingStart="8sp"
+                            />
+                        <TextView
+                            android:id="@+id/main_view_solar_info_today_sun_culmination_invisible_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="6sp"
+                            android:layout_gravity="bottom"
+                            />
                     </TableRow>
                     <TableRow>
                         <TextView
@@ -231,9 +233,28 @@
                             android:layout_height="wrap_content"
                             android:textSize="24sp"
                             android:paddingStart="8sp"
+                            android:layout_gravity="right"
+                            />
+                        <TextView
+                            android:text=""
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             />
                     </TableRow>
                 </TableLayout>
+                <TextView
+                    android:id="@+id/main_view_solar_info_today_sun_next_event_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:paddingTop="4sp"
+                    />
+                <TextView
+                    android:id="@+id/main_view_solar_info_today_sun_next_event_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    />
                 <TextView
                     android:text="@string/main_activity_solar_info_today_moon_header"
                     android:textSize="28sp"
@@ -264,6 +285,7 @@
                         android:paddingStart="8sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
                         />
                 </LinearLayout>
                 <TableLayout
@@ -284,6 +306,12 @@
                             android:layout_height="wrap_content"
                             android:textSize="24sp"
                             android:paddingStart="8sp"
+                            android:layout_gravity="right"
+                            />
+                        <TextView
+                            android:text=""
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             />
                     </TableRow>
                     <TableRow>
@@ -294,25 +322,21 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
                             />
-                        <LinearLayout
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:id="@+id/main_view_solar_info_today_moon_culmination_time"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            >
-                            <TextView
-                                android:id="@+id/main_view_solar_info_today_moon_culmination_time"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="24sp"
-                                android:paddingStart="8sp"
-                                />
-                            <TextView
-                                android:id="@+id/main_view_solar_info_today_moon_culmination_invisible_label"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingStart="6sp"
-                                />
-                        </LinearLayout>
+                            android:textSize="24sp"
+                            android:paddingStart="8sp"
+                            android:layout_gravity="right"
+                            />
+                        <TextView
+                            android:id="@+id/main_view_solar_info_today_moon_culmination_invisible_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="6sp"
+                            android:layout_gravity="bottom"
+                            />
                     </TableRow>
                     <TableRow>
                         <TextView
@@ -328,9 +352,28 @@
                             android:layout_height="wrap_content"
                             android:textSize="24sp"
                             android:paddingStart="8sp"
+                            android:layout_gravity="right"
+                            />
+                        <TextView
+                            android:text=""
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             />
                     </TableRow>
                 </TableLayout>
+                <TextView
+                    android:id="@+id/main_view_solar_info_today_moon_next_event_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:paddingTop="4sp"
+                    />
+                <TextView
+                    android:id="@+id/main_view_solar_info_today_moon_next_event_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    />
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="3dp"
@@ -391,6 +434,82 @@
                             />
                     </TableRow>
                 </TableLayout>
+                <TextView
+                    android:text="@string/main_activity_solar_info_today_sun_header"
+                    android:textSize="24sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="6sp"
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+                    <TextView
+                        android:text="@string/main_activity_solar_info_now_azimuth_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        />
+                    <TextView
+                        android:id="@+id/main_view_solar_info_now_sun_azimuth"
+                        android:paddingStart="8sp"
+                        android:textSize="20sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        />
+                    <TextView
+                        android:text="@string/main_activity_solar_info_now_elevation_label"
+                        android:paddingStart="20sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        />
+                    <TextView
+                        android:id="@+id/main_view_solar_info_now_sun_elevation"
+                        android:paddingStart="8sp"
+                        android:textSize="20sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        />
+                </LinearLayout>
+                <TextView
+                    android:text="@string/main_activity_solar_info_today_moon_header"
+                    android:textSize="24sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="6sp"
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+                    <TextView
+                        android:text="@string/main_activity_solar_info_now_azimuth_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        />
+                    <TextView
+                        android:id="@+id/main_view_solar_info_now_moon_azimuth"
+                        android:paddingStart="8sp"
+                        android:textSize="20sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        />
+                    <TextView
+                        android:text="@string/main_activity_solar_info_now_elevation_label"
+                        android:paddingStart="20sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        />
+                    <TextView
+                        android:id="@+id/main_view_solar_info_now_moon_elevation"
+                        android:paddingStart="8sp"
+                        android:textSize="20sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        />
+                </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="3dp"

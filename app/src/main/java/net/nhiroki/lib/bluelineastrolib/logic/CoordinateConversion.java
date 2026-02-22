@@ -15,11 +15,12 @@ public class CoordinateConversion {
         return Math.acos(numerator / denominator);
     }
 
-    public static double calculateHeightRadFromHourAngle (double hourAngleRad, double declinationRad, double latitudeRad) {
+    public static double calculateElevationRadFromHourAngle(double hourAngleRad, double declinationRad, double latitudeRad) {
         return Math.asin(Math.sin(declinationRad) * Math.sin(latitudeRad) + Math.cos(declinationRad) * Math.cos(latitudeRad) * Math.cos(hourAngleRad));
     }
 
-    public static double calculateAngleRadFromHourAngle (double hourAngleRad, double declinationRad, double latitudeRad) {
+    // May return NaN
+    public static double calculateAzimuthRadFromHourAngle(double hourAngleRad, double declinationRad, double latitudeRad) {
         double numerator = - Math.cos(declinationRad) * Math.sin(hourAngleRad);
         double denominator = Math.sin(declinationRad) * Math.cos(latitudeRad) - Math.cos(declinationRad) * Math.sin(latitudeRad) * Math.cos(hourAngleRad);
 

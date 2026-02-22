@@ -32,7 +32,7 @@ public class AstronomicalObjectCalculator {
             posReference = -1;
         }
 
-        double height = CoordinateConversion.calculateHeightRadFromHourAngle(hourAngle, declination, locationOnTheEarth.getLatitudeRad());
+        double height = CoordinateConversion.calculateElevationRadFromHourAngle(hourAngle, declination, locationOnTheEarth.getLatitudeRad());
         double heightStandard = calculateActualCenterHeightRad(time, locationOnTheEarth.getElevationMeters(), astronomicalObject, posReference, true,  -Math.toRadians(Earth.ATMOSPHERIC_REFRACTION_AT_HORIZON_DEC_SEC / 3600.0));
 
         return height > heightStandard;
@@ -470,6 +470,6 @@ public class AstronomicalObjectCalculator {
     private static double calculateHeightRad(Instant now, LocationOnTheEarth loc, AstronomicalObject astronomicalObject) throws UnsupportedDateRangeException, AstronomicalPhenomenonComputationException {
         double hourAngle = new TimePointOnTheEarth(now).calculateSiderealTimeRad(loc.getLongitudeRad()) - astronomicalObject.calculateRightAscensionRad(now);
         double declination = astronomicalObject.calculateDeclinationRad(now);
-        return CoordinateConversion.calculateHeightRadFromHourAngle(hourAngle, declination, loc.getLatitudeRad());
+        return CoordinateConversion.calculateElevationRadFromHourAngle(hourAngle, declination, loc.getLatitudeRad());
     }
 }
