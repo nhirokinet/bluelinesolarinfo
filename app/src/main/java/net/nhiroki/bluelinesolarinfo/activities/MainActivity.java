@@ -23,6 +23,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import net.nhiroki.androidlib.bluelineastroandroidlib.views.MoonPhaseView;
 import net.nhiroki.bluelinesolarinfo.R;
 import net.nhiroki.bluelinesolarinfo.region.RegionOnTheEarth;
 import net.nhiroki.bluelinesolarinfo.storage.AppPreferences;
@@ -498,7 +499,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             double moonPhaseDeg = MoonTool.calculateMoonPhaseDeg(midOfTheDay);
-            ((net.nhiroki.androidlib.bluelineastroandroidlib.views.MoonPhaseView) findViewById(R.id.main_view_solar_info_today_moon_phase_view)).setMoonPhaseDeg(moonPhaseDeg);
+            ((MoonPhaseView) findViewById(R.id.main_view_solar_info_today_moon_phase_view)).setMoonPhaseDeg(moonPhaseDeg);
 
             Instant prevNewMoon = MoonTool.calculatePreviousTimeOfMoonPhaseByDeg(midOfTheDay, 0.0);
             double daysAfterPrevNewMoon = ((double)(midOfTheDay.toEpochMilli() - prevNewMoon.toEpochMilli())) / 86400000.0;
