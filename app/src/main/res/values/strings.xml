@@ -15,6 +15,7 @@
     <string name="coordinate_display_south">S</string>
     <string name="coordinate_display_east">E</string>
     <string name="coordinate_display_west">W</string>
+    <string name="time_event_not_occur_hm">--:--</string>
 
     <string name="main_activity_today_format">%1$s (today)</string>
     <string name="main_activity_current_location">Current location</string>
@@ -32,7 +33,6 @@
     <string name="main_activity_nolocpriv_add_location_privilege_button">Grant location access</string>
 
     <string name="main_activity_solar_info_today_invisible_culmination_label">(Invisible)</string>
-    <string name="main_activity_solar_info_today_time_placeholder_event_not_occur">--:--</string>
     <string name="main_activity_solar_info_today_sun_header">Sun</string>
     <string name="main_activity_solar_info_today_sunrise">Sunrise</string>
     <string name="main_activity_solar_info_today_sun_culmination">Culmination</string>
@@ -40,7 +40,7 @@
     <string name="main_activity_solar_info_today_next_event_sunrise">Next sunrise:</string>
     <string name="main_activity_solar_info_today_next_event_sunset">Next sunset:</string>
     <string name="main_activity_solar_info_today_moon_header">Moon</string>
-    <string name="main_activity_solar_info_today_moon_is_noon_info"> at noon</string>
+    <string name="main_activity_solar_info_today_moon_is_noon_info">at noon</string>
     <string name="main_activity_solar_info_today_moonrise">Moonrise</string>
     <string name="main_activity_solar_info_today_moon_culmination">Culmination</string>
     <string name="main_activity_solar_info_today_moonset">Moonset</string>
@@ -91,8 +91,8 @@
     <string name="app_info_source_code">Source code</string>
     <string name="app_info_author">Author</string>
 
+    <string name="licensing_notice_header">License information</string>
     <!-- License information, untranslatable not to make the slightest difference -->
-    <string name="licensing_notice_header" translatable="false">License information</string>
     <string name="licensing_notice_body" translatable="false">
         Blue Line Solar Info is licensed under the Apache License, Version 2.0.
         \n
@@ -108,4 +108,19 @@
     <string name="license_apache_license_v2.0_name" translatable="false">Apache License, Version 2.0</string>
     <string name="license_apache_license_v2.0_url" translatable="false">https://www.apache.org/licenses/LICENSE-2.0.txt</string>
 
+    <string name="config_widget_solar_info_today_region">Region</string>
+    <string name="config_widget_solar_info_today_change_button">Change</string>
+    <string name="config_widget_solar_info_today_region_select_dialog_title">Select region for the widget</string>
+    <string name="config_widget_solar_info_today_no_region">(No region)</string>
+    <string name="config_widget_solar_info_today_warn_no_region_yet">No region added yet. You have to add at least one before adding a widget.</string>
+    <string name="config_widget_solar_info_today_ok_button">OK</string>
+
+    <string name="widget_solar_info_today_tiny_name">Sun &amp; moon (tiny)</string>
+    <string name="widget_solar_info_today_24h_format">%1$02d:%2$02d</string>
+
+    <string name="example_text_location_tokyo">Tokyo</string>
+    <string name="example_text_jan_1st_on_widget_without_dow">01/01</string>
+    <string name="example_text_unknown_date_on_widget_without_dow">--/--</string>
+
+    <string name="widget_error_string">ERROR</string>
 </resources>

@@ -3,4 +3,6 @@
     <color name="bluelinesolorinfoThemeColor">#4d68ff</color>
     <color name="textColorOnThemeColorBackground">#ddffffff</color>
 
+    <color name="widget_background_color">#cccccc</color>
+    <color name="widget_text_color">#000000</color>
 </resources>

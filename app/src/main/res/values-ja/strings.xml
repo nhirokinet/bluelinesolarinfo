@@ -1,0 +1,111 @@
+<resources>
+    <string name="app_name">Blue Line Solar Info</string>
+    <!-- Loaded from app/src/main/res/layout/activity_app_info.xml, and don't forget to change the icon when changing author info -->
+    <string name="author_name" translatable="false">nhirokinet</string>
+    <string name="author_description" translatable="false">https://nhiroki.net/</string>
+    <string name="source_code_url" translatable="false">https://github.com/nhirokinet/bluelinesolarinfo</string>
+
+    <string name="format_unit_angle_dms">%1$d°%2$02d\'%3$02d.%4$01d\"</string>
+    <string name="format_unit_angle_dm_3digits">%1$03d°%2$02d\'</string>
+    <string name="unit_angle_dm_invalid_3digits">---°--\'</string>
+    <string name="format_unit_angle_dm_signed">%1$s%2$d°%3$02d\'</string>
+    <string name="unit_angle_deg">°</string>
+    <string name="unit_angle_meter">m</string>
+    <string name="coordinate_display_north">N</string>
+    <string name="coordinate_display_south">S</string>
+    <string name="coordinate_display_east">E</string>
+    <string name="coordinate_display_west">W</string>
+    <string name="time_event_not_occur_hm">--:--</string>
+
+    <string name="main_activity_today_format">%1$s（今日）</string>
+    <string name="main_activity_current_location">現在位置</string>
+    <string name="main_activity_message_location_fetching">測位中……</string>
+    <string name="main_activity_message_location_fetch_error">測位失敗</string>
+    <string name="main_activity_message_error_permission_location_fetch">位置情報取得権限がありません</string>
+    <string name="main_activity_location_coordinates_format">%1$s %2$s %3$s %4$s</string>
+    <string name="main_activity_location_elevation_meters">標高 %1$.1fm</string>
+    <string name="main_activity_location_elevation_meters_unknown">標高 -.-m</string>
+    <string name="main_activity_region_timezone">時間帯：%1$s（%2$s）</string>
+    <string name="main_activity_first_guide_add_region_text">地域が設定されていません。右上の三点メニューから設定できます。</string>
+    <string name="main_activity_first_guest_add_region_now_button">今すぐ地域を追加</string>
+    <string name="main_activity_config_location_measure_use_elevation">標高</string>
+    <string name="main_activity_nolocpriv_add_location_privilege_text">位置情報取得権限がありません。機器の現在位置に基づく情報を表示するには付与する必要があります。メニューから現在位置を登録すれば権限付与せずアプリを利用することもできます。</string>
+    <string name="main_activity_nolocpriv_add_location_privilege_button">位置情報権限付与</string>
+
+    <string name="main_activity_solar_info_today_invisible_culmination_label">（地平線下）</string>
+    <string name="main_activity_solar_info_today_sun_header">太陽</string>
+    <string name="main_activity_solar_info_today_sunrise">日出</string>
+    <string name="main_activity_solar_info_today_sun_culmination">南中</string>
+    <string name="main_activity_solar_info_today_sunset">日入</string>
+    <string name="main_activity_solar_info_today_next_event_sunrise">次の日出：</string>
+    <string name="main_activity_solar_info_today_next_event_sunset">次の日入：</string>
+    <string name="main_activity_solar_info_today_moon_header">月</string>
+    <string name="main_activity_solar_info_today_moon_is_noon_info">正午</string>
+    <string name="main_activity_solar_info_today_moonrise">月出</string>
+    <string name="main_activity_solar_info_today_moon_culmination">南中</string>
+    <string name="main_activity_solar_info_today_moonset">月入</string>
+    <string name="main_activity_solar_info_today_next_event_moonrise">次の月出：</string>
+    <string name="main_activity_solar_info_today_next_event_moonset">次の月入：</string>
+
+    <string name="main_activity_solar_info_now_localtime">現地時間</string>
+    <string name="main_activity_solar_info_now_sidereal_time_greenwich">グリニッジ恒星時</string>
+    <string name="main_activity_solar_info_now_sidereal_time_local">地方恒星時</string>
+    <string name="main_activity_solar_info_now_azimuth_label">方位</string>
+    <string name="main_activity_solar_info_now_elevation_label">高度</string>
+
+    <string name="main_activity_region_select_dialog_title">地域選択</string>
+
+    <string name="menu_item_regions_setting">地域設定</string>
+    <string name="menu_item_app_info">アプリ情報</string>
+
+    <string name="regions_setting_activity_title">地域設定</string>
+    <string name="format_regions_setting_default_region_label">デフォルト：%1$s</string>
+    <string name="regions_setting_change_default_region_button">変更</string>
+    <string name="format_regions_setting_timezone_label">時間帯：%1$s（%2$s）</string>
+    <string name="regions_setting_add_region_button">地域追加</string>
+    <string name="regions_setting_dialog_default_region_select_title">デフォルト地域選択</string>
+
+    <string name="each_region_activity_title">地域設定</string>
+    <string name="each_region_activity_delete_region_button">削除</string>
+    <string name="each_region_activity_save_region_button">保存</string>
+    <string name="each_region_activity_region_name_label">地域名</string>
+    <string name="each_region_activity_longitude_label">経度</string>
+    <string name="each_region_activity_longitude_hint">+:東経、-:西経</string>
+    <string name="each_region_activity_latitude_label">緯度</string>
+    <string name="each_region_activity_latitude_hint">+:北緯、-:南緯</string>
+    <string name="each_region_activity_elevation_label">標高</string>
+    <string name="each_region_activity_elevation_hint">日出や日入の計算では0mとして計算することもよくあります。その場合は0を入力してください。</string>
+    <string name="each_region_activity_timezone_label">時間帯</string>
+    <string name="each_region_activity_change_timezone_button">変更</string>
+    <string name="each_region_activity_dialog_timezone_select_title">時間帯選択</string>
+    <string name="each_region_activity_checkbox_default_region">デフォルト地域に設定</string>
+
+    <string name="each_region_activity_error_dialog_title">エラー</string>
+    <string name="each_region_activity_error_dialog_message_name_empty">名前が空です</string>
+    <string name="each_region_activity_error_dialog_message_coordinate_format">座標が正しくありません</string>
+    <string name="each_region_activity_error_dialog_message_longitude_range">経度は -180.0 から 180.0 の間である必要があります</string>
+    <string name="each_region_activity_error_dialog_message_latitude_range">緯度は -90.0 から 90.0 の間である必要があります</string>
+    <string name="each_region_activity_error_dialog_message_elevation_range">標高は正の値である必要があります</string>
+
+    <string name="format_app_info_version">バージョン %1$s</string>
+    <string name="app_info_source_code">ソースコード</string>
+    <string name="app_info_author">作者</string>
+
+    <string name="licensing_notice_header">ライセンス情報</string>
+
+    <string name="config_widget_solar_info_today_region">地域</string>
+    <string name="config_widget_solar_info_today_change_button">変更</string>
+    <string name="config_widget_solar_info_today_region_select_dialog_title">ウィジェットで使用する地域の選択</string>
+    <string name="config_widget_solar_info_today_no_region">（地域なし）</string>
+    <string name="config_widget_solar_info_today_warn_no_region_yet">地域が追加されていません。ウィジェットを使用するには地域を追加する必要があります。</string>
+    <string name="config_widget_solar_info_today_ok_button">OK</string>
+
+    <string name="widget_solar_info_today_tiny_name">太陽＆月（tiny）</string>
+    <string name="widget_solar_info_today_24h_format">%1$02d:%2$02d</string>
+
+    <string name="example_text_location_tokyo">東京</string>
+    <string name="example_text_jan_1st_on_widget_without_dow">01/01</string>
+    <string name="example_text_unknown_date_on_widget_without_dow">--/--</string>
+
+    <string name="widget_error_string">エラー</string>
+</resources>
