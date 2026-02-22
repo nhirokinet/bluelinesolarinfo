@@ -1,9 +1,5 @@
 <resources>
     <string name="app_name">Blue Line Solar Info</string>
-    <!-- Loaded from app/src/main/res/layout/activity_app_info.xml, and don't forget to change the icon when changing author info -->
-    <string name="author_name" translatable="false">nhirokinet</string>
-    <string name="author_description" translatable="false">https://nhiroki.net/</string>
-    <string name="source_code_url" translatable="false">https://github.com/nhirokinet/bluelinesolarinfo</string>
 
     <string name="format_unit_angle_dms">%1$d°%2$02d\'%3$02d.%4$01d\"</string>
     <string name="format_unit_angle_dm_3digits">%1$03d°%2$02d\'</string>
