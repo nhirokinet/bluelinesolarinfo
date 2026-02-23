@@ -145,11 +145,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onLocationChanged(android.location.Location location) {
                 if (MainActivity.this.currentLocation != null) {
-                    if (locationPrevProvider.equals(LocationManager.FUSED_PROVIDER) && !location.getProvider().equals(LocationManager.FUSED_PROVIDER)) {
-                        return;
-                    }
-                    if ((!locationPrevProvider.equals(location.getProvider())) && locationPrevAccuracy <= location.getAccuracy()) {
-                        return;
+                    if (! locationPrevProvider.equals(LocationManager.PASSIVE_PROVIDER)) {
+                        if (locationPrevProvider.equals(LocationManager.FUSED_PROVIDER) && !location.getProvider().equals(LocationManager.FUSED_PROVIDER)) {
+                            return;
+                        }
+                        if ((!locationPrevProvider.equals(location.getProvider())) && locationPrevAccuracy <= location.getAccuracy()) {
+                            return;
+                        }
                     }
                 }
                 double height;
