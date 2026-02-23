@@ -6,12 +6,24 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activities.RegionsSettingActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/bluelinesolorinfoThemeColor"
+        android:layout_marginVertical="4sp"
+        />
     <TextView
         android:text="@string/regions_setting_activity_title"
         android:textSize="24sp"
         android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/bluelinesolorinfoThemeColor"
+        android:layout_marginVertical="4sp"
         />
     <LinearLayout
         android:layout_width="match_parent"
@@ -31,6 +43,12 @@
             android:layout_height="wrap_content"
             />
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/bluelinesolorinfoThemeColor"
+        android:layout_marginVertical="4sp"
+        />
     <Button
         android:id="@+id/regions_setting_add_region_button"
         android:text="@string/regions_setting_add_region_button"
@@ -41,5 +59,11 @@
         android:id="@+id/regions_setting_region_list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/bluelinesolorinfoThemeColor"
+        android:layout_marginVertical="4sp"
         />
 </LinearLayout>

@@ -120,16 +120,23 @@
     <string name="config_widget_solar_info_today_ok_button">OK</string>
 
     <string name="widget_solar_info_today_tiny_name">Sun &amp; moon (tiny)</string>
+    <string name="widget_solar_info_today_medium_name">Sun &amp; moon (medium)</string>
     <string name="widget_solar_info_today_24h_format">%1$02d:%2$02d</string>
 
-    <string name="widget_preview_text_location">Tokyo</string>
-    <string name="widget_preview_text_on_widget_without_dow">04/21</string>
-    <string name="widget_preview_text_sunrise_time_on_widget">05:01</string>
-    <string name="widget_preview_text_sunset_time_on_widget">18:19</string>
-    <string name="widget_preview_text_moonphase_on_widget"> 3.6</string>
-    <string name="widget_initial_text_date_on_widget_without_dow">--/--</string>
-    <string name="widget_initial_text_time_on_widget">--:--</string>
-    <string name="widget_initial_text_moonphase_on_widget">--.-</string>
+    <string name="widget_solar_info_today_widget_sunrise_label">Sunrise</string>
+    <string name="widget_solar_info_today_widget_sunset_label">Sunset</string>
+    <string name="widget_solar_info_today_widget_moon_phase_label">Moon</string>
+    <string name="widget_solar_info_today_initial_text_location">-</string>
+    <string name="widget_solar_info_today_preview_text_location">Tokyo</string>
+    <string name="widget_solar_info_today_initial_text_date_on_widget_without_dow">--/--</string>
+    <string name="widget_solar_info_today_preview_text_date_on_widget_without_dow">04/21</string>
+    <string name="widget_solar_info_today_initial_text_date_on_widget_with_dow">---, --/--</string>
+    <string name="widget_solar_info_today_preview_text_date_on_widget_with_dow">Tue, 04/21</string>
+    <string name="widget_solar_info_today_initial_text_time_on_widget">--:--</string>
+    <string name="widget_solar_info_today_preview_text_sunrise_time_on_widget">05:01</string>
+    <string name="widget_solar_info_today_preview_text_sunset_time_on_widget">18:19</string>
+    <string name="widget_solar_info_today_initial_text_moonphase_on_widget">--.-</string>
+    <string name="widget_solar_info_today_preview_text_moonphase_on_widget"> 3.6</string>
 
     <string name="widget_error_string">ERROR</string>
 </resources>

@@ -50,7 +50,7 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     public final static String EXTRA_REGION_ID = "region_id";
-    public final static int REQUEST_CODE_FOR_OPENING_REGION = 0x10000000;
+    public final static int REQUEST_CODE_FOR_OPENING_BY_WIDGET = 0x10000000;
 
     private enum LocationMeasureStatus { UNKNOWN, NO_PERMISSION, FETCHING, SUCCESS, ERROR };
 
@@ -73,8 +73,8 @@ public class MainActivity extends AppCompatActivity {
     private Runnable refreshRunnable;
 
 
-    public static int getRequestCodeForOpeningRegion(RegionOnTheEarth region) {
-        return REQUEST_CODE_FOR_OPENING_REGION | ((int)region.getId() & 0xfffffff);
+    public static int getRequestCodeForOpeningByWidget(int appWidgetId) {
+        return REQUEST_CODE_FOR_OPENING_BY_WIDGET | (appWidgetId & 0xfffffff);
     }
 
     @Override

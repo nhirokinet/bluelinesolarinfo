@@ -36,11 +36,26 @@
             android:exported="false"
             android:theme="@style/Theme.BlueLineSolarInfo.NoActionBar"
             />
+        <activity android:name=".activities.widgetConfig.SolarInfoTodayMediumWidgetConfigActivity"
+            android:exported="false"
+            android:theme="@style/Theme.BlueLineSolarInfo.NoActionBar"
+            />
         <activity android:name=".activities.widgetConfig.SolarInfoTodayTinyWidgetConfigActivity"
             android:exported="false"
             android:theme="@style/Theme.BlueLineSolarInfo.NoActionBar"
             />
 
+        <receiver android:name=".widgets.SolarInfoTodayMediumProvider"
+            android:label="@string/widget_solar_info_today_medium_name"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_solarinfo_today_medium"
+                />
+        </receiver>
         <receiver android:name=".widgets.SolarInfoTodayTinyProvider"
             android:label="@string/widget_solar_info_today_tiny_name"
             android:exported="false">

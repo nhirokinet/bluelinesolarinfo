@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minHeight="50sp"
+    android:minWidth="100sp"
+    android:updatePeriodMillis="3600000"
+    android:resizeMode="horizontal|vertical"
+    android:widgetCategory="home_screen"
+    android:previewLayout="@layout/widget_solarinfo_today_medium_preview"
+    android:initialLayout="@layout/widget_solarinfo_today_medium_initial"
+    android:configure="net.nhiroki.bluelinesolarinfo.activities.widgetConfig.SolarInfoTodayMediumWidgetConfigActivity"
+    android:widgetFeatures="reconfigurable"
+    />

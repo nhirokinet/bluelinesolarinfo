@@ -35,7 +35,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 
-public class SolarInfoTodayTinyProvider extends AppWidgetProvider {
+public class SolarInfoTodayMediumProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
@@ -72,7 +72,7 @@ public class SolarInfoTodayTinyProvider extends AppWidgetProvider {
     }
 
     public static void updateWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
-        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_solarinfo_today_tiny);
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_solarinfo_today_medium);
 
         AppPreferences.RegionBasedWidgetConfig widgetConfig = AppPreferences.getRegionBasedWidgetConfig(context, appWidgetId);
         if (widgetConfig == null) {
@@ -97,8 +97,9 @@ public class SolarInfoTodayTinyProvider extends AppWidgetProvider {
         Instant midOfDay = dayMidLocal.toInstant();
 
         Locale locale = context.getResources().getConfiguration().locale;
-        String dateFormat = DateFormat.getBestDateTimePattern(locale, "MMdd");
+        String dateFormat = DateFormat.getBestDateTimePattern(locale, "MMddE");
         remoteViews.setTextViewText(R.id.suninfo_widget_date, new SimpleDateFormat(dateFormat, locale).format(new Date(nowLocal.getYear() - 1900, nowLocal.getMonthValue() - 1, nowLocal.getDayOfMonth())));
+        remoteViews.setTextViewText(R.id.suninfo_widget_location, region.getName());
 
         Sun sun = new Sun();
         try {
