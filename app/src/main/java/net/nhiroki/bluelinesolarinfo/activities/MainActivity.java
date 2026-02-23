@@ -2,6 +2,7 @@ package net.nhiroki.bluelinesolarinfo.activities;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean locationListenerInUse = false;
     private String locationPrevProvider = "";
     private double locationPrevAccuracy = 1000000.0;
+    private double locationPrevElevationAccuracy = 0.0;
 
     private Handler refreshHandler;
     private Runnable refreshRunnable;
@@ -146,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
                     if (locationPrevProvider.equals(LocationManager.FUSED_PROVIDER) && !location.getProvider().equals(LocationManager.FUSED_PROVIDER)) {
                         return;
                     }
-                    if ((!locationPrevProvider.equals(location.getProvider())) && locationPrevAccuracy < location.getAccuracy()) {
+                    if ((!locationPrevProvider.equals(location.getProvider())) && locationPrevAccuracy <= location.getAccuracy()) {
                         return;
                     }
                 }
@@ -160,6 +162,11 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this.locationMeasureStatus = LocationMeasureStatus.SUCCESS;
                 MainActivity.this.locationPrevProvider = location.getProvider();
                 MainActivity.this.locationPrevAccuracy = location.getAccuracy();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE && location.hasMslAltitude()) {
+                    MainActivity.this.locationPrevElevationAccuracy = location.getMslAltitudeAccuracyMeters();
+                } else {
+                    MainActivity.this.locationPrevElevationAccuracy = location.hasAltitude() ? location.getVerticalAccuracyMeters() : -1.0;
+                }
                 MainActivity.this.updateSolarInfo();
             }
 
@@ -269,6 +276,8 @@ public class MainActivity extends AppCompatActivity {
         LocationOnTheEarth locationOnTheEarth;
 
         if (regionOnTheEarth == null) {
+            findViewById(R.id.main_view_region_location_measure_status_text).setVisibility(View.VISIBLE);
+
             boolean hasLocationPermission = ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == android.content.pm.PackageManager.PERMISSION_GRANTED
                     || ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == android.content.pm.PackageManager.PERMISSION_GRANTED;
             if (hasLocationPermission) {
@@ -320,6 +329,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         } else {
+            findViewById(R.id.main_view_region_location_measure_status_text).setVisibility(View.GONE);
             findViewById(R.id.main_view_location_measure_config_area).setVisibility(View.GONE);
             findViewById(R.id.main_view_first_guide_area).setVisibility(View.GONE);
             findViewById(R.id.main_view_nolocpriv_guide_area).setVisibility(View.GONE);
@@ -343,15 +353,16 @@ public class MainActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.main_view_region_text)).setText(R.string.main_activity_current_location);
 
             if (this.locationMeasureStatus == LocationMeasureStatus.NO_PERMISSION) {
-                ((TextView) findViewById(R.id.main_view_region_text_line1)).setText(R.string.main_activity_message_error_permission_location_fetch);
+                ((TextView) findViewById(R.id.main_view_region_location_measure_status_text)).setText(R.string.main_activity_message_error_permission_location_fetch);
             } else if (this.locationMeasureStatus == LocationMeasureStatus.FETCHING || this.locationMeasureStatus == LocationMeasureStatus.UNKNOWN) {
-                ((TextView) findViewById(R.id.main_view_region_text_line1)).setText(R.string.main_activity_message_location_fetching);
+                ((TextView) findViewById(R.id.main_view_region_location_measure_status_text)).setText(R.string.main_activity_message_location_fetching);
             } else if (this.locationMeasureStatus == LocationMeasureStatus.ERROR) {
-                ((TextView) findViewById(R.id.main_view_region_text_line1)).setText(R.string.main_activity_message_location_fetch_error);
+                ((TextView) findViewById(R.id.main_view_region_location_measure_status_text)).setText(R.string.main_activity_message_location_fetch_error);
             } else {
-                ((TextView) findViewById(R.id.main_view_region_text_line1)).setText("");
+                ((TextView) findViewById(R.id.main_view_region_location_measure_status_text)).setText("");
             }
-            ((TextView) findViewById(R.id.main_view_region_text_line2)).setText(R.string.main_activity_location_elevation_meters_unknown);
+            ((TextView) findViewById(R.id.main_view_region_text_line1)).setText(R.string.main_activity_location_unknown_line);
+            ((TextView) findViewById(R.id.main_view_region_text_line2)).setText(R.string.main_activity_location_unknown_line);
 
         } else {
             long longitudeAbs = (long) Math.floor(Math.abs(locationOnTheEarth.getLongitudeDeg()) * 36000.0);
@@ -367,6 +378,19 @@ public class MainActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.main_view_region_text_line2)).setText(
                     getString(R.string.main_activity_location_elevation_meters, locationOnTheEarth.getElevationMeters())
             );
+            if (((CheckBox) findViewById(R.id.main_view_location_measure_config_use_elevation_checkbox)).isChecked() && locationPrevElevationAccuracy != -1.0) {
+                ((TextView) findViewById(R.id.main_view_region_location_measure_status_text)).setText(
+                        getString(R.string.main_activity_location_provider_info_with_elevation_format,
+                                locationPrevProvider, locationPrevAccuracy, locationPrevElevationAccuracy)
+                );
+
+            } else {
+                ((TextView) findViewById(R.id.main_view_region_location_measure_status_text)).setText(
+                        getString(R.string.main_activity_location_provider_info_format,
+                                locationPrevProvider, locationPrevAccuracy)
+                );
+
+            }
         }
 
         Instant now = Instant.now();
@@ -625,17 +649,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private static String degTo24HStr(double deg) {
+    private static String degTo24HStr(Context context, double deg) {
         int sec = (int)(deg / 360.0 * 86400.0);
-        return String.format("%02d:%02d:%02d", sec / 3600, (sec % 3600) / 60, sec % 60);
+        return context.getString(R.string.main_activity_solar_info_now_hms_24h_format, sec / 3600, (sec % 3600) / 60, sec % 60);
     };
-
-    private static String localTimeTo24HStr(ZonedDateTime zonedDateTime) {
-        int hour = zonedDateTime.getHour();
-        int minute = zonedDateTime.getMinute();
-        int second = zonedDateTime.getSecond();
-        return String.format("%02d:%02d:%02d", hour, minute, second);
-    }
 
     private void displayNowSolarInfo(Instant now, LocationOnTheEarth locationOnTheEarth, ZoneId zoneId) {
         TimePointOnTheEarth nowOnTheEarth = new TimePointOnTheEarth(now);
@@ -648,7 +665,11 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             if (timeFormat24Hour) {
-                ((TextView) findViewById(R.id.main_view_solar_info_now_greenwich_localtime)).setText(localTimeTo24HStr(now.atZone(zoneId)));
+                ZonedDateTime zonedDateTime = now.atZone(zoneId);
+                int hour = zonedDateTime.getHour();
+                int minute = zonedDateTime.getMinute();
+                int second = zonedDateTime.getSecond();
+                ((TextView) findViewById(R.id.main_view_solar_info_now_greenwich_localtime)).setText(getString(R.string.main_activity_solar_info_now_hms_24h_format, hour, minute, second));
 
             } else {
                 DateTimeFormatter timeFormatterWithSec = DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, "hmsa"), locale);
@@ -656,10 +677,10 @@ public class MainActivity extends AppCompatActivity {
             }
 
             double greenwichSideralTimeDeg = nowOnTheEarth.calculateSiderealTimeDeg(0.0);
-            ((TextView) findViewById(R.id.main_view_solar_info_now_greenwich_sidereal_time)).setText(degTo24HStr(greenwichSideralTimeDeg));
+            ((TextView) findViewById(R.id.main_view_solar_info_now_greenwich_sidereal_time)).setText(degTo24HStr(this.getApplicationContext(), greenwichSideralTimeDeg));
 
             double localSideralTimeDeg = nowOnTheEarth.calculateSiderealTimeDeg(locationOnTheEarth.getLongitudeDeg());
-            ((TextView) findViewById(R.id.main_view_solar_info_now_local_sidereal_time)).setText(degTo24HStr(localSideralTimeDeg));
+            ((TextView) findViewById(R.id.main_view_solar_info_now_local_sidereal_time)).setText(degTo24HStr(this.getApplicationContext(), localSideralTimeDeg));
 
             double sunHourAngle = nowOnTheEarth.calculateSiderealTimeRad(locationOnTheEarth.getLongitudeRad()) - sun.calculateRightAscensionRad(now);
             double sunDeclination = sun.calculateDeclinationRad(now);

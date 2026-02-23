@@ -50,6 +50,11 @@
                 android:orientation="vertical"
                 >
                 <TextView
+                    android:id="@+id/main_view_region_location_measure_status_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+                <TextView
                     android:id="@+id/main_view_region_text_line1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

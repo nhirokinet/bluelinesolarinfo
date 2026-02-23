@@ -24,7 +24,9 @@
     <string name="main_activity_message_error_permission_location_fetch">App has no permission to get the current position</string>
     <string name="main_activity_location_coordinates_format">%1$s %2$s %3$s %4$s</string>
     <string name="main_activity_location_elevation_meters">Elevation %1$.1fm</string>
-    <string name="main_activity_location_elevation_meters_unknown">Elevation -.-m</string>
+    <string name="main_activity_location_unknown_line">---</string>
+    <string name="main_activity_location_provider_info_format">Provider: %1$s / Accuracy: %2$1.1fm</string>
+    <string name="main_activity_location_provider_info_with_elevation_format">Provider: %1$s / Accuracy: %2$1.1fm / Elevation accuracy: %3$1.1fm</string>
     <string name="main_activity_region_timezone">Timezone: %1$s (%2$s)</string>
     <string name="main_activity_first_guide_add_region_text">No region is set yet. You can configure regions via top-right menu button.</string>
     <string name="main_activity_first_guest_add_region_now_button">Add region now</string>
@@ -47,6 +49,7 @@
     <string name="main_activity_solar_info_today_next_event_moonrise">Next moonrise:</string>
     <string name="main_activity_solar_info_today_next_event_moonset">Next moonset:</string>
 
+    <string name="main_activity_solar_info_now_hms_24h_format">%1$02d:%2$02d:%3$02d</string>
     <string name="main_activity_solar_info_now_localtime">Local time</string>
     <string name="main_activity_solar_info_now_sidereal_time_greenwich">Greenwich sidereal time</string>
     <string name="main_activity_solar_info_now_sidereal_time_local">Local sidereal time</string>
@@ -108,6 +111,7 @@
     <string name="license_apache_license_v2.0_name" translatable="false">Apache License, Version 2.0</string>
     <string name="license_apache_license_v2.0_url" translatable="false">https://www.apache.org/licenses/LICENSE-2.0.txt</string>
 
+    <string name="config_widget_solar_info_today_title">Configure widget</string>
     <string name="config_widget_solar_info_today_region">Region</string>
     <string name="config_widget_solar_info_today_change_button">Change</string>
     <string name="config_widget_solar_info_today_region_select_dialog_title">Select region for the widget</string>
@@ -118,9 +122,14 @@
     <string name="widget_solar_info_today_tiny_name">Sun &amp; moon (tiny)</string>
     <string name="widget_solar_info_today_24h_format">%1$02d:%2$02d</string>
 
-    <string name="example_text_location_tokyo">Tokyo</string>
-    <string name="example_text_jan_1st_on_widget_without_dow">01/01</string>
-    <string name="example_text_unknown_date_on_widget_without_dow">--/--</string>
+    <string name="widget_preview_text_location">Tokyo</string>
+    <string name="widget_preview_text_on_widget_without_dow">04/21</string>
+    <string name="widget_preview_text_sunrise_time_on_widget">05:01</string>
+    <string name="widget_preview_text_sunset_time_on_widget">18:19</string>
+    <string name="widget_preview_text_moonphase_on_widget"> 3.6</string>
+    <string name="widget_initial_text_date_on_widget_without_dow">--/--</string>
+    <string name="widget_initial_text_time_on_widget">--:--</string>
+    <string name="widget_initial_text_moonphase_on_widget">--.-</string>
 
     <string name="widget_error_string">ERROR</string>
 </resources>

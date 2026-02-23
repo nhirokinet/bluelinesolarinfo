@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/widget_text_color"
             android:textStyle="bold"
-            android:text="@string/example_text_jan_1st_on_widget_without_dow"
+            android:text="@string/widget_preview_text_on_widget_without_dow"
             />
     </LinearLayout>
     <LinearLayout
@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/widget_text_color"
-            android:text="07:50"
+            android:text="@string/widget_preview_text_sunrise_time_on_widget"
             />
     </LinearLayout>
     <LinearLayout
@@ -45,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/widget_text_color"
-            android:text="16:38"
+            android:text="@string/widget_preview_text_sunset_time_on_widget"
             />
     </LinearLayout>
     <LinearLayout
@@ -55,6 +55,7 @@
         android:gravity="center_vertical"
         >
         <ImageView
+            android:id="@+id/suninfo_moon_phase_bitmap"
             android:src="@drawable/moonphase_on_widget_sample_50deg"
             android:layout_width="12sp"
             android:layout_height="12sp"
@@ -64,7 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/widget_text_color"
-            android:text=" 5.6"
+            android:text="@string/widget_preview_text_moonphase_on_widget"
             />
     </LinearLayout>
 </LinearLayout>
