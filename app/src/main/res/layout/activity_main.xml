@@ -215,6 +215,7 @@
                             android:layout_height="wrap_content"
                             android:textSize="24sp"
                             android:paddingStart="8sp"
+                            android:layout_gravity="right"
                             />
                         <TextView
                             android:id="@+id/main_view_solar_info_today_sun_culmination_invisible_label"
