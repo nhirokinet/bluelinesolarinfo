@@ -196,9 +196,11 @@
                             android:layout_gravity="right"
                             />
                         <TextView
-                            android:text=""
+                            android:id="@+id/main_view_solar_info_today_sunrise_direction"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:paddingStart="6sp"
+                            android:layout_gravity="bottom"
                             />
                     </TableRow>
                     <TableRow>
@@ -242,9 +244,11 @@
                             android:layout_gravity="right"
                             />
                         <TextView
-                            android:text=""
+                            android:id="@+id/main_view_solar_info_today_sunset_direction"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:paddingStart="6sp"
+                            android:layout_gravity="bottom"
                             />
                     </TableRow>
                 </TableLayout>
@@ -272,6 +276,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:paddingVertical="4sp"
                     >
                     <net.nhiroki.androidlib.bluelineastroandroidlib.views.MoonPhaseView
                         android:id="@+id/main_view_solar_info_today_moon_phase_view"
@@ -315,9 +320,11 @@
                             android:layout_gravity="right"
                             />
                         <TextView
-                            android:text=""
+                            android:id="@+id/main_view_solar_info_today_moonrise_direction"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:paddingStart="6sp"
+                            android:layout_gravity="bottom"
                             />
                     </TableRow>
                     <TableRow>
@@ -361,9 +368,11 @@
                             android:layout_gravity="right"
                             />
                         <TextView
-                            android:text=""
+                            android:id="@+id/main_view_solar_info_today_moonset_direction"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:paddingStart="6sp"
+                            android:layout_gravity="bottom"
                             />
                     </TableRow>
                 </TableLayout>
@@ -440,82 +449,105 @@
                             />
                     </TableRow>
                 </TableLayout>
-                <TextView
-                    android:text="@string/main_activity_solar_info_today_sun_header"
-                    android:textSize="24sp"
+                <TableLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="6sp"
-                    />
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     >
-                    <TextView
-                        android:text="@string/main_activity_solar_info_now_azimuth_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        />
-                    <TextView
-                        android:id="@+id/main_view_solar_info_now_sun_azimuth"
-                        android:paddingStart="8sp"
-                        android:textSize="20sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        />
-                    <TextView
-                        android:text="@string/main_activity_solar_info_now_elevation_label"
-                        android:paddingStart="20sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        />
-                    <TextView
-                        android:id="@+id/main_view_solar_info_now_sun_elevation"
-                        android:paddingStart="8sp"
-                        android:textSize="20sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        />
-                </LinearLayout>
-                <TextView
-                    android:text="@string/main_activity_solar_info_today_moon_header"
-                    android:textSize="24sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="6sp"
-                    />
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
-                    <TextView
-                        android:text="@string/main_activity_solar_info_now_azimuth_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        />
-                    <TextView
-                        android:id="@+id/main_view_solar_info_now_moon_azimuth"
-                        android:paddingStart="8sp"
-                        android:textSize="20sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        />
-                    <TextView
-                        android:text="@string/main_activity_solar_info_now_elevation_label"
-                        android:paddingStart="20sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        />
-                    <TextView
-                        android:id="@+id/main_view_solar_info_now_moon_elevation"
-                        android:paddingStart="8sp"
-                        android:textSize="20sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        />
-                </LinearLayout>
+                    <TableRow>
+                        <TextView
+                            android:text="@string/main_activity_solar_info_today_sun_header"
+                            android:textSize="24sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="6sp"
+                            android:layout_span="5"
+                            />
+                    </TableRow>
+                    <TableRow>
+                        <TextView
+                            android:text="@string/main_activity_solar_info_now_azimuth_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            />
+                        <TextView
+                            android:id="@+id/main_view_solar_info_now_sun_azimuth"
+                            android:paddingStart="8sp"
+                            android:textSize="20sp"
+                            android:textAlignment="textEnd"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            />
+                        <TextView
+                            android:id="@+id/main_view_solar_info_now_sun_azimuth_str"
+                            android:paddingStart="8sp"
+                            android:textSize="16sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            />
+                        <TextView
+                            android:text="@string/main_activity_solar_info_now_elevation_label"
+                            android:paddingStart="20sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            />
+                        <TextView
+                            android:id="@+id/main_view_solar_info_now_sun_elevation"
+                            android:paddingStart="8sp"
+                            android:textSize="20sp"
+                            android:textAlignment="textEnd"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            />
+
+                    </TableRow>
+                    <TableRow>
+                        <TextView
+                            android:text="@string/main_activity_solar_info_today_moon_header"
+                            android:textSize="24sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="6sp"
+                            android:layout_span="5"
+                            />
+                    </TableRow>
+                    <TableRow>
+                        <TextView
+                            android:text="@string/main_activity_solar_info_now_azimuth_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            />
+                        <TextView
+                            android:id="@+id/main_view_solar_info_now_moon_azimuth"
+                            android:paddingStart="8sp"
+                            android:textSize="20sp"
+                            android:textAlignment="textEnd"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            />
+                        <TextView
+                            android:id="@+id/main_view_solar_info_now_moon_azimuth_str"
+                            android:paddingStart="8sp"
+                            android:textSize="16sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            />
+                        <TextView
+                            android:text="@string/main_activity_solar_info_now_elevation_label"
+                            android:paddingStart="20sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            />
+                        <TextView
+                            android:id="@+id/main_view_solar_info_now_moon_elevation"
+                            android:paddingStart="8sp"
+                            android:textSize="20sp"
+                            android:textAlignment="textEnd"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            />
+                    </TableRow>
+                </TableLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="3dp"

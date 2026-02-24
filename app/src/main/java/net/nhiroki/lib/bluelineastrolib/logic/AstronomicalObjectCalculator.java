@@ -17,11 +17,25 @@ public class AstronomicalObjectCalculator {
     public enum ReferencePoint { TOP, CENTER, BOTTOM };
 
 
-    public static boolean isObjectAboveHorizon(AstronomicalObject astronomicalObject, Instant time,
-                                               LocationOnTheEarth locationOnTheEarth, boolean horizonByElevation,
-                                               ReferencePoint referencePoint) throws UnsupportedDateRangeException, AstronomicalPhenomenonComputationException {
+    public static double calculateAzimuthRad(AstronomicalObject astronomicalObject, Instant time,
+                                             LocationOnTheEarth locationOnTheEarth) throws UnsupportedDateRangeException, AstronomicalPhenomenonComputationException {
         double hourAngle = new TimePointOnTheEarth(time).calculateSiderealTimeRad(locationOnTheEarth.getLongitudeRad()) - astronomicalObject.calculateRightAscensionRad(time);
         double declination = astronomicalObject.calculateDeclinationRad(time);
+
+        return CoordinateConversion.calculateAzimuthRadFromHourAngle(hourAngle, declination, locationOnTheEarth.getLatitudeRad());
+    }
+
+    public static double calculateElevationRad(AstronomicalObject astronomicalObject, Instant time,
+                                               LocationOnTheEarth locationOnTheEarth) throws UnsupportedDateRangeException, AstronomicalPhenomenonComputationException {
+        double hourAngle = new TimePointOnTheEarth(time).calculateSiderealTimeRad(locationOnTheEarth.getLongitudeRad()) - astronomicalObject.calculateRightAscensionRad(time);
+        double declination = astronomicalObject.calculateDeclinationRad(time);
+
+        return CoordinateConversion.calculateElevationRadFromHourAngle(hourAngle, declination, locationOnTheEarth.getLatitudeRad());
+    }
+
+    public static double calculateThresholdElevationRadForRiseSet(AstronomicalObject astronomicalObject, Instant time,
+                                                                  LocationOnTheEarth locationOnTheEarth, boolean horizonByElevation,
+                                                                  ReferencePoint referencePoint) throws UnsupportedDateRangeException, AstronomicalPhenomenonComputationException {
 
         int posReference = 0;
         if (referencePoint == ReferencePoint.TOP) {
@@ -32,10 +46,8 @@ public class AstronomicalObjectCalculator {
             posReference = -1;
         }
 
-        double height = CoordinateConversion.calculateElevationRadFromHourAngle(hourAngle, declination, locationOnTheEarth.getLatitudeRad());
-        double heightStandard = calculateActualCenterHeightRad(time, locationOnTheEarth.getElevationMeters(), astronomicalObject, posReference, true,  -Math.toRadians(Earth.ATMOSPHERIC_REFRACTION_AT_HORIZON_DEC_SEC / 3600.0));
-
-        return height > heightStandard;
+        double heightMeter = horizonByElevation ? locationOnTheEarth.getElevationMeters() : 0.0;
+        return calculateActualCenterHeightRad(time, heightMeter, astronomicalObject, posReference, true,  -Math.toRadians(Earth.ATMOSPHERIC_REFRACTION_AT_HORIZON_DEC_SEC / 3600.0));
     }
 
     /**

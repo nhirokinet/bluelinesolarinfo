@@ -6,7 +6,7 @@
     <string name="source_code_url" translatable="false">https://github.com/nhirokinet/bluelinesolarinfo</string>
 
     <string name="format_unit_angle_dms">%1$d°%2$02d\'%3$02d.%4$01d\"</string>
-    <string name="format_unit_angle_dm_3digits">%1$03d°%2$02d\'</string>
+    <string name="format_unit_angle_dm">%1$d°%2$02d\'</string>
     <string name="unit_angle_dm_invalid_3digits">---°--\'</string>
     <string name="format_unit_angle_dm_signed">%1$s%2$d°%3$02d\'</string>
     <string name="unit_angle_deg">°</string>
@@ -16,6 +16,23 @@
     <string name="coordinate_display_east">E</string>
     <string name="coordinate_display_west">W</string>
     <string name="time_event_not_occur_hm">--:--</string>
+
+    <string name="direction_short_16_area_0">N</string>
+    <string name="direction_short_16_area_1">NNE</string>
+    <string name="direction_short_16_area_2">NE</string>
+    <string name="direction_short_16_area_3">ENE</string>
+    <string name="direction_short_16_area_4">E</string>
+    <string name="direction_short_16_area_5">ESE</string>
+    <string name="direction_short_16_area_6">SE</string>
+    <string name="direction_short_16_area_7">SSE</string>
+    <string name="direction_short_16_area_8">S</string>
+    <string name="direction_short_16_area_9">SSW</string>
+    <string name="direction_short_16_area_10">SW</string>
+    <string name="direction_short_16_area_11">WSW</string>
+    <string name="direction_short_16_area_12">W</string>
+    <string name="direction_short_16_area_13">WNW</string>
+    <string name="direction_short_16_area_14">NW</string>
+    <string name="direction_short_16_area_15">NNW</string>
 
     <string name="main_activity_today_format">%1$s (today)</string>
     <string name="main_activity_current_location">Current location</string>
@@ -27,13 +44,14 @@
     <string name="main_activity_location_unknown_line">---</string>
     <string name="main_activity_location_provider_info_format">Provider: %1$s / Accuracy: %2$1.1fm</string>
     <string name="main_activity_location_provider_info_with_elevation_format">Provider: %1$s / Accuracy: %2$1.1fm / Elevation accuracy: %3$1.1fm</string>
-    <string name="main_activity_region_timezone">Timezone: %1$s (%2$s)</string>
     <string name="main_activity_first_guide_add_region_text">No region is set yet. You can configure regions via top-right menu button.</string>
     <string name="main_activity_first_guest_add_region_now_button">Add region now</string>
     <string name="main_activity_config_location_measure_use_elevation">Consider elevation in calculation</string>
     <string name="main_activity_nolocpriv_add_location_privilege_text">This app currently does not have privilege to fetch the current location. If you want to display according to device location, please grant the privilege. You can add region from menu to use without location permission.</string>
     <string name="main_activity_nolocpriv_add_location_privilege_button">Grant location access</string>
 
+    <string name="main_activity_solar_info_today_azimuth_str_format">Azimuth %1$s (%2$s)</string>
+    <string name="main_activity_solar_info_today_culmination_direction_format">%1$s Elevation %2$s</string>
     <string name="main_activity_solar_info_today_invisible_culmination_label">(Invisible)</string>
     <string name="main_activity_solar_info_today_sun_header">Sun</string>
     <string name="main_activity_solar_info_today_sunrise">Sunrise</string>
@@ -54,6 +72,7 @@
     <string name="main_activity_solar_info_now_sidereal_time_greenwich">Greenwich sidereal time</string>
     <string name="main_activity_solar_info_now_sidereal_time_local">Local sidereal time</string>
     <string name="main_activity_solar_info_now_azimuth_label">Azimuth</string>
+    <string name="main_activity_solar_info_now_azimuth_str_format">(%1$s)</string>
     <string name="main_activity_solar_info_now_elevation_label">Elevation</string>
 
     <string name="main_activity_region_select_dialog_title">Select region</string>

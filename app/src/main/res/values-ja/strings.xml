@@ -2,7 +2,7 @@
     <string name="app_name">Blue Line Solar Info</string>
 
     <string name="format_unit_angle_dms">%1$d°%2$02d\'%3$02d.%4$01d\"</string>
-    <string name="format_unit_angle_dm_3digits">%1$03d°%2$02d\'</string>
+    <string name="format_unit_angle_dm">%1$03d°%2$02d\'</string>
     <string name="unit_angle_dm_invalid_3digits">---°--\'</string>
     <string name="format_unit_angle_dm_signed">%1$s%2$d°%3$02d\'</string>
     <string name="unit_angle_deg">°</string>
@@ -12,6 +12,23 @@
     <string name="coordinate_display_east">E</string>
     <string name="coordinate_display_west">W</string>
     <string name="time_event_not_occur_hm">--:--</string>
+
+    <string name="direction_short_16_area_0">北</string>
+    <string name="direction_short_16_area_1">北北東</string>
+    <string name="direction_short_16_area_2">北東</string>
+    <string name="direction_short_16_area_3">東北東</string>
+    <string name="direction_short_16_area_4">東</string>
+    <string name="direction_short_16_area_5">東南東</string>
+    <string name="direction_short_16_area_6">南東</string>
+    <string name="direction_short_16_area_7">南南東</string>
+    <string name="direction_short_16_area_8">南</string>
+    <string name="direction_short_16_area_9">南南西</string>
+    <string name="direction_short_16_area_10">南西</string>
+    <string name="direction_short_16_area_11">西南西</string>
+    <string name="direction_short_16_area_12">西</string>
+    <string name="direction_short_16_area_13">西北西</string>
+    <string name="direction_short_16_area_14">北西</string>
+    <string name="direction_short_16_area_15">北北西</string>
 
     <string name="main_activity_today_format">%1$s（今日）</string>
     <string name="main_activity_current_location">現在位置</string>
@@ -23,13 +40,14 @@
     <string name="main_activity_location_unknown_line">---</string>
     <string name="main_activity_location_provider_info_format">プロバイダ:%1$s / 精度:%2$1.1fm</string>
     <string name="main_activity_location_provider_info_with_elevation_format">プロバイダ:%1$s / 精度:%2$1.1fm / 標高精度:%3$1.1fm</string>
-    <string name="main_activity_region_timezone">時間帯：%1$s（%2$s）</string>
     <string name="main_activity_first_guide_add_region_text">地域が設定されていません。右上の三点メニューから設定できます。</string>
     <string name="main_activity_first_guest_add_region_now_button">今すぐ地域を追加</string>
     <string name="main_activity_config_location_measure_use_elevation">標高</string>
     <string name="main_activity_nolocpriv_add_location_privilege_text">位置情報取得権限がありません。機器の現在位置に基づく情報を表示するには付与する必要があります。メニューから現在位置を登録すれば権限付与せずアプリを利用することもできます。</string>
     <string name="main_activity_nolocpriv_add_location_privilege_button">位置情報権限付与</string>
 
+    <string name="main_activity_solar_info_today_azimuth_str_format">方位 %1$s (%2$s)</string>
+    <string name="main_activity_solar_info_today_culmination_direction_format">%1$s 高度 %2$s</string>
     <string name="main_activity_solar_info_today_invisible_culmination_label">（地平線下）</string>
     <string name="main_activity_solar_info_today_sun_header">太陽</string>
     <string name="main_activity_solar_info_today_sunrise">日出</string>
@@ -50,6 +68,7 @@
     <string name="main_activity_solar_info_now_sidereal_time_greenwich">グリニッジ恒星時</string>
     <string name="main_activity_solar_info_now_sidereal_time_local">地方恒星時</string>
     <string name="main_activity_solar_info_now_azimuth_label">方位</string>
+    <string name="main_activity_solar_info_now_azimuth_str_format">(%1$s)</string>
     <string name="main_activity_solar_info_now_elevation_label">高度</string>
 
     <string name="main_activity_region_select_dialog_title">地域選択</string>
