@@ -15,5 +15,9 @@ public class BroadcastReceiversForWidgets extends BroadcastReceiver {
             int[] widgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, SolarInfoTodayTinyProvider.class.getName()));
             SolarInfoTodayTinyProvider.updateAllWidgets(context, AppWidgetManager.getInstance(context), widgetIds);
         }
+        {
+            int[] widgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, SolarInfoTodayMediumProvider.class.getName()));
+            SolarInfoTodayMediumProvider.updateAllWidgets(context, AppWidgetManager.getInstance(context), widgetIds);
+        }
     }
 }
