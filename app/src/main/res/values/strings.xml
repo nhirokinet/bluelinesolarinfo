@@ -74,6 +74,7 @@
     <string name="main_activity_solar_info_now_azimuth_label">Azimuth</string>
     <string name="main_activity_solar_info_now_azimuth_str_format">(%1$s)</string>
     <string name="main_activity_solar_info_now_elevation_label">Elevation</string>
+    <string name="main_activity_solar_info_now_invisible_culmination_label">(Invisible)</string>
 
     <string name="main_activity_region_select_dialog_title">Select region</string>
 

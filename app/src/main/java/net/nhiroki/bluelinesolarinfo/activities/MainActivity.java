@@ -515,12 +515,13 @@ public class MainActivity extends AppCompatActivity {
             if (sunculmination != null) {
                 ((TextView) findViewById(R.id.main_view_solar_info_today_sun_culmination_time)).setText(sunculmination.plusSeconds(30).atZone(zoneId).format(timeFormatter));
 
-                double sunElevationRad = AstronomicalObjectCalculator.calculateElevationRad(sun, sunculmination, locationOnTheEarth);
-                if (sunElevationRad >= AstronomicalObjectCalculator.calculateThresholdElevationRadForRiseSet(sun, sunculmination, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP)) {
+                double sunElevationRadForJudge = AstronomicalObjectCalculator.calculateElevationRad(sun, sunculmination, locationOnTheEarth, AstronomicalObjectCalculator.ViewPoint.CENTER_OF_THE_EARTH, AstronomicalObjectCalculator.ElevationType.ACTUAL);
+                if (sunElevationRadForJudge >= AstronomicalObjectCalculator.calculateThresholdElevationRadForRiseSet(sun, sunculmination, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP)) {
                     double sunAzimuthDeg = Math.toDegrees(AstronomicalObjectCalculator.calculateAzimuthRad(sun, sunculmination, locationOnTheEarth));
                     if (Double.isNaN(sunAzimuthDeg)) {
                         ((TextView) findViewById(R.id.main_view_solar_info_today_sun_culmination_invisible_label)).setText("");
                     } else {
+                        double sunElevationRad = AstronomicalObjectCalculator.calculateElevationRad(sun, sunculmination, locationOnTheEarth, AstronomicalObjectCalculator.ViewPoint.GROUND, AstronomicalObjectCalculator.ElevationType.APPARENT);
                         double sunElevationDeg = Math.toDegrees(sunElevationRad);
                         long sunElevationArcMin = Math.round(sunElevationDeg * 60.0);
                         long sunElevationArcMinAbs = Math.abs(sunElevationArcMin);
@@ -643,13 +644,14 @@ public class MainActivity extends AppCompatActivity {
             if (moonculmination != null) {
                 ((TextView) findViewById(R.id.main_view_solar_info_today_moon_culmination_time)).setText(moonculmination.plusSeconds(30).atZone(zoneId).format(timeFormatter));
 
-                double moonElevationRad = AstronomicalObjectCalculator.calculateElevationRad(moon, moonculmination, locationOnTheEarth);
+                double moonElevationRadForJudge = AstronomicalObjectCalculator.calculateElevationRad(moon, moonculmination, locationOnTheEarth, AstronomicalObjectCalculator.ViewPoint.CENTER_OF_THE_EARTH, AstronomicalObjectCalculator.ElevationType.ACTUAL);
 
-                if (moonElevationRad >= AstronomicalObjectCalculator.calculateThresholdElevationRadForRiseSet(moon, moonculmination, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.CENTER)) {
+                if (moonElevationRadForJudge >= AstronomicalObjectCalculator.calculateThresholdElevationRadForRiseSet(moon, moonculmination, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP)) {
                     double moonAzimuthDeg = Math.toDegrees(AstronomicalObjectCalculator.calculateAzimuthRad(moon, moonculmination, locationOnTheEarth));
                     if (Double.isNaN(moonAzimuthDeg)) {
                         ((TextView) findViewById(R.id.main_view_solar_info_today_moon_culmination_invisible_label)).setText("");
                     } else {
+                        double moonElevationRad = AstronomicalObjectCalculator.calculateElevationRad(moon, moonculmination, locationOnTheEarth, AstronomicalObjectCalculator.ViewPoint.GROUND, AstronomicalObjectCalculator.ElevationType.APPARENT);
                         double moonElevationDeg = Math.toDegrees(moonElevationRad);
                         long moonElevationArcMin = Math.round(moonElevationDeg * 60.0);
                         long moonElevationArcMinAbs = Math.abs(moonElevationArcMin);
@@ -784,11 +786,17 @@ public class MainActivity extends AppCompatActivity {
                 ((TextView) findViewById(R.id.main_view_solar_info_now_sun_azimuth)).setText(getString(R.string.format_unit_angle_dm, sunAzumithArcMin / 60, sunAzumithArcMin % 60));
                 ((TextView) findViewById(R.id.main_view_solar_info_now_sun_azimuth_str)).setText(getString(R.string.main_activity_solar_info_now_azimuth_str_format, getString(degToStrResId(Math.toDegrees(sunAzimuthRad)))));
             }
-            double sunElevationRad = CoordinateConversion.calculateElevationRadFromHourAngle(sunHourAngle, sunDeclination, locationOnTheEarth.getLatitudeRad());
-            long sunElevationArcMin = (long) Math.floor(Math.toDegrees(sunElevationRad) * 60.0 + 0.5);
-            long sunElevationArcMinAbs = Math.abs(sunElevationArcMin);
-            String sunElevationSign = (sunElevationRad >= 0.0) ? "+" : "-";
-            ((TextView) findViewById(R.id.main_view_solar_info_now_sun_elevation)).setText(getString(R.string.format_unit_angle_dm_signed, sunElevationSign, sunElevationArcMinAbs / 60, sunElevationArcMinAbs % 60));
+            double sunElevationRadForJudge = AstronomicalObjectCalculator.calculateElevationRad(sun, now, locationOnTheEarth, AstronomicalObjectCalculator.ViewPoint.CENTER_OF_THE_EARTH, AstronomicalObjectCalculator.ElevationType.ACTUAL);
+
+            if (sunElevationRadForJudge >= AstronomicalObjectCalculator.calculateThresholdElevationRadForRiseSet(sun, now, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP)) {
+                double sunElevationRad = AstronomicalObjectCalculator.calculateElevationRad(sun, now, locationOnTheEarth, AstronomicalObjectCalculator.ViewPoint.GROUND, AstronomicalObjectCalculator.ElevationType.APPARENT);
+                long sunElevationArcMin = (long) Math.floor(Math.toDegrees(sunElevationRad) * 60.0 + 0.5);
+                long sunElevationArcMinAbs = Math.abs(sunElevationArcMin);
+                String sunElevationSign = (sunElevationRad >= 0.0) ? "+" : "-";
+                ((TextView) findViewById(R.id.main_view_solar_info_now_sun_elevation)).setText(getString(R.string.format_unit_angle_dm_signed, sunElevationSign, sunElevationArcMinAbs / 60, sunElevationArcMinAbs % 60));
+            } else {
+                ((TextView) findViewById(R.id.main_view_solar_info_now_sun_elevation)).setText(R.string.main_activity_solar_info_now_invisible_culmination_label);
+            }
 
 
             double moonHourAngle = nowOnTheEarth.calculateSiderealTimeRad(locationOnTheEarth.getLongitudeRad()) - moon.calculateRightAscensionRad(now);
@@ -802,11 +810,16 @@ public class MainActivity extends AppCompatActivity {
                 ((TextView) findViewById(R.id.main_view_solar_info_now_moon_azimuth)).setText(getString(R.string.format_unit_angle_dm, moonAzumithArcMin / 60, moonAzumithArcMin % 60));
                 ((TextView) findViewById(R.id.main_view_solar_info_now_moon_azimuth_str)).setText(getString(R.string.main_activity_solar_info_now_azimuth_str_format, getString(degToStrResId(Math.toDegrees(moonAzimuthRad)))));
             }
-            double moonElevationRad = CoordinateConversion.calculateElevationRadFromHourAngle(moonHourAngle, moonDeclination, locationOnTheEarth.getLatitudeRad());
-            long moonElevationArcMin = (long) Math.floor(Math.toDegrees(moonElevationRad) * 60.0 + 0.5);
-            long moonElevationArcMinAbs = Math.abs(moonElevationArcMin);
-            String moonElevationSign = (moonElevationRad >= 0.0) ? "+" : "-";
-            ((TextView) findViewById(R.id.main_view_solar_info_now_moon_elevation)).setText(getString(R.string.format_unit_angle_dm_signed, moonElevationSign, moonElevationArcMinAbs / 60, moonElevationArcMinAbs % 60));
+            double moonElevationRadForJudge = AstronomicalObjectCalculator.calculateElevationRad(moon, now, locationOnTheEarth, AstronomicalObjectCalculator.ViewPoint.CENTER_OF_THE_EARTH, AstronomicalObjectCalculator.ElevationType.ACTUAL);
+            if (moonElevationRadForJudge >= AstronomicalObjectCalculator.calculateThresholdElevationRadForRiseSet(moon, now, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP)) {
+                double moonElevationRad = AstronomicalObjectCalculator.calculateElevationRad(moon, now, locationOnTheEarth, AstronomicalObjectCalculator.ViewPoint.GROUND, AstronomicalObjectCalculator.ElevationType.APPARENT);
+                long moonElevationArcMin = (long) Math.floor(Math.toDegrees(moonElevationRad) * 60.0 + 0.5);
+                long moonElevationArcMinAbs = Math.abs(moonElevationArcMin);
+                String moonElevationSign = (moonElevationRad >= 0.0) ? "+" : "-";
+                ((TextView) findViewById(R.id.main_view_solar_info_now_moon_elevation)).setText(getString(R.string.format_unit_angle_dm_signed, moonElevationSign, moonElevationArcMinAbs / 60, moonElevationArcMinAbs % 60));
+            } else {
+                ((TextView) findViewById(R.id.main_view_solar_info_now_moon_elevation)).setText(R.string.main_activity_solar_info_now_invisible_culmination_label);
+            }
 
         } catch (UnsupportedDateRangeException e) {
             throw new RuntimeException(e);

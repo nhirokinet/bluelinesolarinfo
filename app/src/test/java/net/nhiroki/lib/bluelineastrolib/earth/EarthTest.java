@@ -22,6 +22,29 @@ public class EarthTest {
     }
 
     @Test
+    public void calculateAtmosphericRefractionRadFromActualElevationRadTest() {
+        assertThrows(IllegalArgumentException.class, () -> Earth.calculateAtmosphericRefractionRadFromActualElevationRad(Math.toRadians(-3.1)));
+
+        // For invisible area, it is OK if the function does not crash and gets not to wrong value
+        assertEquals(35.0, Math.toDegrees(Earth.calculateAtmosphericRefractionRadFromActualElevationRad(Math.toRadians(-2.0))) * 60.0, 15.0);
+        assertEquals(35.0, Math.toDegrees(Earth.calculateAtmosphericRefractionRadFromActualElevationRad(Math.toRadians(-1.0))) * 60.0, 5.0);
+
+        // This test takes apparent horizon refraction as the value we use for rise/set
+        assertEquals(35.0 + 8.0 / 60.0, Math.toDegrees(Earth.calculateAtmosphericRefractionRadFromActualElevationRad(Math.toRadians(-35.0 / 60.0 - 8.0 / 3600.0))) * 60.0, 0.7);
+
+        // Took values from https://en.wikipedia.org/wiki/Atmospheric_refraction
+        assertEquals(18.4, Math.toDegrees(Earth.calculateAtmosphericRefractionRadFromActualElevationRad(Math.toRadians(2.0 - 18.4 / 60.0))) * 60.0, 1.0);
+        assertEquals(9.9, Math.toDegrees(Earth.calculateAtmosphericRefractionRadFromActualElevationRad(Math.toRadians(5.0 - 9.9 / 60.0))) * 60.0, 1.0);
+        assertEquals(5.3, Math.toDegrees(Earth.calculateAtmosphericRefractionRadFromActualElevationRad(Math.toRadians(10.0 - 5.3 / 60.0))) * 60.0, 0.5);
+
+        // This page says apparent elevation is 45 deg it is less than 1 arcmin https://en.wikipedia.org/wiki/Atmospheric_refraction
+        assertEquals(1.0, Math.toDegrees(Earth.calculateAtmosphericRefractionRadFromActualElevationRad(Math.toRadians(45.0 - 1.0))) * 60.0, 0.1);
+
+        // The value should be zero if 90 degrees
+        assertEquals(0.0, Math.toDegrees(Earth.calculateAtmosphericRefractionRadFromActualElevationRad(Math.toRadians(90.0))) * 60.0, 0.002);
+    }
+
+    @Test
     public void calculateEclipticTiltDegTest() throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
         assertEquals(23.5,  Earth.calculateEclipticTiltDeg(Instant.parse("1500-01-01T00:00:00Z")), 0.05);
         assertEquals(23.44, Earth.calculateEclipticTiltDeg(Instant.parse("2000-01-01T00:00:00Z")), 0.01);

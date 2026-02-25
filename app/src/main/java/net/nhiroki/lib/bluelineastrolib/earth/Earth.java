@@ -15,6 +15,17 @@ public class Earth {
     private static final double MEAN_EQUATORIAL_HORIZONTAL_PARALLAX_AT_1_AU_SUN_DEG_SEC = 8.794148;
 
 
+    // Assumes actualElevation is not less than -1deg
+    public static double calculateAtmosphericRefractionRadFromActualElevationRad(double actualElevationRad) {
+        // https://en.wikipedia.org/wiki/Atmospheric_refraction
+        // Formula by Sæmundsson
+        // 1.02 cot (h + 10.3 / (h + 5.11))
+        if (actualElevationRad < Math.toRadians(-3.0)) {
+            throw new IllegalArgumentException("actualElevationRad should be not less than -3deg");
+        }
+        return Math.toRadians(1.02 / 60.0 / Math.tan(actualElevationRad + Math.toRadians(10.3 / (Math.toDegrees(actualElevationRad) + 5.11))));
+    }
+
     public static double calculateAltitudeCorrectionOfHorizonRad (double elevationMeters) {
         // I could not find a constant that is commonly used,
         // but use sqrt(H in m) * 2.076' for now,

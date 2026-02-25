@@ -15,6 +15,8 @@ import java.util.ArrayList;
 public class AstronomicalObjectCalculator {
     public enum EventDirectionType { RISE, CULMINATION, SET };
     public enum ReferencePoint { TOP, CENTER, BOTTOM };
+    public enum ViewPoint { CENTER_OF_THE_EARTH, GROUND };
+    public enum ElevationType { APPARENT, ACTUAL };
 
 
     public static double calculateAzimuthRad(AstronomicalObject astronomicalObject, Instant time,
@@ -26,11 +28,20 @@ public class AstronomicalObjectCalculator {
     }
 
     public static double calculateElevationRad(AstronomicalObject astronomicalObject, Instant time,
-                                               LocationOnTheEarth locationOnTheEarth) throws UnsupportedDateRangeException, AstronomicalPhenomenonComputationException {
+                                               LocationOnTheEarth locationOnTheEarth, ViewPoint viewPoint, ElevationType elevationType) throws UnsupportedDateRangeException, AstronomicalPhenomenonComputationException {
         double hourAngle = new TimePointOnTheEarth(time).calculateSiderealTimeRad(locationOnTheEarth.getLongitudeRad()) - astronomicalObject.calculateRightAscensionRad(time);
         double declination = astronomicalObject.calculateDeclinationRad(time);
 
-        return CoordinateConversion.calculateElevationRadFromHourAngle(hourAngle, declination, locationOnTheEarth.getLatitudeRad());
+        double ret = CoordinateConversion.calculateElevationRadFromHourAngle(hourAngle, declination, locationOnTheEarth.getLatitudeRad());
+        if (viewPoint == ViewPoint.GROUND) {
+            if (Math.abs(ret) < Math.PI * 0.4999999) {
+                ret = Math.atan(Math.tan(ret) - Math.tan(astronomicalObject.calculateEquatorialHorizontalParallaxRad(time)) / Math.cos(ret));
+            }
+        }
+        if (elevationType == ElevationType.APPARENT) {
+            ret += Earth.calculateAtmosphericRefractionRadFromActualElevationRad(ret);
+        }
+        return ret;
     }
 
     public static double calculateThresholdElevationRadForRiseSet(AstronomicalObject astronomicalObject, Instant time,
