@@ -1,0 +1,7 @@
+Blue Line Solar Info は、日出、日入など太陽や月に関する情報を表示します。
+
+ホームスクリーンから日出、日入、月齢を確認できるウィジェットもあります。
+
+お使いの機器で計算するので、インターネット接続は不要です。
+
+ソースコード： https://github.com/nhirokinet/bluelinesolarinfo

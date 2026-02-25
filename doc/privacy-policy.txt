@@ -1,0 +1,11 @@
+Privacy Policy for Blue Line Solar Info
+
+
+This doc was written to comply requirements of Google Play Store, and is for users downloading this Blue Line Solar Info from Google Play.
+
+This app does not send any data out. This app does not have a privilege to access the Internet.
+However, this app asks to fetch the current location to your device if you grant permission. In that case, depending on your device setting, your OS may send information to fetch the location. It is out of control of this app and you should control in your OS side.
+
+This app has no guarantee. However, if you find some defects, please report to the developer.
+
+This privacy policy may be updated without notice.

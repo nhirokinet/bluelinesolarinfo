@@ -1,0 +1,7 @@
+Blue Line Solar Info provides information about sun and moon like sunrise, sunset, moonrise, or moonset.
+
+This app provides widget to see sunrise, sunset and moon phase from your home screen.
+
+Computing is done on your device, so network connection is not needed.
+
+Source code: https://github.com/nhirokinet/bluelinesolarinfo
