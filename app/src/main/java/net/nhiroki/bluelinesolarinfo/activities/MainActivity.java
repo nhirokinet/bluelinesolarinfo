@@ -51,6 +51,7 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     public final static String EXTRA_REGION_ID = "region_id";
+    public final static String EXTRA_TARGET_TIME_UNIX_MILLISEC = "target_time_unix_millisec";
     public final static int REQUEST_CODE_FOR_OPENING_BY_WIDGET = 0x10000000;
 
     private enum LocationMeasureStatus { UNKNOWN, NO_PERMISSION, FETCHING, SUCCESS, ERROR };
@@ -249,7 +250,16 @@ public class MainActivity extends AppCompatActivity {
                 this.regionOnTheEarth = DataStore.getInstance(getApplicationContext()).getDefaultRegion();
             }
         }
-        this.targetDate = null;
+        long targetDateUnixMilliSec = intentFrom.getLongExtra(EXTRA_TARGET_TIME_UNIX_MILLISEC, -1);
+        if (targetDateUnixMilliSec == -1) {
+            this.targetDate = null;
+        } else {
+            ZoneId zoneId = ZoneId.systemDefault();
+            if (this.regionOnTheEarth != null && this.regionOnTheEarth.getZoneId() != null) {
+                zoneId = this.regionOnTheEarth.getZoneId();
+            }
+            this.targetDate = Instant.ofEpochMilli(targetDateUnixMilliSec).atZone(zoneId).toLocalDate();
+        }
 
         ((CheckBox) findViewById(R.id.main_view_location_measure_config_use_elevation_checkbox)).setChecked(AppPreferences.getCurrentLocationUsesElevation(getApplicationContext()));
     }

@@ -9,6 +9,11 @@ public class LocationOnTheEarth {
     private double latitudeDeg;
     private double elevationMeters;
 
+
+    public String toString() {
+        return String.format("LocationOnTheEarth{longitudeDeg=%.6f, latitudeDeg=%.6f, elevationMeters=%.2f}", longitudeDeg, latitudeDeg, elevationMeters);
+    }
+
     /**
      * Constructor of LocationOnTheEarth.
      *
@@ -38,5 +43,15 @@ public class LocationOnTheEarth {
 
     public double getElevationMeters() {
         return elevationMeters;
+    }
+
+    public boolean equals(Object other) {
+        if (other == null || !(other instanceof LocationOnTheEarth)) {
+            return false;
+        }
+        LocationOnTheEarth otherLocation = (LocationOnTheEarth) other;
+        return this.longitudeDeg == otherLocation.longitudeDeg &&
+                this.latitudeDeg == otherLocation.latitudeDeg &&
+                this.elevationMeters == otherLocation.elevationMeters;
     }
 }

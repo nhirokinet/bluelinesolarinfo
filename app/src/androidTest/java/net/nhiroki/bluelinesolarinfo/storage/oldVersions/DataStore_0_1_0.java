@@ -1,4 +1,4 @@
-package net.nhiroki.bluelinesolarinfo.storage;
+package net.nhiroki.bluelinesolarinfo.storage.oldVersions;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -13,25 +13,25 @@ import net.nhiroki.bluelinesolarinfo.region.RegionOnTheEarth;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataStore extends SQLiteOpenHelper {
+public class DataStore_0_1_0 extends SQLiteOpenHelper {
     private static final String DATABASE_FILENAME = "app-data.sqlite";
     private static final int DATABASE_VERSION = 1;
 
     private static final String PROP_KEY_DEFAULT_REGION_ID = "default_region_id";
-    private static DataStore singleton;
+    private static DataStore_0_1_0 singleton;
 
-    private DataStore(Context context) {
+    private DataStore_0_1_0(Context context) {
         super(context, DATABASE_FILENAME, null, DATABASE_VERSION);
     }
 
-    public static DataStore getInstance(Context context) {
+    public static DataStore_0_1_0 getInstance(Context context) {
         if (singleton == null) {
-            singleton = new DataStore(context);
+            singleton = new DataStore_0_1_0(context);
         }
         return singleton;
     }
 
-
+    // For testing
     public static void discardInstance() {
         singleton = null;
     }
@@ -39,15 +39,15 @@ public class DataStore extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS regions (" +
-                               "    id INTEGER PRIMARY KEY," +
-                               "    name TEXT NOT NULL, " +
-                               "    timezone TEXT NOT NULL, " +
-                               "    longitude REAL NOT NULL, " +
-                               "    latitude REAL NOT NULL , " +
-                               "    elevation REAL NOT NULL)");
+                "    id INTEGER PRIMARY KEY," +
+                "    name TEXT NOT NULL, " +
+                "    timezone TEXT NOT NULL, " +
+                "    longitude REAL NOT NULL, " +
+                "    latitude REAL NOT NULL , " +
+                "    elevation REAL NOT NULL)");
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS props (" +
-                               "    name TEXT PRIMARY KEY," +
-                               "    value TEXT NOT NULL)");
+                "    name TEXT PRIMARY KEY," +
+                "    value TEXT NOT NULL)");
     }
 
     @Override
