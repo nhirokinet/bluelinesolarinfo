@@ -42,25 +42,9 @@ public class SolarInfoTodayTinyProvider extends AppWidgetProvider {
         updateAllWidgets(context, appWidgetManager, appWidgetIds);
     }
 
-    private static long nextWidgetUpdateTime() {
-        // If there is widget with different timezone, it should be regarded
-        LocalTime now = LocalTime.now();
-        long fromNow = 86400 - (now.getHour() * 3600 + now.getMinute() * 60 + now.getSecond());
-
-        return System.currentTimeMillis() + fromNow * 1000 + 800;
-    }
-
     public static void updateAllWidgets(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         for (int appWidgetId: appWidgetIds) {
             updateWidget(context, appWidgetManager, appWidgetId);
-        }
-
-        if (appWidgetIds.length > 0) {
-            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            Intent intentForTimer = new Intent(context, BroadcastReceiversForWidgets.class);
-            PendingIntent pendingForTimer = PendingIntent.getBroadcast(context, 0, intentForTimer, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, nextWidgetUpdateTime(), pendingForTimer);
         }
     }
 
