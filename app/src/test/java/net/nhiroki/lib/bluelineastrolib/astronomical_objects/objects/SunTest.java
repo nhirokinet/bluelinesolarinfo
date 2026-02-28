@@ -87,7 +87,7 @@ public class SunTest {
         for (int i = 0; i < 365 * 24 * 70; ++i) {
             double diff = sun.calculateEclipticLongitudeDeg(t) - calculateEclipticLongitudeDegBySuirobuKubo1980(t);
             diff -= Math.floor((diff + 180.0) / 360.0) * 360.0;
-            assertEquals(0.0, diff, 0.02);
+            assertEquals(0.0, diff, 0.8 / 60.0);
 
             t = t.plusSeconds(3600);
         }

@@ -17,7 +17,7 @@ public class MoonTest {
         // 19h45m27.4s at 1999/11/14 00:00 UTC, from p 120 of 日の出・日の入りの計算 天体の出没時刻の求め方 by 長沢 工
         //   It's described as from 理科年表
         // https://www.chijinshokan.co.jp/Books/ISBN4-8052-0634-9.htm
-        assertEquals((19.0 + 45.0 / 60.0 + 27.4 / 3600.0) * 15.0, Math.toDegrees(moon.calculateRightAscensionRad(Instant.parse("1999-11-14T00:00:00Z"))), 0.01);
+        assertEquals((19.0 + 45.0 / 60.0 + 27.4 / 3600.0) * 15.0, Math.toDegrees(moon.calculateRightAscensionRad(Instant.parse("1999-11-14T00:00:00Z"))), 0.005);
     }
 
     @Test
@@ -46,6 +46,7 @@ public class MoonTest {
 
         // 294.6433deg at 1999/11/14 00:00 UTC, from p 129 of 日の出・日の入りの計算 天体の出没時刻の求め方 by 長沢 工
         // https://www.chijinshokan.co.jp/Books/ISBN4-8052-0634-9.htm
+        // Based formula is similar but not the same, so the result does not match exactly.
         assertEquals(294.6433, moon.calculateEclipticLongitudeDeg(Instant.parse("1999-11-14T00:00:00Z")), 0.005);
     }
 
