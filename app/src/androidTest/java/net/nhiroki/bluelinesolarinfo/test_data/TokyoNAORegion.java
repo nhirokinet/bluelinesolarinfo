@@ -6,6 +6,6 @@ import java.time.ZoneId;
 
 public class TokyoNAORegion extends RegionOnTheEarth {
     public TokyoNAORegion() {
-        super(0, "Tokyo", ZoneId.of("Asia/Tokyo"), new TokyoNAOLocation());
+        super(0, "東京", ZoneId.of("Asia/Tokyo"), new TokyoNAOLocation());
     }
 }
