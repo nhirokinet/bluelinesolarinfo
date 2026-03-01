@@ -72,12 +72,15 @@ public class TimePointOnTheEarth {
         return Math.toRadians(this.calculateSiderealTimeDeg(Math.toDegrees(longitudeRad)));
     }
 
+    // This function has error of about 1.3s in 2000-2100 with the sum of:
+    // - Formula itself has an error of max error 0.432 sec, RMS error 0.001512 sec, in 2000-2100
+    // - This formula handles UTC derived from Instant as the same as UT1. As long as UTC is kept within difference of 0.9s from UT1, this would cause an error of about 0.9s.
     public double calculateSiderealTimeDeg (double longitudeDeg) throws UnsupportedDateRangeException{
         // Estimation method open to public by U.S. navy
         // https://aa.usno.navy.mil/faq/GAST
         // This page writes:
         // > The maximum error in GAST resulting from the use of these formulae over the period 2000-2100 is 0.432 seconds; the RMS error is 0.01512 seconds.
-        // In this function, we don't handle D_UT properly and this will have error of 0.9s, so this is largest factor and total error is about 1.3s.
+        // In this function, we don't handle D_UT properly and this will have error of 0.9s, so this is the largest factor and total error is about 1.3s in 2000-2100.
         double T = this.julianYearFromJ2000_0() / 100.0;
         double D_TT = T * 36525.0;
         // D_UT here should be the elapsed time in UT1 from 2000/01/01 12:00:00 UT1, but this.instant.toEpochMillis is UTC.
