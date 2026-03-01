@@ -13,6 +13,8 @@ public class SunTest {
         double T = new TimePointOnTheEarth(t).julianYearFromJ2000_0() / 100.0;
 
         // https://www1.kaiho.mlit.go.jp/kenkyu/report/rhr15/rhr15-06.pdf
+        // Table 12 of this page shows this formula got up to 6 arcsecs of error to 3653 points from 1972 to 1981.
+        // The author expects this precision to be retained for 60 years centering at 2000.
         double ret = 0.0;
         ret += 0.0004 * Math.cos(Math.toRadians( 31557.0  * T + 161.0));
         ret += 0.0004 * Math.cos(Math.toRadians( 29930.0  * T +  48.0));
@@ -41,6 +43,8 @@ public class SunTest {
         double T = new TimePointOnTheEarth(t).julianYearFromJ2000_0() / 100.0;
 
         // https://www1.kaiho.mlit.go.jp/kenkyu/report/rhr15/rhr15-06.pdf
+        // Table 12 of this page shows this formula got up to 4 * 10^-5 AU of error to 3653 points from 1972 to 1981.
+        // The author expects this precision to be retained for 60 years centering at 2000.
         double ret = 0.0;
         ret += 0.000005 * Math.cos(Math.toRadians( 33718.0  * T + 226.0));
         ret += 0.000005 * Math.cos(Math.toRadians( 22519.0  * T + 233.0));

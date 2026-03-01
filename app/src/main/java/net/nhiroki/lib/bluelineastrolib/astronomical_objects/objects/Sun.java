@@ -23,6 +23,8 @@ public class Sun implements AstronomicalObject {
 
     @Override
     public double calculateRightAscensionRad (Instant t) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
+        // This formula assumes ecliptic latitude of sun is 0
+        // https://en.wikipedia.org/wiki/Position_of_the_Sun says that the ecliptic latitude of the Sun is very small and never exceeds 0.00033 deg (a little over 1 arcsec).
         double eclipticLongitudeRad = this.calculateEclipticLongitudeRad(t);
         eclipticLongitudeRad -= Math.floor(eclipticLongitudeRad / (2.0 * Math.PI)) * 2.0 * Math.PI;
         double ret = Math.atan(Math.tan(eclipticLongitudeRad) * Math.cos(Earth.calculateEclipticTiltRad(t)));
@@ -37,6 +39,8 @@ public class Sun implements AstronomicalObject {
 
     @Override
     public double calculateDeclinationRad (Instant t) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
+        // This formula assumes ecliptic latitude of sun is 0
+        // https://en.wikipedia.org/wiki/Position_of_the_Sun says that the ecliptic latitude of the Sun is very small and never exceeds 0.00033 deg (a little over 1 arcsec).
         final double eclipticLongitudeRad = this.calculateEclipticLongitudeRad(t);
         return Math.asin(Math.sin(eclipticLongitudeRad) * Math.sin(Earth.calculateEclipticTiltRad(t)));
     }
@@ -54,7 +58,9 @@ public class Sun implements AstronomicalObject {
 
     public double calculateDistanceFromTheEarthAU(Instant t) {
         // https://aa.usno.navy.mil/faq/sun_approx as of 2024/02/29
-        // TODO: check precision
+        // Almost the same formula is found in https://en.wikipedia.org/wiki/Position_of_the_Sun , with 357.528 + 0.9856003n to calculate g
+        // Both pages uses distance to the Sun to calculate the longitude of the Sun.
+        // Looks like both pages does not mention precision about this formula itself, but US Navy page mentions the precision of the longitude calculated in 1800-2200, and the Wikipedia for 1950-2050.
         double D = new TimePointOnTheEarth(t).julianYearFromJ2000_0() * 365.25;
 
         double g = Math.toRadians(357.529 + 0.98560028 * D);
@@ -71,7 +77,11 @@ public class Sun implements AstronomicalObject {
 
     public double calculateEclipticLongitudeDeg (Instant t) {
         // https://aa.usno.navy.mil/faq/sun_approx as of 2024/02/29
-        // TODO: check precision
+        // About precision, the page links to the file: https://aa.usno.navy.mil/graphics/sun_lonlat.pdf
+        // Which looks like we can expect precision of roughly 30 arcsecs in 1950-2050, and roughly 50 arcsecs in 1800-2200 (both peak error is a little larger).
+        //
+        // Almost the same formula is found in https://en.wikipedia.org/wiki/Position_of_the_Sun , except that 0.9856474 instead of 0.98564736 is used to calculate q, 357.528 + 0.9856003n to calculate g
+        // This formula is described as precision of 0.01 deg (36 arcsecs) between 1950 and 2050.
         double D = new TimePointOnTheEarth(t).julianYearFromJ2000_0() * 365.25;
         double g = Math.toRadians(357.529 + 0.98560028 * D);
         double q = 280.459 + 0.98564736 * D;
@@ -86,7 +96,7 @@ public class Sun implements AstronomicalObject {
     public double estimatedIncrementOfRightAscensionRadPerDay(Instant t) {
         // Use estimated increment of ecliptic longitude from calculateEclipticLongitudeDeg()
         // as rough estimate
-        //0.98564736 / 180 * pi
+        // 0.98564736 / 180 * pi
         return 0.01720279169558985675;
     }
 }
