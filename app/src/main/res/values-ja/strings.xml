@@ -55,8 +55,10 @@
     <string name="main_activity_solar_info_today_sunset">日入</string>
     <string name="main_activity_solar_info_today_next_event_sunrise">次の日出：</string>
     <string name="main_activity_solar_info_today_next_event_sunset">次の日入：</string>
+    <string name="main_activity_solar_info_today_equation_of_time_label">均時差</string>
+    <string name="main_activity_solar_info_today_equation_of_time_format">%1$s%2$d\'%3$02d\"</string>
     <string name="main_activity_solar_info_today_moon_header">月</string>
-    <string name="main_activity_solar_info_today_moon_is_noon_info">正午</string>
+    <string name="main_activity_solar_info_today_is_noon_info">正午</string>
     <string name="main_activity_solar_info_today_moonrise">月出</string>
     <string name="main_activity_solar_info_today_moon_culmination">南中</string>
     <string name="main_activity_solar_info_today_moonset">月入</string>
@@ -65,6 +67,8 @@
 
     <string name="main_activity_solar_info_now_hms_24h_format">%1$02d:%2$02d:%3$02d</string>
     <string name="main_activity_solar_info_now_localtime">現地時間</string>
+    <string name="main_activity_solar_info_now_mean_solar_time">地方平均太陽時</string>
+    <string name="main_activity_solar_info_now_apparent_solar_time">視太陽時</string>
     <string name="main_activity_solar_info_now_sidereal_time_greenwich">グリニッジ恒星時</string>
     <string name="main_activity_solar_info_now_sidereal_time_local">地方恒星時</string>
     <string name="main_activity_solar_info_now_azimuth_label">方位</string>

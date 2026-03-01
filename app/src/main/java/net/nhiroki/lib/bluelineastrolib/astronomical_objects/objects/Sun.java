@@ -92,6 +92,17 @@ public class Sun implements AstronomicalObject {
         return L;
     }
 
+    public double calculateEquationOfTimeInSeconds(Instant t) throws UnsupportedDateRangeException, AstronomicalPhenomenonComputationException {
+        // https://aa.usno.navy.mil/faq/sun_approx as of 2026/03/02
+        double D = new TimePointOnTheEarth(t).julianYearFromJ2000_0() * 365.25;
+        double q = 280.459 + 0.98564736 * D;
+
+        double eqDeg = q - Math.toDegrees(this.calculateRightAscensionRad(t));
+        eqDeg -= 360.0 * Math.floor((eqDeg + 180.0) / 360.0);
+
+        return eqDeg * 240.0;
+    }
+
     @Override
     public double estimatedIncrementOfRightAscensionRadPerDay(Instant t) {
         // Use estimated increment of ecliptic longitude from calculateEclipticLongitudeDeg()
