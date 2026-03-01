@@ -606,6 +606,11 @@ public class MainActivity extends AppCompatActivity {
                 findViewById(R.id.main_view_solar_info_today_sun_next_event_time).setVisibility(View.GONE);
             }
 
+            double equationOfTimeSec = new Sun().calculateEquationOfTimeInSeconds(midOfTheDay);
+            String equationOfTimeSign = (equationOfTimeSec >= 0.0) ? "+" : "-";
+            long euqationOfTimeSecAbs = Math.abs(Math.round(equationOfTimeSec));
+            ((TextView) findViewById(R.id.main_view_solar_info_now_equation_of_time)).setText(getString(R.string.main_activity_solar_info_today_equation_of_time_format, equationOfTimeSign, euqationOfTimeSecAbs / 60, euqationOfTimeSecAbs % 60));
+
             double moonPhaseDeg = MoonTool.calculateMoonPhaseDeg(midOfTheDay);
             ((MoonPhaseView) findViewById(R.id.main_view_solar_info_today_moon_phase_view)).setMoonPhaseDeg(moonPhaseDeg);
 
@@ -762,11 +767,38 @@ public class MainActivity extends AppCompatActivity {
                 int hour = zonedDateTime.getHour();
                 int minute = zonedDateTime.getMinute();
                 int second = zonedDateTime.getSecond();
-                ((TextView) findViewById(R.id.main_view_solar_info_now_greenwich_localtime)).setText(getString(R.string.main_activity_solar_info_now_hms_24h_format, hour, minute, second));
+                ((TextView) findViewById(R.id.main_view_solar_info_now_localtime)).setText(getString(R.string.main_activity_solar_info_now_hms_24h_format, hour, minute, second));
 
             } else {
                 DateTimeFormatter timeFormatterWithSec = DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, "hmsa"), locale);
-                ((TextView) findViewById(R.id.main_view_solar_info_now_greenwich_localtime)).setText(now.atZone(zoneId).format(timeFormatterWithSec));
+                ((TextView) findViewById(R.id.main_view_solar_info_now_localtime)).setText(now.atZone(zoneId).format(timeFormatterWithSec));
+            }
+
+            {
+                ZonedDateTime zonedDateTime = nowOnTheEarth.calculateMeanSolarTime(locationOnTheEarth);
+                if (timeFormat24Hour) {
+                    int hour = zonedDateTime.getHour();
+                    int minute = zonedDateTime.getMinute();
+                    int second = zonedDateTime.getSecond();
+                    ((TextView) findViewById(R.id.main_view_solar_info_now_mean_solar_time)).setText(getString(R.string.main_activity_solar_info_now_hms_24h_format, hour, minute, second));
+
+                } else {
+                    DateTimeFormatter timeFormatterWithSec = DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, "hmsa"), locale);
+                    ((TextView) findViewById(R.id.main_view_solar_info_now_mean_solar_time)).setText(zonedDateTime.format(timeFormatterWithSec));
+                }
+            }
+            {
+                ZonedDateTime zonedDateTime = new TimePointOnTheEarth(now).calculateApparentSolarTime(locationOnTheEarth);
+                if (timeFormat24Hour) {
+                    int hour = zonedDateTime.getHour();
+                    int minute = zonedDateTime.getMinute();
+                    int second = zonedDateTime.getSecond();
+                    ((TextView) findViewById(R.id.main_view_solar_info_now_apparent_solar_time)).setText(getString(R.string.main_activity_solar_info_now_hms_24h_format, hour, minute, second));
+
+                } else {
+                    DateTimeFormatter timeFormatterWithSec = DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, "hmsa"), locale);
+                    ((TextView) findViewById(R.id.main_view_solar_info_now_apparent_solar_time)).setText(zonedDateTime.format(timeFormatterWithSec));
+                }
             }
 
             double greenwichSideralTimeDeg = nowOnTheEarth.calculateSiderealTimeDeg(0.0);

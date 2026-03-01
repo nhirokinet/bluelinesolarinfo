@@ -2,11 +2,14 @@ package net.nhiroki.lib.bluelineastrolib.logic;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.ZonedDateTime;
+
 import org.junit.Test;
 
 import net.nhiroki.lib.bluelineastrolib.astronomical_objects.AstronomicalObject;
 import net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects.Moon;
 import net.nhiroki.lib.bluelineastrolib.earth.Earth;
+import net.nhiroki.lib.bluelineastrolib.earth.TimePointOnTheEarth;
 import net.nhiroki.lib.bluelineastrolib.exceptions.AstronomicalPhenomenonComputationException;
 import net.nhiroki.lib.bluelineastrolib.exceptions.UnsupportedDateRangeException;
 import net.nhiroki.lib.bluelineastrolib.test_data.AstroComputingTestDataList;
@@ -39,6 +42,9 @@ public class AstronomicalObjectCalculatorTest {
         assertEquals(Instant.parse("2024-02-28T21:12:00Z").getEpochSecond(), sunriseOnTestDay1.getEpochSecond(), 30.0);
         Instant culminationOnTestDay1 = AstronomicalObjectCalculator.calculateCulminationWithin24h(sun, testDay1, placeToTest);
         assertEquals(Instant.parse("2024-02-29T02:54:00Z").getEpochSecond(), culminationOnTestDay1.getEpochSecond(), 30.0);
+        ZonedDateTime apparentSolarTimeAtCulminationOnTestDay1 = new TimePointOnTheEarth(culminationOnTestDay1).calculateApparentSolarTime(placeToTest);
+        double culminationApparentSolarTime = apparentSolarTimeAtCulminationOnTestDay1.getHour() + apparentSolarTimeAtCulminationOnTestDay1.getMinute() / 60.0 + apparentSolarTimeAtCulminationOnTestDay1.getSecond() / 3600.0;
+        assertEquals(12.0, culminationApparentSolarTime, 0.2 / 3600.0);
         Instant sunsetOnTestDay1 = AstronomicalObjectCalculator.calculateSetWithin24h(sun, testDay1, placeToTest, false, AstronomicalObjectCalculator.ReferencePoint.TOP);
         assertEquals(Instant.parse("2024-02-29T08:35:00Z").getEpochSecond(), sunsetOnTestDay1.getEpochSecond(), 30.0);
     }

@@ -1,8 +1,13 @@
 package net.nhiroki.lib.bluelineastrolib.earth;
 
+import net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects.Sun;
+import net.nhiroki.lib.bluelineastrolib.exceptions.AstronomicalPhenomenonComputationException;
 import net.nhiroki.lib.bluelineastrolib.exceptions.UnsupportedDateRangeException;
+import net.nhiroki.lib.bluelineastrolib.location.LocationOnTheEarth;
 
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 
 /**
@@ -123,5 +128,15 @@ public class TimePointOnTheEarth {
     public double estimatedIncrementOfSiderealTimeRadPerDay () {
         // 1.0027379 * 2 * pi
         return 6.30038804023211344976;
+    }
+
+    // Dismisses the difference between UTC and UT1, which would be up to 0.9sec in the operation of leap seconds.
+    public ZonedDateTime calculateMeanSolarTime(LocationOnTheEarth locationOnTheEarth) {
+        return instant.plusMillis((long)(locationOnTheEarth.getLongitudeDeg() * 240000.0)).atZone(ZoneId.of("UTC"));
+    }
+
+    // Dismisses the difference between UTC and UT1, which would be up to 0.9sec in the operation of leap seconds.
+    public ZonedDateTime calculateApparentSolarTime(LocationOnTheEarth locationOnTheEarth) throws UnsupportedDateRangeException, AstronomicalPhenomenonComputationException {
+        return this.calculateMeanSolarTime(locationOnTheEarth).plusNanos((long) (new Sun().calculateEquationOfTimeInSeconds(this.instant) * 1000000000.0));
     }
 }
