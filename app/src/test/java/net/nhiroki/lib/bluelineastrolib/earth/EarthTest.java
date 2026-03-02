@@ -23,11 +23,12 @@ public class EarthTest {
 
     @Test
     public void calculateAtmosphericRefractionRadFromActualElevationRadTest() {
-        assertThrows(IllegalArgumentException.class, () -> Earth.calculateAtmosphericRefractionRadFromActualElevationRad(Math.toRadians(-3.1)));
-
         // For invisible area, it is OK if the function does not crash and gets not to wrong value
-        assertEquals(35.0, Math.toDegrees(Earth.calculateAtmosphericRefractionRadFromActualElevationRad(Math.toRadians(-2.0))) * 60.0, 15.0);
-        assertEquals(35.0, Math.toDegrees(Earth.calculateAtmosphericRefractionRadFromActualElevationRad(Math.toRadians(-1.0))) * 60.0, 5.0);
+        // Actually meaning less if invisible or too low as it is estimate of refraction by air
+        assertEquals(36.0, Math.toDegrees(Earth.calculateAtmosphericRefractionRadFromActualElevationRad(Math.toRadians(-89.0))) * 60.0, 1.0);
+        assertEquals(36.0, Math.toDegrees(Earth.calculateAtmosphericRefractionRadFromActualElevationRad(Math.toRadians(-10.0))) * 60.0, 1.0);
+        assertEquals(36.0, Math.toDegrees(Earth.calculateAtmosphericRefractionRadFromActualElevationRad(Math.toRadians(-2.0))) * 60.0, 1.0);
+        assertEquals(36.0, Math.toDegrees(Earth.calculateAtmosphericRefractionRadFromActualElevationRad(Math.toRadians(-1.0))) * 60.0, 1.0);
 
         // This test takes apparent horizon refraction as the value we use for rise/set
         assertEquals(35.0 + 8.0 / 60.0, Math.toDegrees(Earth.calculateAtmosphericRefractionRadFromActualElevationRad(Math.toRadians(-35.0 / 60.0 - 8.0 / 3600.0))) * 60.0, 0.7);
