@@ -112,7 +112,7 @@
     <string name="each_region_activity_error_dialog_message_coordinate_format">Coordinate value invalid</string>
     <string name="each_region_activity_error_dialog_message_longitude_range">Longitude must be between -180.0 and 180.0</string>
     <string name="each_region_activity_error_dialog_message_latitude_range">Latitude must be between -90.0 and 90.0</string>
-    <string name="each_region_activity_error_dialog_message_elevation_range">Elevation must not be negative</string>
+    <string name="each_region_activity_error_dialog_message_elevation_range">Elevation must be valid non-negative value and 10000m or less</string>
 
     <string name="format_app_info_version">Version %1$s</string>
     <string name="app_info_source_code">Source code</string>
