@@ -20,8 +20,10 @@ public class Earth {
         // https://en.wikipedia.org/wiki/Atmospheric_refraction
         // Formula by Sæmundsson
         // 1.02 cot (h + 10.3 / (h + 5.11))
-        if (actualElevationRad < Math.toRadians(-3.0)) {
-            throw new IllegalArgumentException("actualElevationRad should be not less than -3deg");
+        if (actualElevationRad < Math.toRadians(-0.8)) {
+            // Not to crash calculation in high elevation mountain or too large astronomical object
+            // Not to crash and not to strange value for now
+            return calculateAtmosphericRefractionRadFromActualElevationRad(Math.toRadians(-0.8));
         }
         return Math.toRadians(1.02 / 60.0 / Math.tan(actualElevationRad + Math.toRadians(10.3 / (Math.toDegrees(actualElevationRad) + 5.11))));
     }
