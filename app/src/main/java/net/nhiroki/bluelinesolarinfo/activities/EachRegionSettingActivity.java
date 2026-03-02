@@ -91,7 +91,7 @@ public class EachRegionSettingActivity extends AppCompatActivity {
                 return;
             }
 
-            if (elevationMeters < 0.0 || Double.isNaN(elevationMeters) || Double.isInfinite(elevationMeters)) {
+            if (elevationMeters < 0.0 || Double.isNaN(elevationMeters) || Double.isInfinite(elevationMeters) || elevationMeters > 10000.0) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(EachRegionSettingActivity.this);
                 builder.setTitle(getString(R.string.each_region_activity_error_dialog_title));
                 builder.setMessage(getString(R.string.each_region_activity_error_dialog_message_elevation_range));
