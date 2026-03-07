@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 />
             <TextView
-                android:text="@string/source_code_url"
+                android:text="@string/app_source_code_url"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:autoLink="web"
@@ -88,13 +88,13 @@
                 android:paddingEnd="8sp"
                 />
             <TextView
-                android:text="@string/author_name"
+                android:text="@string/app_author_name"
                 android:textSize="18sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
         <TextView
-            android:text="@string/author_description"
+            android:text="@string/app_author_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:autoLink="web"
