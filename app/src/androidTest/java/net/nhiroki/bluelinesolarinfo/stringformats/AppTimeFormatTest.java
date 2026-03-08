@@ -40,8 +40,8 @@ public class AppTimeFormatTest {
         assertEquals("06:12", AppTimeFormat.instantToStringForMainActivity(context, Instant.parse("2026-01-01T06:12:29Z"), ZoneId.of("UTC"), true));
         assertEquals("06:13", AppTimeFormat.instantToStringForMainActivity(context, Instant.parse("2026-01-01T06:12:30Z"), ZoneId.of("UTC"), true));
         assertEquals("23:59", AppTimeFormat.instantToStringForMainActivity(context, Instant.parse("2026-01-01T23:59:29Z"), ZoneId.of("UTC"), true));
-        assertEquals("00:00", AppTimeFormat.instantToStringForMainActivity(context, Instant.parse("2026-01-01T23:59:30Z"), ZoneId.of("UTC"), true));
-        assertEquals("00:00", AppTimeFormat.instantToStringForMainActivity(context, Instant.parse("2026-01-01T23:59:59Z"), ZoneId.of("UTC"), true));
+        assertEquals("24:00", AppTimeFormat.instantToStringForMainActivity(context, Instant.parse("2026-01-01T23:59:30Z"), ZoneId.of("UTC"), true));
+        assertEquals("24:00", AppTimeFormat.instantToStringForMainActivity(context, Instant.parse("2026-01-01T23:59:59Z"), ZoneId.of("UTC"), true));
 
         assertEquals("15:12", AppTimeFormat.instantToStringForMainActivity(context, Instant.parse("2026-01-01T06:12:29Z"), ZoneId.of("Asia/Tokyo"), true));
         assertEquals("05:12", AppTimeFormat.instantToStringForMainActivity(context, Instant.parse("2026-01-01T20:12:29Z"), ZoneId.of("Asia/Tokyo"), true));
@@ -68,8 +68,8 @@ public class AppTimeFormatTest {
         assertEquals("06:12", AppTimeFormat.instantToStringForWidget(context, Instant.parse("2026-01-01T06:12:29Z"), ZoneId.of("UTC"), true));
         assertEquals("06:13", AppTimeFormat.instantToStringForWidget(context, Instant.parse("2026-01-01T06:12:30Z"), ZoneId.of("UTC"), true));
         assertEquals("23:59", AppTimeFormat.instantToStringForWidget(context, Instant.parse("2026-01-01T23:59:29Z"), ZoneId.of("UTC"), true));
-        assertEquals("00:00", AppTimeFormat.instantToStringForWidget(context, Instant.parse("2026-01-01T23:59:30Z"), ZoneId.of("UTC"), true));
-        assertEquals("00:00", AppTimeFormat.instantToStringForWidget(context, Instant.parse("2026-01-01T23:59:59Z"), ZoneId.of("UTC"), true));
+        assertEquals("24:00", AppTimeFormat.instantToStringForWidget(context, Instant.parse("2026-01-01T23:59:30Z"), ZoneId.of("UTC"), true));
+        assertEquals("24:00", AppTimeFormat.instantToStringForWidget(context, Instant.parse("2026-01-01T23:59:59Z"), ZoneId.of("UTC"), true));
 
         assertEquals("15:12", AppTimeFormat.instantToStringForWidget(context, Instant.parse("2026-01-01T06:12:29Z"), ZoneId.of("Asia/Tokyo"), true));
         assertEquals("05:12", AppTimeFormat.instantToStringForWidget(context, Instant.parse("2026-01-01T20:12:29Z"), ZoneId.of("Asia/Tokyo"), true));
