@@ -30,6 +30,7 @@ import net.nhiroki.bluelinesolarinfo.R;
 import net.nhiroki.bluelinesolarinfo.region.RegionOnTheEarth;
 import net.nhiroki.bluelinesolarinfo.storage.AppPreferences;
 import net.nhiroki.bluelinesolarinfo.storage.DataStore;
+import net.nhiroki.bluelinesolarinfo.stringformats.AppTimeFormat;
 import net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects.Moon;
 import net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects.Sun;
 import net.nhiroki.lib.bluelineastrolib.earth.TimePointOnTheEarth;
@@ -480,7 +481,6 @@ public class MainActivity extends AppCompatActivity {
 
         Locale locale = getResources().getConfiguration().getLocales().get(0);
         boolean timeFormat24Hour = android.text.format.DateFormat.is24HourFormat(this.getApplicationContext());
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, timeFormat24Hour ? "Hm" : "hma"), locale);
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, timeFormat24Hour ? "yMdHm" : "yMdhma"), locale);
 
         try {
@@ -491,8 +491,8 @@ public class MainActivity extends AppCompatActivity {
             if (sunrise != null && sunrise.isAfter(todayEnd)) {
                 sunrise = null;
             }
+            ((TextView) findViewById(R.id.main_view_solar_info_today_sunrise_time)).setText(AppTimeFormat.instantToStringForMainActivity(this, sunrise, zoneId, timeFormat24Hour));
             if (sunrise != null) {
-                ((TextView) findViewById(R.id.main_view_solar_info_today_sunrise_time)).setText(sunrise.plusSeconds(30).atZone(zoneId).format(timeFormatter));
                 double sunAzimuthDeg = Math.toDegrees(AstronomicalObjectCalculator.calculateAzimuthRad(sun, sunrise, locationOnTheEarth));
                 if (Double.isNaN(sunAzimuthDeg)) {
                     ((TextView) findViewById(R.id.main_view_solar_info_today_sunrise_direction)).setText("");
@@ -501,7 +501,6 @@ public class MainActivity extends AppCompatActivity {
                     ((TextView) findViewById(R.id.main_view_solar_info_today_sunrise_direction)).setText(getString(R.string.main_activity_solar_info_today_azimuth_str_format, getString(R.string.format_unit_angle_dm, sunAzimuthArcMin / 60, sunAzimuthArcMin % 60), getString(degToStrResId(sunAzimuthDeg))));
                 }
             } else {
-                ((TextView) findViewById(R.id.main_view_solar_info_today_sunrise_time)).setText(R.string.time_event_not_occur_hm);
                 ((TextView) findViewById(R.id.main_view_solar_info_today_sunrise_direction)).setText("");
             }
 
@@ -512,9 +511,8 @@ public class MainActivity extends AppCompatActivity {
             if (sunculmination != null && sunculmination.isAfter(todayEnd)) {
                 sunculmination = null;
             }
+            ((TextView) findViewById(R.id.main_view_solar_info_today_sun_culmination_time)).setText(AppTimeFormat.instantToStringForMainActivity(this, sunculmination, zoneId, timeFormat24Hour));
             if (sunculmination != null) {
-                ((TextView) findViewById(R.id.main_view_solar_info_today_sun_culmination_time)).setText(sunculmination.plusSeconds(30).atZone(zoneId).format(timeFormatter));
-
                 double sunElevationRadForJudge = AstronomicalObjectCalculator.calculateElevationRad(sun, sunculmination, locationOnTheEarth, AstronomicalObjectCalculator.ViewPoint.CENTER_OF_THE_EARTH, AstronomicalObjectCalculator.ElevationType.ACTUAL);
                 if (sunElevationRadForJudge >= AstronomicalObjectCalculator.calculateThresholdElevationRadForRiseSet(sun, sunculmination, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP)) {
                     double sunAzimuthDeg = Math.toDegrees(AstronomicalObjectCalculator.calculateAzimuthRad(sun, sunculmination, locationOnTheEarth));
@@ -532,7 +530,6 @@ public class MainActivity extends AppCompatActivity {
                     ((TextView) findViewById(R.id.main_view_solar_info_today_sun_culmination_invisible_label)).setText(R.string.main_activity_solar_info_today_invisible_culmination_label);
                 }
             } else {
-                ((TextView) findViewById(R.id.main_view_solar_info_today_sun_culmination_time)).setText(R.string.time_event_not_occur_hm);
                 ((TextView) findViewById(R.id.main_view_solar_info_today_sun_culmination_invisible_label)).setText("");
             }
 
@@ -543,8 +540,8 @@ public class MainActivity extends AppCompatActivity {
             if (sunset != null && sunset.isAfter(todayEnd)) {
                 sunset = null;
             }
+            ((TextView) findViewById(R.id.main_view_solar_info_today_sunset_time)).setText(AppTimeFormat.instantToStringForMainActivity(this, sunset, zoneId, timeFormat24Hour));
             if (sunset != null) {
-                ((TextView) findViewById(R.id.main_view_solar_info_today_sunset_time)).setText(sunset.plusSeconds(30).atZone(zoneId).format(timeFormatter));
                 double sunAzimuthDeg = Math.toDegrees(AstronomicalObjectCalculator.calculateAzimuthRad(sun, sunset, locationOnTheEarth));
                 if (Double.isNaN(sunAzimuthDeg)) {
                     ((TextView) findViewById(R.id.main_view_solar_info_today_sunset_direction)).setText("");
@@ -553,7 +550,6 @@ public class MainActivity extends AppCompatActivity {
                     ((TextView) findViewById(R.id.main_view_solar_info_today_sunset_direction)).setText(getString(R.string.main_activity_solar_info_today_azimuth_str_format, getString(R.string.format_unit_angle_dm, sunAzimuthArcMin / 60, sunAzimuthArcMin % 60), getString(degToStrResId(sunAzimuthDeg))));
                 }
             } else {
-                ((TextView) findViewById(R.id.main_view_solar_info_today_sunset_time)).setText(R.string.time_event_not_occur_hm);
                 ((TextView) findViewById(R.id.main_view_solar_info_today_sunset_direction)).setText("");
             }
 
@@ -625,8 +621,8 @@ public class MainActivity extends AppCompatActivity {
             if (moonrise != null && moonrise.isAfter(todayEnd)) {
                 moonrise = null;
             }
+            ((TextView) findViewById(R.id.main_view_solar_info_today_moonrise_time)).setText(AppTimeFormat.instantToStringForMainActivity(this, moonrise, zoneId, timeFormat24Hour));
             if (moonrise != null) {
-                ((TextView) findViewById(R.id.main_view_solar_info_today_moonrise_time)).setText(moonrise.plusSeconds(30).atZone(zoneId).format(timeFormatter));
                 double moonAzimuthDeg = Math.toDegrees(AstronomicalObjectCalculator.calculateAzimuthRad(moon, moonrise, locationOnTheEarth));
                 if (Double.isNaN(moonAzimuthDeg)) {
                     ((TextView) findViewById(R.id.main_view_solar_info_today_moonrise_direction)).setText("");
@@ -635,7 +631,6 @@ public class MainActivity extends AppCompatActivity {
                     ((TextView) findViewById(R.id.main_view_solar_info_today_moonrise_direction)).setText(getString(R.string.main_activity_solar_info_today_azimuth_str_format, getString(R.string.format_unit_angle_dm, moonAzimuthArcMin / 60, moonAzimuthArcMin % 60), getString(degToStrResId(moonAzimuthDeg))));
                 }
             } else {
-                ((TextView) findViewById(R.id.main_view_solar_info_today_moonrise_time)).setText(R.string.time_event_not_occur_hm);
                 ((TextView) findViewById(R.id.main_view_solar_info_today_moonrise_direction)).setText("");
             }
 
@@ -646,9 +641,8 @@ public class MainActivity extends AppCompatActivity {
             if (moonculmination != null && moonculmination.isAfter(todayEnd)) {
                 moonculmination = null;
             }
+            ((TextView) findViewById(R.id.main_view_solar_info_today_moon_culmination_time)).setText(AppTimeFormat.instantToStringForMainActivity(this, moonculmination, zoneId, timeFormat24Hour));
             if (moonculmination != null) {
-                ((TextView) findViewById(R.id.main_view_solar_info_today_moon_culmination_time)).setText(moonculmination.plusSeconds(30).atZone(zoneId).format(timeFormatter));
-
                 double moonElevationRadForJudge = AstronomicalObjectCalculator.calculateElevationRad(moon, moonculmination, locationOnTheEarth, AstronomicalObjectCalculator.ViewPoint.CENTER_OF_THE_EARTH, AstronomicalObjectCalculator.ElevationType.ACTUAL);
 
                 if (moonElevationRadForJudge >= AstronomicalObjectCalculator.calculateThresholdElevationRadForRiseSet(moon, moonculmination, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP)) {
@@ -667,7 +661,6 @@ public class MainActivity extends AppCompatActivity {
                     ((TextView) findViewById(R.id.main_view_solar_info_today_moon_culmination_invisible_label)).setText(R.string.main_activity_solar_info_today_invisible_culmination_label);
                 }
             } else {
-                ((TextView) findViewById(R.id.main_view_solar_info_today_moon_culmination_time)).setText(R.string.time_event_not_occur_hm);
                 ((TextView) findViewById(R.id.main_view_solar_info_today_moon_culmination_invisible_label)).setText("");
             }
 
@@ -678,8 +671,8 @@ public class MainActivity extends AppCompatActivity {
             if (moonset != null && moonset.isAfter(todayEnd)) {
                 moonset = null;
             }
+            ((TextView) findViewById(R.id.main_view_solar_info_today_moonset_time)).setText(AppTimeFormat.instantToStringForMainActivity(this, moonset, zoneId, timeFormat24Hour));
             if (moonset != null) {
-                ((TextView) findViewById(R.id.main_view_solar_info_today_moonset_time)).setText(moonset.plusSeconds(30).atZone(zoneId).format(timeFormatter));
                 double moonAzimuthDeg = Math.toDegrees(AstronomicalObjectCalculator.calculateAzimuthRad(moon, moonset, locationOnTheEarth));
                 if (Double.isNaN(moonAzimuthDeg)) {
                     ((TextView) findViewById(R.id.main_view_solar_info_today_moonset_direction)).setText("");
@@ -688,7 +681,6 @@ public class MainActivity extends AppCompatActivity {
                     ((TextView) findViewById(R.id.main_view_solar_info_today_moonset_direction)).setText(getString(R.string.main_activity_solar_info_today_azimuth_str_format, getString(R.string.format_unit_angle_dm, moonAzimuthArcMin / 60, moonAzimuthArcMin % 60), getString(degToStrResId(moonAzimuthDeg))));
                 }
             } else {
-                ((TextView) findViewById(R.id.main_view_solar_info_today_moonset_time)).setText(R.string.time_event_not_occur_hm);
                 ((TextView) findViewById(R.id.main_view_solar_info_today_moonset_direction)).setText("");
             }
 
@@ -747,11 +739,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private static String degTo24HStr(Context context, double deg) {
-        int sec = (int)(deg / 360.0 * 86400.0);
-        return context.getString(R.string.main_activity_solar_info_now_hms_24h_format, sec / 3600, (sec % 3600) / 60, sec % 60);
-    };
-
     private void displayNowSolarInfo(Instant now, LocationOnTheEarth locationOnTheEarth, ZoneId zoneId) {
         TimePointOnTheEarth nowOnTheEarth = new TimePointOnTheEarth(now);
 
@@ -802,10 +789,10 @@ public class MainActivity extends AppCompatActivity {
             }
 
             double greenwichSideralTimeDeg = nowOnTheEarth.calculateSiderealTimeDeg(0.0);
-            ((TextView) findViewById(R.id.main_view_solar_info_now_greenwich_sidereal_time)).setText(degTo24HStr(this.getApplicationContext(), greenwichSideralTimeDeg));
+            ((TextView) findViewById(R.id.main_view_solar_info_now_greenwich_sidereal_time)).setText(AppTimeFormat.degTo24HStr(this.getApplicationContext(), greenwichSideralTimeDeg));
 
             double localSideralTimeDeg = nowOnTheEarth.calculateSiderealTimeDeg(locationOnTheEarth.getLongitudeDeg());
-            ((TextView) findViewById(R.id.main_view_solar_info_now_local_sidereal_time)).setText(degTo24HStr(this.getApplicationContext(), localSideralTimeDeg));
+            ((TextView) findViewById(R.id.main_view_solar_info_now_local_sidereal_time)).setText(AppTimeFormat.degTo24HStr(this.getApplicationContext(), localSideralTimeDeg));
 
             double sunHourAngle = nowOnTheEarth.calculateSiderealTimeRad(locationOnTheEarth.getLongitudeRad()) - sun.calculateRightAscensionRad(now);
             double sunDeclination = sun.calculateDeclinationRad(now);

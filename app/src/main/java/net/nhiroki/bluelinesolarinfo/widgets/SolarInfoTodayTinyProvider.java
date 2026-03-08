@@ -1,6 +1,5 @@
 package net.nhiroki.bluelinesolarinfo.widgets;
 
-import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -11,7 +10,6 @@ import android.text.format.DateFormat;
 import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
 import android.widget.RemoteViews;
-import android.widget.TextView;
 
 import net.nhiroki.androidlib.bluelineastroandroidlib.moonphase.MoonPhaseRenderer;
 import net.nhiroki.bluelinesolarinfo.R;
@@ -19,6 +17,7 @@ import net.nhiroki.bluelinesolarinfo.activities.MainActivity;
 import net.nhiroki.bluelinesolarinfo.region.RegionOnTheEarth;
 import net.nhiroki.bluelinesolarinfo.storage.AppPreferences;
 import net.nhiroki.bluelinesolarinfo.storage.DataStore;
+import net.nhiroki.bluelinesolarinfo.stringformats.AppTimeFormat;
 import net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects.Sun;
 import net.nhiroki.lib.bluelineastrolib.exceptions.AstronomicalPhenomenonComputationException;
 import net.nhiroki.lib.bluelineastrolib.exceptions.UnsupportedDateRangeException;
@@ -28,7 +27,6 @@ import net.nhiroki.lib.bluelineastrolib.tool.MoonTool;
 
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -72,6 +70,7 @@ public class SolarInfoTodayTinyProvider extends AppWidgetProvider {
         }
         LocationOnTheEarth locationOnEarth = region.getLocationOnTheEarth();
         ZoneId localZone = region.getZoneId();
+        boolean timeFormat24Hour = android.text.format.DateFormat.is24HourFormat(context);
 
         Instant now = Instant.now();
         ZonedDateTime nowLocal = ZonedDateTime.ofInstant(now, localZone);
@@ -87,7 +86,7 @@ public class SolarInfoTodayTinyProvider extends AppWidgetProvider {
         Sun sun = new Sun();
         try {
             Instant sunrise = AstronomicalObjectCalculator.calculateRiseWithin24h(sun, startOfDay, locationOnEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP);
-            remoteViews.setTextViewText(R.id.suninfo_widget_sunrise, instantToString(context, sunrise, localZone));
+            remoteViews.setTextViewText(R.id.suninfo_widget_sunrise, AppTimeFormat.instantToStringForWidget(context, sunrise, localZone, timeFormat24Hour));
         } catch (AstronomicalPhenomenonComputationException e) {
             remoteViews.setTextViewText(R.id.suninfo_widget_sunrise, context.getString(R.string.widget_error_string));
         } catch (UnsupportedDateRangeException e) {
@@ -96,7 +95,7 @@ public class SolarInfoTodayTinyProvider extends AppWidgetProvider {
 
         try {
             Instant sunset = AstronomicalObjectCalculator.calculateSetWithin24h(sun, startOfDay, locationOnEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP);
-            remoteViews.setTextViewText(R.id.suninfo_widget_sunset, instantToString(context, sunset, localZone));
+            remoteViews.setTextViewText(R.id.suninfo_widget_sunset, AppTimeFormat.instantToStringForWidget(context, sunset, localZone, timeFormat24Hour));
         } catch (AstronomicalPhenomenonComputationException e) {
             remoteViews.setTextViewText(R.id.suninfo_widget_sunset, context.getString(R.string.widget_error_string));
         } catch (UnsupportedDateRangeException e) {
@@ -133,22 +132,5 @@ public class SolarInfoTodayTinyProvider extends AppWidgetProvider {
         PendingIntent pendingIntent = PendingIntent.getActivities(context, MainActivity.getRequestCodeForOpeningByWidget(appWidgetId), new Intent[]{intentForClick}, PendingIntent.FLAG_IMMUTABLE);
         remoteViews.setOnClickPendingIntent(R.id.widget_suninfo_root, pendingIntent);
         appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
-    }
-
-    private static String instantToString(Context context, Instant instant, ZoneId zoneId) {
-        if (instant == null) {
-            return context.getString(R.string.time_event_not_occur_hm);
-        }
-
-        boolean timeFormat24Hour = android.text.format.DateFormat.is24HourFormat(context);
-        ZonedDateTime localTime = ZonedDateTime.ofInstant(instant.plusSeconds(30), zoneId);
-
-        if (timeFormat24Hour) {
-            return context.getString(R.string.widget_solar_info_today_24h_format, localTime.getHour(), localTime.getMinute());
-        } else {
-            Locale locale = context.getResources().getConfiguration().getLocales().get(0);
-            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, "hma"), locale);
-            return localTime.format(timeFormatter);
-        }
     }
 }
