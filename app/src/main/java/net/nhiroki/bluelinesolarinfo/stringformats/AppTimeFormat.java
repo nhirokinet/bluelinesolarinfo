@@ -70,10 +70,16 @@ public class AppTimeFormat {
                 ourPattern = "%02d " + format2312.charAt(3) + " %02d";
             }
             LocalTime localTime = instant.atZone(zoneId).toLocalTime();
-            int secOfDay = localTime.toSecondOfDay();
             // explicitly show 24:00 if the nearest minute is the end of the day
-            int hour = (secOfDay + 30) / 3600;
-            int min = ((secOfDay + 30) % 3600) / 60;
+            int secOfDay;
+            if (localTime.toSecondOfDay() >= 86370) {
+                secOfDay = 86400;
+            } else {
+                LocalTime localTimeRounded = instant.plusSeconds(30).atZone(zoneId).toLocalTime();
+                secOfDay = localTimeRounded.toSecondOfDay();
+            }
+            int hour = secOfDay / 3600;
+            int min = (secOfDay % 3600) / 60;
             return String.format(ourPattern, hour, min);
 
         } else {
