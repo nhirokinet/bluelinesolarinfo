@@ -117,7 +117,12 @@ public class AppTimeFormat {
     }
 
     public static String fullDateTimeForEvent(Instant instant, ZoneId zoneId, boolean timeFormat24Hours, Locale locale) {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, timeFormat24Hours ? "yMdHm" : "yMdhma"), locale);
+        DateTimeFormatter dateTimeFormatter;
+        if (locale.getLanguage().equals("ja") && timeFormat24Hours) {
+            dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
+        } else {
+            dateTimeFormatter = DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, timeFormat24Hours ? "yMdHm" : "yMdhma"), locale);
+        }
         return instant.plusSeconds(30).atZone(zoneId).format(dateTimeFormatter);
     }
 }
