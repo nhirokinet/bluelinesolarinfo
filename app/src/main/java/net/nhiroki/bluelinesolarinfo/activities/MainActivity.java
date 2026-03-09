@@ -244,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
                 ((TextView) dialogView.findViewById(R.id.main_activity_dialog_this_lunar_cycle_moon_phase_180_date)).setText(AppTimeFormat.fullDateTimeForEvent(time180Deg, this.currentDisplayedZoneId, timeFormat24Hour, locale));
                 Instant time270Deg = MoonTool.calculateNextTimeOfMoonPhaseByDeg(prevNewMoon, 270.0);
                 ((TextView) dialogView.findViewById(R.id.main_activity_dialog_this_lunar_cycle_moon_phase_270_date)).setText(AppTimeFormat.fullDateTimeForEvent(time270Deg, this.currentDisplayedZoneId, timeFormat24Hour, locale));
-                Instant time360Deg = MoonTool.calculateNextTimeOfMoonPhaseByDeg(prevNewMoon, 0.0);
+                Instant time360Deg = MoonTool.calculateNextTimeOfMoonPhaseByDeg(prevNewMoon.plusSeconds(86400), 0.0);
                 ((TextView) dialogView.findViewById(R.id.main_activity_dialog_this_lunar_cycle_moon_phase_360_date)).setText(AppTimeFormat.fullDateTimeForEvent(time360Deg, this.currentDisplayedZoneId, timeFormat24Hour, locale));
 
             } catch (AstronomicalPhenomenonComputationException e) {
