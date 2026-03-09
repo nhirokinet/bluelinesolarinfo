@@ -189,7 +189,7 @@ public class AppTimeFormatTest {
 
         assertEquals("3/18/2026, 12:34 PM", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-03-18T12:34:00Z"), ZoneId.of("UTC"), false, Locale.US));
 
-        assertEquals("2026/3/18 12:34", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-03-18T12:34:00Z"), ZoneId.of("UTC"), true, Locale.JAPAN));
+        assertEquals("2026/03/18 12:34", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-03-18T12:34:00Z"), ZoneId.of("UTC"), true, Locale.JAPAN));
         assertEquals("2026/3/18 午後0:34", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-03-18T12:34:00Z"), ZoneId.of("UTC"), false, Locale.JAPAN));
     }
 }
