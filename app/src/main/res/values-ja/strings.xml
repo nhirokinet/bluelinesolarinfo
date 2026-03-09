@@ -11,8 +11,6 @@
     <string name="coordinate_display_south">S</string>
     <string name="coordinate_display_east">E</string>
     <string name="coordinate_display_west">W</string>
-    <string name="time_event_not_occur_hm">--:--</string>
-    <string name="time_24_oclock">24:00</string>
 
     <string name="direction_short_16_area_0">北</string>
     <string name="direction_short_16_area_1">北北東</string>
@@ -127,7 +125,6 @@
 
     <string name="widget_solar_info_today_tiny_name">太陽＆月（tiny）</string>
     <string name="widget_solar_info_today_medium_name">太陽＆月（medium）</string>
-    <string name="widget_solar_info_today_24h_format">%1$02d:%2$02d</string>
 
     <string name="widget_solar_info_today_widget_sunrise_label">日出</string>
     <string name="widget_solar_info_today_widget_sunset_label">日入</string>
