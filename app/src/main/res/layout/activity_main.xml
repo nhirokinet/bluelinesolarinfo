@@ -306,21 +306,36 @@
                         android:id="@+id/main_view_solar_info_today_moon_phase_view"
                         android:layout_width="32sp"
                         android:layout_height="32sp"
-                        />
-                    <TextView
-                        android:id="@+id/main_view_solar_info_today_moon_phase_days_text"
-                        android:textSize="24sp"
-                        android:paddingStart="8sp"
                         android:layout_gravity="center_vertical"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         />
-                    <TextView
-                        android:text="@string/main_activity_solar_info_today_is_noon_info"
-                        android:paddingStart="8sp"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center_vertical"
+                        android:paddingStart="8sp"
+                        >
+                        <TextView
+                            android:id="@+id/main_view_solar_info_today_moon_phase_days_text"
+                            android:textSize="24sp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            />
+                        <TextView
+                            android:text="@string/main_activity_solar_info_today_is_noon_info"
+                            android:paddingStart="8sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            />
+                    </LinearLayout>
+                    <Button
+                        android:id="@+id/main_view_solar_info_today_this_moon_cycle_button"
+                        android:text="@string/main_activity_solar_info_today_this_lunar_cycle_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8sp"
                         />
                 </LinearLayout>
                 <TableLayout

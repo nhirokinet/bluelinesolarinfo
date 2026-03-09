@@ -4,16 +4,19 @@ import android.app.LocaleManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.LocaleList;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.os.LocaleListCompat;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
+import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import net.nhiroki.bluelinesolarinfo.R;
 import net.nhiroki.bluelinesolarinfo.storage.DataStore;
 import net.nhiroki.bluelinesolarinfo.test_data.NorthPoleRegion;
 import net.nhiroki.bluelinesolarinfo.test_data.TokyoNAORegion;
@@ -79,7 +82,7 @@ public class MainActivityTest {
     }
 
     @Test
-    public void testJustLaunch20260101() throws InterruptedException {
+    public void testLaunch20260101() throws InterruptedException {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MainActivity.class);
         intent.putExtra(MainActivity.EXTRA_TARGET_TIME_UNIX_MILLISEC, 1767236400000l);  // 2026/01/01 12:00 JST
         ActivityScenario<MainActivity> activity = ActivityScenario.launch(intent);
@@ -116,6 +119,24 @@ public class MainActivityTest {
             Espresso.onView(ViewMatchers.withText("9:47 PM")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
             Espresso.onView(ViewMatchers.withText("4:21 AM")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
         }
+
+        Espresso.onView(ViewMatchers.withId(R.id.main_view_solar_info_today_this_moon_cycle_button)).perform(ViewActions.click());
+        Thread.sleep(500);
+        if (android.text.format.DateFormat.is24HourFormat(ApplicationProvider.getApplicationContext())) {
+            Espresso.onView(ViewMatchers.withText("12/20/2025, 10:44")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+            Espresso.onView(ViewMatchers.withText("12/28/2025, 04:10")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+            Espresso.onView(ViewMatchers.withText("1/3/2026, 19:03")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+            Espresso.onView(ViewMatchers.withText("1/11/2026, 00:49")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+            Espresso.onView(ViewMatchers.withText("1/19/2026, 04:53")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+        } else {
+            Espresso.onView(ViewMatchers.withText("12/20/2025, 10:44 AM")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+            Espresso.onView(ViewMatchers.withText("12/28/2025, 4:10 AM")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+            Espresso.onView(ViewMatchers.withText("1/3/2026, 7:03 PM")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+            Espresso.onView(ViewMatchers.withText("1/11/2026, 12:49 AM")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+            Espresso.onView(ViewMatchers.withText("1/19/2026, 4:53 AM")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+        }
+
+        Espresso.pressBack();
     }
 
     @Test

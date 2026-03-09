@@ -93,6 +93,9 @@ public class MainActivity extends AppCompatActivity {
     private Handler refreshHandler;
     private Runnable refreshRunnable;
 
+    private LocalDate currentDisplayedDate = null;
+    private ZoneId currentDisplayedZoneId = null;
+
 
     public static int getRequestCodeForOpeningByWidget(int appWidgetId) {
         return REQUEST_CODE_FOR_OPENING_BY_WIDGET | (appWidgetId & 0xfffffff);
@@ -210,6 +213,45 @@ public class MainActivity extends AppCompatActivity {
         ((CheckBox) findViewById(R.id.main_view_location_measure_config_use_elevation_checkbox)).setOnCheckedChangeListener((buttonView, isChecked) -> {
             AppPreferences.setCurrentLocationUsesElevation(MainActivity.this.getApplicationContext(), isChecked);
             MainActivity.this.updateSolarInfo();
+        });
+
+        findViewById(R.id.main_view_solar_info_today_this_moon_cycle_button).setOnClickListener(view -> {
+            View dialogView = getLayoutInflater().inflate(R.layout.activity_main_dialog_this_moon_cycle, null);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setView(dialogView);
+            builder.create();
+
+            Instant endOfTheDay = this.currentDisplayedDate.plusDays(1).atStartOfDay(this.currentDisplayedZoneId).toInstant();
+
+            Locale locale = getResources().getConfiguration().getLocales().get(0);
+            boolean timeFormat24Hour = android.text.format.DateFormat.is24HourFormat(this.getApplicationContext());
+
+            ((TextView) dialogView.findViewById(R.id.main_activity_dialog_this_lunar_cycle_timezone)).setText(
+                    getString(R.string.format_regions_setting_timezone_label,
+                            this.currentDisplayedZoneId.getDisplayName(java.time.format.TextStyle.FULL_STANDALONE, getResources().getConfiguration().getLocales().get(0)),
+                            this.currentDisplayedZoneId.toString()
+                    )
+            );
+
+            try {
+                Instant prevNewMoon = MoonTool.calculatePreviousTimeOfMoonPhaseByDeg(endOfTheDay, 0.0);
+                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_this_lunar_cycle_moon_phase_0_date)).setText(AppTimeFormat.fullDateTimeForEvent(prevNewMoon, this.currentDisplayedZoneId, timeFormat24Hour, locale));
+
+                Instant time90Deg = MoonTool.calculateNextTimeOfMoonPhaseByDeg(prevNewMoon, 90.0);
+                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_this_lunar_cycle_moon_phase_90_date)).setText(AppTimeFormat.fullDateTimeForEvent(time90Deg, this.currentDisplayedZoneId, timeFormat24Hour, locale));
+                Instant time180Deg = MoonTool.calculateNextTimeOfMoonPhaseByDeg(prevNewMoon, 180.0);
+                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_this_lunar_cycle_moon_phase_180_date)).setText(AppTimeFormat.fullDateTimeForEvent(time180Deg, this.currentDisplayedZoneId, timeFormat24Hour, locale));
+                Instant time270Deg = MoonTool.calculateNextTimeOfMoonPhaseByDeg(prevNewMoon, 270.0);
+                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_this_lunar_cycle_moon_phase_270_date)).setText(AppTimeFormat.fullDateTimeForEvent(time270Deg, this.currentDisplayedZoneId, timeFormat24Hour, locale));
+                Instant time360Deg = MoonTool.calculateNextTimeOfMoonPhaseByDeg(prevNewMoon, 0.0);
+                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_this_lunar_cycle_moon_phase_360_date)).setText(AppTimeFormat.fullDateTimeForEvent(time360Deg, this.currentDisplayedZoneId, timeFormat24Hour, locale));
+
+            } catch (AstronomicalPhenomenonComputationException e) {
+                throw new RuntimeException(e);
+            }
+
+            builder.show();
         });
     }
 
@@ -429,6 +471,9 @@ public class MainActivity extends AppCompatActivity {
         LocalDate today = now.atZone(zoneId).toLocalDate();
         LocalDate date = (this.targetDate == null) ? today : this.targetDate;
 
+        this.currentDisplayedDate = date;
+        this.currentDisplayedZoneId = zoneId;
+
         String todayString = date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG).withLocale(getResources().getConfiguration().getLocales().get(0)));
         if (date.equals(today)) {
             ((TextView) findViewById(R.id.main_view_date_view)).setText(getString(R.string.main_activity_today_format, todayString));
@@ -452,10 +497,10 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.main_view_solar_info_today_area).setVisibility(View.VISIBLE);
 
-        Instant todayStart = date.atStartOfDay(zoneId).toInstant();
+        Instant startOfTheDay = date.atStartOfDay(zoneId).toInstant();
         Instant midOfTheDay = date.atTime(12, 0).atZone(zoneId).toInstant();
-        Instant todayEnd = date.plusDays(1).atStartOfDay(zoneId).toInstant();
-        this.displayTodaySolarInfo(todayStart, midOfTheDay, todayEnd, locationOnTheEarth, zoneId);
+        Instant endOfTheDay = date.plusDays(1).atStartOfDay(zoneId).toInstant();
+        this.displayTodaySolarInfo(startOfTheDay, midOfTheDay, endOfTheDay, locationOnTheEarth, zoneId);
 
         if (date.equals(today)) {
             this.displayNowSolarInfo(now, locationOnTheEarth, zoneId);
@@ -474,7 +519,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Uses @midOfTheDay to calculate moon phase. Required because it can be 11 hours or 13 hours from @todayStart due to DST
     // @endOfTheDay is assumed to be 23-25 hours from @todayStart
-    private void displayTodaySolarInfo(Instant todayStart, Instant midOfTheDay, Instant todayEnd, LocationOnTheEarth locationOnTheEarth, ZoneId zoneId) {
+    private void displayTodaySolarInfo(Instant startOfTheDay, Instant midOfTheDay, Instant endOfTheDay, LocationOnTheEarth locationOnTheEarth, ZoneId zoneId) {
         Sun sun = new Sun();
         Moon moon = new Moon();
 
@@ -482,11 +527,11 @@ public class MainActivity extends AppCompatActivity {
         boolean timeFormat24Hour = android.text.format.DateFormat.is24HourFormat(this.getApplicationContext());
 
         try {
-            Instant sunrise = AstronomicalObjectCalculator.calculateRiseWithin24h(sun, todayStart, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP);
-            if (sunrise == null && todayEnd.isAfter(todayStart.plusSeconds(86400))) {
-                sunrise = AstronomicalObjectCalculator.calculateRiseWithin24h(sun, todayEnd.minusSeconds(86400), locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP);
+            Instant sunrise = AstronomicalObjectCalculator.calculateRiseWithin24h(sun, startOfTheDay, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP);
+            if (sunrise == null && endOfTheDay.isAfter(startOfTheDay.plusSeconds(86400))) {
+                sunrise = AstronomicalObjectCalculator.calculateRiseWithin24h(sun, endOfTheDay.minusSeconds(86400), locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP);
             }
-            if (sunrise != null && sunrise.isAfter(todayEnd)) {
+            if (sunrise != null && sunrise.isAfter(endOfTheDay)) {
                 sunrise = null;
             }
             ((TextView) findViewById(R.id.main_view_solar_info_today_sunrise_time)).setText(AppTimeFormat.instantToStringForMainActivity(sunrise, zoneId, timeFormat24Hour, locale));
@@ -502,11 +547,11 @@ public class MainActivity extends AppCompatActivity {
                 ((TextView) findViewById(R.id.main_view_solar_info_today_sunrise_direction)).setText("");
             }
 
-            Instant sunculmination = AstronomicalObjectCalculator.calculateCulminationWithin24h(sun, todayStart, locationOnTheEarth);
-            if (sunculmination == null && todayEnd.isAfter(todayStart.plusSeconds(86400))) {
-                sunculmination = AstronomicalObjectCalculator.calculateCulminationWithin24h(sun, todayEnd.minusSeconds(86400), locationOnTheEarth);
+            Instant sunculmination = AstronomicalObjectCalculator.calculateCulminationWithin24h(sun, startOfTheDay, locationOnTheEarth);
+            if (sunculmination == null && endOfTheDay.isAfter(startOfTheDay.plusSeconds(86400))) {
+                sunculmination = AstronomicalObjectCalculator.calculateCulminationWithin24h(sun, endOfTheDay.minusSeconds(86400), locationOnTheEarth);
             }
-            if (sunculmination != null && sunculmination.isAfter(todayEnd)) {
+            if (sunculmination != null && sunculmination.isAfter(endOfTheDay)) {
                 sunculmination = null;
             }
             ((TextView) findViewById(R.id.main_view_solar_info_today_sun_culmination_time)).setText(AppTimeFormat.instantToStringForMainActivity(sunculmination, zoneId, timeFormat24Hour, locale));
@@ -531,11 +576,11 @@ public class MainActivity extends AppCompatActivity {
                 ((TextView) findViewById(R.id.main_view_solar_info_today_sun_culmination_invisible_label)).setText("");
             }
 
-            Instant sunset = AstronomicalObjectCalculator.calculateSetWithin24h(sun, todayStart, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP);
-            if (sunset == null && todayEnd.isAfter(todayStart.plusSeconds(86400))) {
-                sunset = AstronomicalObjectCalculator.calculateSetWithin24h(sun, todayEnd.minusSeconds(86400), locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP);
+            Instant sunset = AstronomicalObjectCalculator.calculateSetWithin24h(sun, startOfTheDay, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP);
+            if (sunset == null && endOfTheDay.isAfter(startOfTheDay.plusSeconds(86400))) {
+                sunset = AstronomicalObjectCalculator.calculateSetWithin24h(sun, endOfTheDay.minusSeconds(86400), locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP);
             }
-            if (sunset != null && sunset.isAfter(todayEnd)) {
+            if (sunset != null && sunset.isAfter(endOfTheDay)) {
                 sunset = null;
             }
             ((TextView) findViewById(R.id.main_view_solar_info_today_sunset_time)).setText(AppTimeFormat.instantToStringForMainActivity(sunset, zoneId, timeFormat24Hour, locale));
@@ -555,7 +600,7 @@ public class MainActivity extends AppCompatActivity {
                 Instant nextEventTime = null;
                 boolean nextEventIsRise = false;
 
-                Instant t = todayEnd.minusSeconds(1);
+                Instant t = endOfTheDay.minusSeconds(1);
                 for (int i = 0; i < 270; ++i) {
                     Instant sunriseCandidate = AstronomicalObjectCalculator.calculateRiseWithin24h(sun, t, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP);
                     Instant sunsetCandidate = AstronomicalObjectCalculator.calculateSetWithin24h(sun, t, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP);
@@ -612,11 +657,11 @@ public class MainActivity extends AppCompatActivity {
             double daysAfterPrevNewMoon = ((double)(midOfTheDay.toEpochMilli() - prevNewMoon.toEpochMilli())) / 86400000.0;
             ((TextView) findViewById(R.id.main_view_solar_info_today_moon_phase_days_text)).setText(String.format("%.1f", daysAfterPrevNewMoon));
 
-            Instant moonrise = AstronomicalObjectCalculator.calculateRiseWithin24h(moon, todayStart, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.CENTER);
-            if (moonrise == null && todayEnd.isAfter(todayStart.plusSeconds(86400))) {
-                moonrise = AstronomicalObjectCalculator.calculateRiseWithin24h(moon, todayEnd.minusSeconds(86400), locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.CENTER);
+            Instant moonrise = AstronomicalObjectCalculator.calculateRiseWithin24h(moon, startOfTheDay, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.CENTER);
+            if (moonrise == null && endOfTheDay.isAfter(startOfTheDay.plusSeconds(86400))) {
+                moonrise = AstronomicalObjectCalculator.calculateRiseWithin24h(moon, endOfTheDay.minusSeconds(86400), locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.CENTER);
             }
-            if (moonrise != null && moonrise.isAfter(todayEnd)) {
+            if (moonrise != null && moonrise.isAfter(endOfTheDay)) {
                 moonrise = null;
             }
             ((TextView) findViewById(R.id.main_view_solar_info_today_moonrise_time)).setText(AppTimeFormat.instantToStringForMainActivity(moonrise, zoneId, timeFormat24Hour, locale));
@@ -632,11 +677,11 @@ public class MainActivity extends AppCompatActivity {
                 ((TextView) findViewById(R.id.main_view_solar_info_today_moonrise_direction)).setText("");
             }
 
-            Instant moonculmination = AstronomicalObjectCalculator.calculateCulminationWithin24h(moon, todayStart, locationOnTheEarth);
-            if (moonculmination == null && todayEnd.isAfter(todayStart.plusSeconds(86400))) {
-                moonculmination = AstronomicalObjectCalculator.calculateCulminationWithin24h(moon, todayEnd.minusSeconds(86400), locationOnTheEarth);
+            Instant moonculmination = AstronomicalObjectCalculator.calculateCulminationWithin24h(moon, startOfTheDay, locationOnTheEarth);
+            if (moonculmination == null && endOfTheDay.isAfter(startOfTheDay.plusSeconds(86400))) {
+                moonculmination = AstronomicalObjectCalculator.calculateCulminationWithin24h(moon, endOfTheDay.minusSeconds(86400), locationOnTheEarth);
             }
-            if (moonculmination != null && moonculmination.isAfter(todayEnd)) {
+            if (moonculmination != null && moonculmination.isAfter(endOfTheDay)) {
                 moonculmination = null;
             }
             ((TextView) findViewById(R.id.main_view_solar_info_today_moon_culmination_time)).setText(AppTimeFormat.instantToStringForMainActivity(moonculmination, zoneId, timeFormat24Hour, locale));
@@ -662,11 +707,11 @@ public class MainActivity extends AppCompatActivity {
                 ((TextView) findViewById(R.id.main_view_solar_info_today_moon_culmination_invisible_label)).setText("");
             }
 
-            Instant moonset = AstronomicalObjectCalculator.calculateSetWithin24h(moon, todayStart, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.CENTER);
-            if (moonset == null && todayEnd.isAfter(todayStart.plusSeconds(86400))) {
-                moonset = AstronomicalObjectCalculator.calculateSetWithin24h(moon, todayEnd.minusSeconds(86400), locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.CENTER);
+            Instant moonset = AstronomicalObjectCalculator.calculateSetWithin24h(moon, startOfTheDay, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.CENTER);
+            if (moonset == null && endOfTheDay.isAfter(startOfTheDay.plusSeconds(86400))) {
+                moonset = AstronomicalObjectCalculator.calculateSetWithin24h(moon, endOfTheDay.minusSeconds(86400), locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.CENTER);
             }
-            if (moonset != null && moonset.isAfter(todayEnd)) {
+            if (moonset != null && moonset.isAfter(endOfTheDay)) {
                 moonset = null;
             }
             ((TextView) findViewById(R.id.main_view_solar_info_today_moonset_time)).setText(AppTimeFormat.instantToStringForMainActivity(moonset, zoneId, timeFormat24Hour, locale));
@@ -686,7 +731,7 @@ public class MainActivity extends AppCompatActivity {
                 Instant nextEventTime = null;
                 boolean nextEventIsRise = false;
 
-                Instant t = todayEnd.minusSeconds(1);
+                Instant t = endOfTheDay.minusSeconds(1);
                 for (int i = 0; i < 270; ++i) {
                     Instant moonriseCandidate = AstronomicalObjectCalculator.calculateRiseWithin24h(moon, t, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP);
                     Instant moonsetCandidate = AstronomicalObjectCalculator.calculateSetWithin24h(moon, t, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP);
