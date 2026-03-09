@@ -29,6 +29,11 @@
     <string name="direction_short_16_area_14">北西</string>
     <string name="direction_short_16_area_15">北北西</string>
 
+    <string name="moon_phase_0">新月</string>
+    <string name="moon_phase_90">上弦</string>
+    <string name="moon_phase_180">満月</string>
+    <string name="moon_phase_270">下弦</string>
+
     <string name="main_activity_today_format">%1$s（今日）</string>
     <string name="main_activity_current_location">現在位置</string>
     <string name="main_activity_message_location_fetching">測位中……</string>
@@ -57,6 +62,7 @@
     <string name="main_activity_solar_info_today_equation_of_time_label">均時差</string>
     <string name="main_activity_solar_info_today_equation_of_time_format">%1$s%2$d\'%3$02d\"</string>
     <string name="main_activity_solar_info_today_moon_header">月</string>
+    <string name="main_activity_solar_info_today_this_lunar_cycle_button">今サイクル</string>"
     <string name="main_activity_solar_info_today_is_noon_info">正午</string>
     <string name="main_activity_solar_info_today_moonrise">月出</string>
     <string name="main_activity_solar_info_today_moon_culmination">南中</string>
@@ -76,6 +82,8 @@
     <string name="main_activity_solar_info_now_invisible_culmination_label">（地平線下）</string>
 
     <string name="main_activity_region_select_dialog_title">地域選択</string>
+
+    <string name="main_activity_dialog_this_lunar_cycle_title">月相</string>
 
     <string name="menu_item_regions_setting">地域設定</string>
     <string name="menu_item_app_info">アプリ情報</string>
