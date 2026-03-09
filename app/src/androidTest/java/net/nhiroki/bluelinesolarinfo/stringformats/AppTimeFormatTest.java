@@ -40,6 +40,10 @@ public class AppTimeFormatTest {
         assertEquals("15:42", AppTimeFormat.instantToStringForMainActivity(Instant.parse("2026-07-01T06:12:29Z"), ZoneId.of("Australia/Adelaide"), true, locale));
         assertEquals("16:42", AppTimeFormat.instantToStringForMainActivity(Instant.parse("2026-01-01T06:12:29Z"), ZoneId.of("Australia/Adelaide"), true, locale));
 
+        assertEquals("02:59", AppTimeFormat.instantToStringForMainActivity(Instant.parse("2026-04-04T15:59:29Z"), ZoneId.of("Australia/Sydney"), true, locale));
+        assertEquals("02:00", AppTimeFormat.instantToStringForMainActivity(Instant.parse("2026-04-04T15:59:30Z"), ZoneId.of("Australia/Sydney"), true, locale));
+        assertEquals("02:00", AppTimeFormat.instantToStringForMainActivity(Instant.parse("2026-04-04T16:00:00Z"), ZoneId.of("Australia/Sydney"), true, locale));
+
         assertEquals("12:00 AM", AppTimeFormat.instantToStringForMainActivity(Instant.parse("2026-01-01T00:00:00Z"), ZoneId.of("UTC"), false, locale));
         assertEquals("6:12 AM", AppTimeFormat.instantToStringForMainActivity(Instant.parse("2026-01-01T06:12:29Z"), ZoneId.of("UTC"), false, locale));
         assertEquals("6:13 AM", AppTimeFormat.instantToStringForMainActivity(Instant.parse("2026-01-01T06:12:30Z"), ZoneId.of("UTC"), false, locale));
@@ -94,6 +98,10 @@ public class AppTimeFormatTest {
         assertEquals("05:12", AppTimeFormat.instantToStringForWidget(Instant.parse("2026-01-01T20:12:29Z"), ZoneId.of("Asia/Tokyo"), true, locale));
         assertEquals("15:42", AppTimeFormat.instantToStringForWidget(Instant.parse("2026-07-01T06:12:29Z"), ZoneId.of("Australia/Adelaide"), true, locale));
         assertEquals("16:42", AppTimeFormat.instantToStringForWidget(Instant.parse("2026-01-01T06:12:29Z"), ZoneId.of("Australia/Adelaide"), true, locale));
+
+        assertEquals("02:59", AppTimeFormat.instantToStringForWidget(Instant.parse("2026-04-04T15:59:29Z"), ZoneId.of("Australia/Sydney"), true, locale));
+        assertEquals("02:00", AppTimeFormat.instantToStringForWidget(Instant.parse("2026-04-04T15:59:30Z"), ZoneId.of("Australia/Sydney"), true, locale));
+        assertEquals("02:00", AppTimeFormat.instantToStringForWidget(Instant.parse("2026-04-04T16:00:00Z"), ZoneId.of("Australia/Sydney"), true, locale));
 
         assertEquals("12:00 AM", AppTimeFormat.instantToStringForWidget(Instant.parse("2026-01-01T00:00:00Z"), ZoneId.of("UTC"), false, locale));
         assertEquals("6:12 AM", AppTimeFormat.instantToStringForWidget(Instant.parse("2026-01-01T06:12:29Z"), ZoneId.of("UTC"), false, locale));
@@ -174,6 +182,10 @@ public class AppTimeFormatTest {
         assertEquals("3/19/2026, 00:00", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-03-19T00:00:00Z"), ZoneId.of("UTC"), true, Locale.US));
 
         assertEquals("3/18/2026, 21:34", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-03-18T12:34:00Z"), ZoneId.of("Asia/Tokyo"), true, Locale.US));
+
+        assertEquals("4/5/2026, 02:59", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-04-04T15:59:29Z"), ZoneId.of("Australia/Sydney"), true, Locale.US));
+        assertEquals("4/5/2026, 02:00", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-04-04T15:59:30Z"), ZoneId.of("Australia/Sydney"), true, Locale.US));
+        assertEquals("4/5/2026, 02:00", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-04-04T16:00:00Z"), ZoneId.of("Australia/Sydney"), true, Locale.US));
 
         assertEquals("3/18/2026, 12:34 PM", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-03-18T12:34:00Z"), ZoneId.of("UTC"), false, Locale.US));
 
