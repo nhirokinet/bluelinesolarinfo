@@ -5,56 +5,113 @@ import android.content.Context;
 import net.nhiroki.bluelinesolarinfo.R;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 public class AppTimeFormat {
-    public static String instantToStringForMainActivity(Context context, Instant instant, ZoneId zoneId, boolean timeFormat24Hours) {
+    public static String instantToStringForMainActivity(Instant instant, ZoneId zoneId, boolean timeFormat24Hours, Locale locale) {
         if (instant == null) {
-            return context.getString(R.string.time_event_not_occur_hm);
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, "Hm"), locale);
+            String format2312 = LocalTime.of(23, 4, 0).format(timeFormatter);
+            if (format2312.length() == 5 && format2312.startsWith("23") && format2312.endsWith("04")) {
+                return "--" + format2312.charAt(2) + "--";
+            }
+            if (format2312.length() == 7 && format2312.startsWith("23 ") && format2312.endsWith(" 04")) {
+                return "-- " + format2312.charAt(3) + " --";
+            }
+            // Fallback
+            return "--:--";
         }
 
-        Locale locale = context.getResources().getConfiguration().getLocales().get(0);
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, timeFormat24Hours ? "Hm" : "hma"), locale);
 
         ZonedDateTime localTime = instant.atZone(zoneId);
 
         if (timeFormat24Hours && localTime.getHour() == 23 && localTime.getMinute() == 59 && localTime.getSecond() >= 30) {
-            return context.getString(R.string.time_24_oclock);
+            String format2300 = LocalTime.of(23, 0, 0).format(timeFormatter);
+            if (format2300.length() == 5 && format2300.startsWith("23") && format2300.endsWith("00")) {
+                return "24" + format2300.charAt(2) + "00";
+            }
+            if (format2300.length() == 7 && format2300.startsWith("23 ") && format2300.endsWith(" 00")) {
+                return "24 " + format2300.charAt(3) + " 00";
+            }
+            // Fallback
+            return "24:00";
         }
         return instant.plusSeconds(30).atZone(zoneId).format(timeFormatter);
     }
 
-    public static String instantToStringForWidget(Context context, Instant instant, ZoneId zoneId, boolean timeFormat24Hours) {
+    public static String instantToStringForWidget(Instant instant, ZoneId zoneId, boolean timeFormat24Hours, Locale locale) {
         if (instant == null) {
-            return context.getString(R.string.time_event_not_occur_hm);
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, "Hm"), locale);
+            String format2312 = LocalTime.of(23, 4, 0).format(timeFormatter);
+            if (format2312.length() == 5 && format2312.startsWith("23") && format2312.endsWith("04")) {
+                return "--" + format2312.charAt(2) + "--";
+            }
+            if (format2312.length() == 7 && format2312.startsWith("23 ") && format2312.endsWith(" 04")) {
+                return "-- " + format2312.charAt(3) + " --";
+            }
+            // Fallback
+            return "--:--";
         }
 
-
         if (timeFormat24Hours) {
-            ZonedDateTime localTime = instant.atZone(zoneId);
-            int hour = localTime.getHour();
-            int minute = localTime.getMinute();
-            if (localTime.getSecond() >= 30) {
-                minute += 1;
-                if (minute == 60) {
-                    minute = 0;
-                    hour += 1;
-                }
+            String ourPattern = "%02d:%02d";
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, "Hm"), locale);
+            String format2312 = LocalTime.of(23, 4, 0).format(timeFormatter);
+            if (format2312.length() == 5 && format2312.startsWith("23") && format2312.endsWith("04")) {
+                ourPattern = "%02d" + format2312.charAt(2) + "%02d";
             }
-            return context.getString(R.string.widget_solar_info_today_24h_format, hour, minute);
+            if (format2312.length() == 7 && format2312.startsWith("23 ") && format2312.endsWith(" 04")) {
+                ourPattern = "%02d " + format2312.charAt(3) + " %02d";
+            }
+            LocalTime localTime = instant.atZone(zoneId).toLocalTime();
+            int secOfDay = localTime.toSecondOfDay();
+            // explicitly show 24:00 if the nearest minute is the end of the day
+            int hour = (secOfDay + 30) / 3600;
+            int min = ((secOfDay + 30) % 3600) / 60;
+            return String.format(ourPattern, hour, min);
 
         } else {
-            Locale locale = context.getResources().getConfiguration().getLocales().get(0);
             DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, "hma"), locale);
             return ZonedDateTime.ofInstant(instant.plusSeconds(30), zoneId).format(timeFormatter);
         }
     }
 
-    public static String degTo24HStr(Context context, double deg) {
+    public static String instantToHmsStringForRealtime(LocalTime localTime, boolean timeFormat24Hours, Locale locale) {
+        if (timeFormat24Hours) {
+            String defaultPattern = android.text.format.DateFormat.getBestDateTimePattern(locale, "Hms");
+
+            String ourPattern = "%02d:%02d:%02d";
+            if (defaultPattern.equals("HH.mm.ss") || defaultPattern.equals("H.mm.ss")) {
+                ourPattern = "%02d.%02d.%02d";
+            }
+            int sec = localTime.toSecondOfDay();
+            return String.format(ourPattern, sec / 3600, (sec % 3600) / 60, sec % 60);
+
+        } else {
+            DateTimeFormatter timeFormatterWithSec = DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, "hmsa"), locale);
+            return localTime.format(timeFormatterWithSec);
+        }
+    }
+
+    public static String degTo24HStr(double deg, Locale locale) {
+        String defaultPattern = android.text.format.DateFormat.getBestDateTimePattern(locale, "Hms");
+
+        String ourPattern = "%02d:%02d:%02d";
+        if (defaultPattern.equals("HH.mm.ss") || defaultPattern.equals("H.mm.ss")) {
+            ourPattern = "%02d.%02d.%02d";
+        }
         int sec = (int)(deg / 360.0 * 86400.0);
-        return context.getString(R.string.main_activity_solar_info_now_hms_24h_format, sec / 3600, (sec % 3600) / 60, sec % 60);
-    };
+        return String.format(ourPattern, sec / 3600, (sec % 3600) / 60, sec % 60);
+    }
+
+    public static String fullDateTimeForEvent(Instant instant, ZoneId zoneId, boolean timeFormat24Hours, Locale locale) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, timeFormat24Hours ? "yMdHm" : "yMdhma"), locale);
+        return instant.plusSeconds(30).atZone(zoneId).format(dateTimeFormatter);
+    }
 }
