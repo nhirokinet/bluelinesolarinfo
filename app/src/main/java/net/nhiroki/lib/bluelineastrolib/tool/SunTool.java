@@ -33,6 +33,8 @@ public class SunTool {
                 throw new AstronomicalPhenomenonComputationException("Unexpected computation error");
             }
 
+            diffAbsPrev = Math.abs(diff);
+
             long estimatedMilliSecondsAfter = (long)(diff / 360.0 * 365.25 * 86400000.0);
             now = now.plusMillis(estimatedMilliSecondsAfter);
 
