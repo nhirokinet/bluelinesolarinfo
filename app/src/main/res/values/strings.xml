@@ -33,6 +33,11 @@
     <string name="direction_short_16_area_14">NW</string>
     <string name="direction_short_16_area_15">NNW</string>
 
+    <string name="equinox_name_0">March equinox</string>
+    <string name="equinox_name_90">June solstice</string>
+    <string name="equinox_name_180">September equinox</string>
+    <string name="equinox_name_270">December solstice</string>
+
     <string name="moon_phase_0">New moon</string>
     <string name="moon_phase_90">First quarter</string>
     <string name="moon_phase_180">Full moon</string>
@@ -58,6 +63,8 @@
     <string name="main_activity_solar_info_today_culmination_direction_format">%1$s Elevation %2$s</string>
     <string name="main_activity_solar_info_today_invisible_culmination_label">(Invisible)</string>
     <string name="main_activity_solar_info_today_sun_header">Sun</string>
+    <string name="main_activity_solar_info_today_sun_ecliptic_longitude_label">Ecliptic longitude</string>
+    <string name="main_activity_solar_info_today_sun_events_this_year_button">Yearly</string>
     <string name="main_activity_solar_info_today_sunrise">Sunrise</string>
     <string name="main_activity_solar_info_today_sun_culmination">Culmination</string>
     <string name="main_activity_solar_info_today_sunset">Sunset</string>
@@ -66,7 +73,7 @@
     <string name="main_activity_solar_info_today_equation_of_time_label">Equation of time</string>
     <string name="main_activity_solar_info_today_equation_of_time_format">%1$s%2$d\'%3$02d\"</string>
     <string name="main_activity_solar_info_today_moon_header">Moon</string>
-    <string name="main_activity_solar_info_today_this_lunar_cycle_button">This cycle</string>"
+    <string name="main_activity_solar_info_today_this_lunar_cycle_button">Cycle</string>"
     <string name="main_activity_solar_info_today_is_noon_info">at noon</string>
     <string name="main_activity_solar_info_today_moonrise">Moonrise</string>
     <string name="main_activity_solar_info_today_moon_culmination">Culmination</string>

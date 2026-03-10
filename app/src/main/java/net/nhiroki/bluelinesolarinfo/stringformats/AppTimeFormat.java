@@ -119,10 +119,20 @@ public class AppTimeFormat {
     public static String fullDateTimeForEvent(Instant instant, ZoneId zoneId, boolean timeFormat24Hours, Locale locale) {
         DateTimeFormatter dateTimeFormatter;
         if (locale.getLanguage().equals("ja") && timeFormat24Hours) {
-            dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
+            dateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd HH:mm");
         } else {
-            dateTimeFormatter = DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, timeFormat24Hours ? "yMdHm" : "yMdhma"), locale);
+            dateTimeFormatter = DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, timeFormat24Hours ? "MdHm" : "Mdhma"), locale);
         }
         return instant.plusSeconds(30).atZone(zoneId).format(dateTimeFormatter);
+    }
+
+    public static String fullDateTimeHourPrecisionForEvent(Instant instant, ZoneId zoneId, boolean timeFormat24Hours, Locale locale) {
+        DateTimeFormatter dateTimeFormatter;
+        if (locale.getLanguage().equals("ja") && timeFormat24Hours) {
+            dateTimeFormatter = DateTimeFormatter.ofPattern("MM月dd日 HH時");
+        } else {
+            dateTimeFormatter = DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, timeFormat24Hours ? "MdH" : "Mdha"), locale);
+        }
+        return instant.plusSeconds(1800).atZone(zoneId).toLocalDateTime().withMinute(0).withSecond(0).format(dateTimeFormatter);
     }
 }

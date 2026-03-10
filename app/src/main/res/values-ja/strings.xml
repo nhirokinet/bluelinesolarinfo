@@ -29,6 +29,11 @@
     <string name="direction_short_16_area_14">北西</string>
     <string name="direction_short_16_area_15">北北西</string>
 
+    <string name="equinox_name_0">春分</string>
+    <string name="equinox_name_90">夏至</string>
+    <string name="equinox_name_180">秋分</string>
+    <string name="equinox_name_270">冬至</string>
+
     <string name="moon_phase_0">新月</string>
     <string name="moon_phase_90">上弦</string>
     <string name="moon_phase_180">満月</string>
@@ -54,6 +59,8 @@
     <string name="main_activity_solar_info_today_culmination_direction_format">%1$s 高度 %2$s</string>
     <string name="main_activity_solar_info_today_invisible_culmination_label">（地平線下）</string>
     <string name="main_activity_solar_info_today_sun_header">太陽</string>
+    <string name="main_activity_solar_info_today_sun_ecliptic_longitude_label">黄経</string>
+    <string name="main_activity_solar_info_today_sun_events_this_year_button">年間</string>
     <string name="main_activity_solar_info_today_sunrise">日出</string>
     <string name="main_activity_solar_info_today_sun_culmination">南中</string>
     <string name="main_activity_solar_info_today_sunset">日入</string>
@@ -62,7 +69,7 @@
     <string name="main_activity_solar_info_today_equation_of_time_label">均時差</string>
     <string name="main_activity_solar_info_today_equation_of_time_format">%1$s%2$d\'%3$02d\"</string>
     <string name="main_activity_solar_info_today_moon_header">月</string>
-    <string name="main_activity_solar_info_today_this_lunar_cycle_button">今サイクル</string>"
+    <string name="main_activity_solar_info_today_this_lunar_cycle_button">サイクル</string>"
     <string name="main_activity_solar_info_today_is_noon_info">正午</string>
     <string name="main_activity_solar_info_today_moonrise">月出</string>
     <string name="main_activity_solar_info_today_moon_culmination">南中</string>
