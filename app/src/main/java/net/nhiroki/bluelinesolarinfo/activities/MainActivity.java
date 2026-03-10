@@ -39,6 +39,7 @@ import net.nhiroki.lib.bluelineastrolib.location.LocationOnTheEarth;
 import net.nhiroki.lib.bluelineastrolib.logic.AstronomicalObjectCalculator;
 import net.nhiroki.lib.bluelineastrolib.logic.CoordinateConversion;
 import net.nhiroki.lib.bluelineastrolib.tool.MoonTool;
+import net.nhiroki.lib.bluelineastrolib.tool.SunTool;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -240,13 +241,51 @@ public class MainActivity extends AppCompatActivity {
 
                 Instant time90Deg = MoonTool.calculateNextTimeOfMoonPhaseByDeg(prevNewMoon, 90.0);
                 ((TextView) dialogView.findViewById(R.id.main_activity_dialog_this_lunar_cycle_moon_phase_90_date)).setText(AppTimeFormat.fullDateTimeForEvent(time90Deg, this.currentDisplayedZoneId, timeFormat24Hour, locale));
-                Instant time180Deg = MoonTool.calculateNextTimeOfMoonPhaseByDeg(prevNewMoon, 180.0);
+                Instant time180Deg = MoonTool.calculateNextTimeOfMoonPhaseByDeg(time90Deg, 180.0);
                 ((TextView) dialogView.findViewById(R.id.main_activity_dialog_this_lunar_cycle_moon_phase_180_date)).setText(AppTimeFormat.fullDateTimeForEvent(time180Deg, this.currentDisplayedZoneId, timeFormat24Hour, locale));
-                Instant time270Deg = MoonTool.calculateNextTimeOfMoonPhaseByDeg(prevNewMoon, 270.0);
+                Instant time270Deg = MoonTool.calculateNextTimeOfMoonPhaseByDeg(time180Deg, 270.0);
                 ((TextView) dialogView.findViewById(R.id.main_activity_dialog_this_lunar_cycle_moon_phase_270_date)).setText(AppTimeFormat.fullDateTimeForEvent(time270Deg, this.currentDisplayedZoneId, timeFormat24Hour, locale));
-                Instant time360Deg = MoonTool.calculateNextTimeOfMoonPhaseByDeg(prevNewMoon.plusSeconds(86400), 0.0);
+                Instant time360Deg = MoonTool.calculateNextTimeOfMoonPhaseByDeg(time270Deg, 0.0);
                 ((TextView) dialogView.findViewById(R.id.main_activity_dialog_this_lunar_cycle_moon_phase_360_date)).setText(AppTimeFormat.fullDateTimeForEvent(time360Deg, this.currentDisplayedZoneId, timeFormat24Hour, locale));
 
+            } catch (AstronomicalPhenomenonComputationException e) {
+                throw new RuntimeException(e);
+            }
+
+            builder.show();
+        });
+
+        findViewById(R.id.main_view_solar_info_today_sun_this_year_button).setOnClickListener(view -> {
+            View dialogView = getLayoutInflater().inflate(R.layout.activity_main_dialog_sun_events_this_year, null);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setView(dialogView);
+            builder.create();
+
+            int year = this.currentDisplayedDate.getYear();
+
+            Locale locale = getResources().getConfiguration().getLocales().get(0);
+            boolean timeFormat24Hour = android.text.format.DateFormat.is24HourFormat(this.getApplicationContext());
+
+            ((TextView) dialogView.findViewById(R.id.main_activity_dialog_sun_this_year_timezone)).setText(
+                    getString(R.string.format_regions_setting_timezone_label,
+                            this.currentDisplayedZoneId.getDisplayName(java.time.format.TextStyle.FULL_STANDALONE, getResources().getConfiguration().getLocales().get(0)),
+                            this.currentDisplayedZoneId.toString()
+                    )
+            );
+
+            Instant startOfTheYear = LocalDate.of(year, 1, 1).atStartOfDay(this.currentDisplayedZoneId).toInstant();
+            ((TextView) dialogView.findViewById(R.id.main_activity_dialog_sun_this_year_title_year)).setText(LocalDate.of(year, 1, 1).format(DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, "yyyy"), locale)));
+
+            try {
+                Instant nextEquinox0 = SunTool.calculateNextTimeOfEclipticLongitudeDeg(startOfTheYear, 0.0);
+                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_sun_this_year_equinox_0_date)).setText(AppTimeFormat.fullDateTimeHourPrecisionForEvent(nextEquinox0, this.currentDisplayedZoneId, timeFormat24Hour, locale));
+                Instant nextEquinox90 = SunTool.calculateNextTimeOfEclipticLongitudeDeg(nextEquinox0, 90.0);
+                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_sun_this_year_equinox_90_date)).setText(AppTimeFormat.fullDateTimeHourPrecisionForEvent(nextEquinox90, this.currentDisplayedZoneId, timeFormat24Hour, locale));
+                Instant nextEquinox180 = SunTool.calculateNextTimeOfEclipticLongitudeDeg(nextEquinox90, 180.0);
+                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_sun_this_year_equinox_180_date)).setText(AppTimeFormat.fullDateTimeHourPrecisionForEvent(nextEquinox180, this.currentDisplayedZoneId, timeFormat24Hour, locale));
+                Instant nextEquinox270 = SunTool.calculateNextTimeOfEclipticLongitudeDeg(nextEquinox180, 270.0);
+                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_sun_this_year_equinox_270_date)).setText(AppTimeFormat.fullDateTimeHourPrecisionForEvent(nextEquinox270, this.currentDisplayedZoneId, timeFormat24Hour, locale));
             } catch (AstronomicalPhenomenonComputationException e) {
                 throw new RuntimeException(e);
             }
@@ -527,6 +566,10 @@ public class MainActivity extends AppCompatActivity {
         boolean timeFormat24Hour = android.text.format.DateFormat.is24HourFormat(this.getApplicationContext());
 
         try {
+            double sunEclipticLongittudeDegAtNoon = sun.calculateEclipticLongitudeDeg(midOfTheDay);
+            int sunEclipticLongitudeMin = (int) Math.floor(sunEclipticLongittudeDegAtNoon * 60.0);
+            ((TextView) findViewById(R.id.main_view_solar_info_today_sun_ecliptic_longitude_today)).setText(getString(R.string.format_unit_angle_dm, sunEclipticLongitudeMin / 60, sunEclipticLongitudeMin % 60));
+
             Instant sunrise = AstronomicalObjectCalculator.calculateRiseWithin24h(sun, startOfTheDay, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP);
             if (sunrise == null && endOfTheDay.isAfter(startOfTheDay.plusSeconds(86400))) {
                 sunrise = AstronomicalObjectCalculator.calculateRiseWithin24h(sun, endOfTheDay.minusSeconds(86400), locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP);

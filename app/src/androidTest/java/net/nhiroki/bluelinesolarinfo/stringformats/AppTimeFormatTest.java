@@ -175,21 +175,28 @@ public class AppTimeFormatTest {
 
     @Test
     public void fullDateTimeForEventTest() {
-        assertEquals("3/18/2026, 12:34", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-03-18T12:34:00Z"), ZoneId.of("UTC"), true, Locale.US));
-        assertEquals("3/18/2026, 12:34", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-03-18T12:34:29Z"), ZoneId.of("UTC"), true, Locale.US));
-        assertEquals("3/18/2026, 12:35", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-03-18T12:34:30Z"), ZoneId.of("UTC"), true, Locale.US));
-        assertEquals("3/19/2026, 00:00", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-03-18T23:59:30Z"), ZoneId.of("UTC"), true, Locale.US));
-        assertEquals("3/19/2026, 00:00", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-03-19T00:00:00Z"), ZoneId.of("UTC"), true, Locale.US));
+        assertEquals("3/18, 12:34", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-03-18T12:34:00Z"), ZoneId.of("UTC"), true, Locale.US));
+        assertEquals("3/18, 12:34", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-03-18T12:34:29Z"), ZoneId.of("UTC"), true, Locale.US));
+        assertEquals("3/18, 12:35", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-03-18T12:34:30Z"), ZoneId.of("UTC"), true, Locale.US));
+        assertEquals("3/19, 00:00", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-03-18T23:59:30Z"), ZoneId.of("UTC"), true, Locale.US));
+        assertEquals("3/19, 00:00", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-03-19T00:00:00Z"), ZoneId.of("UTC"), true, Locale.US));
 
-        assertEquals("3/18/2026, 21:34", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-03-18T12:34:00Z"), ZoneId.of("Asia/Tokyo"), true, Locale.US));
+        assertEquals("3/18, 21:34", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-03-18T12:34:00Z"), ZoneId.of("Asia/Tokyo"), true, Locale.US));
 
-        assertEquals("4/5/2026, 02:59", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-04-04T15:59:29Z"), ZoneId.of("Australia/Sydney"), true, Locale.US));
-        assertEquals("4/5/2026, 02:00", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-04-04T15:59:30Z"), ZoneId.of("Australia/Sydney"), true, Locale.US));
-        assertEquals("4/5/2026, 02:00", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-04-04T16:00:00Z"), ZoneId.of("Australia/Sydney"), true, Locale.US));
+        assertEquals("4/5, 02:59", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-04-04T15:59:29Z"), ZoneId.of("Australia/Sydney"), true, Locale.US));
+        assertEquals("4/5, 02:00", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-04-04T15:59:30Z"), ZoneId.of("Australia/Sydney"), true, Locale.US));
+        assertEquals("4/5, 02:00", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-04-04T16:00:00Z"), ZoneId.of("Australia/Sydney"), true, Locale.US));
 
-        assertEquals("3/18/2026, 12:34 PM", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-03-18T12:34:00Z"), ZoneId.of("UTC"), false, Locale.US));
+        assertEquals("3/18, 12:34 PM", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-03-18T12:34:00Z"), ZoneId.of("UTC"), false, Locale.US));
 
-        assertEquals("2026/03/18 12:34", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-03-18T12:34:00Z"), ZoneId.of("UTC"), true, Locale.JAPAN));
-        assertEquals("2026/3/18 午後0:34", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-03-18T12:34:00Z"), ZoneId.of("UTC"), false, Locale.JAPAN));
+        assertEquals("03/18 12:34", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-03-18T12:34:00Z"), ZoneId.of("UTC"), true, Locale.JAPAN));
+        assertEquals("3/18 午後0:34", AppTimeFormat.fullDateTimeForEvent(Instant.parse("2026-03-18T12:34:00Z"), ZoneId.of("UTC"), false, Locale.JAPAN));
+    }
+
+    @Test
+    public void fullDateTimeHourPrecisionForEventTest() {
+        assertEquals("1/2, 00", AppTimeFormat.fullDateTimeHourPrecisionForEvent(Instant.parse("2026-01-02T00:00:00Z"), ZoneId.of("UTC"), true, Locale.US));
+        assertEquals("1/2, 00", AppTimeFormat.fullDateTimeHourPrecisionForEvent(Instant.parse("2026-01-02T00:29:59Z"), ZoneId.of("UTC"), true, Locale.US));
+        assertEquals("1/2, 01", AppTimeFormat.fullDateTimeHourPrecisionForEvent(Instant.parse("2026-01-02T00:30:00Z"), ZoneId.of("UTC"), true, Locale.US));
     }
 }
