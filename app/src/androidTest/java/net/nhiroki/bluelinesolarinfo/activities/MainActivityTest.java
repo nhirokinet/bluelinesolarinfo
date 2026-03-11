@@ -58,7 +58,7 @@ public class MainActivityTest {
         Thread.sleep(2000);
 
         Espresso.onView(ViewMatchers.withText("東京")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
-        Espresso.onView(ViewMatchers.withText("E 139°44'29.0\" N 35°39'29.1\"")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+        Espresso.onView(ViewMatchers.withText("E \u200e139\u200e°44\u200e'29\u200e.0\u200e\" N \u200e35\u200e°39\u200e'29\u200e.1\u200e\"")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
         Espresso.onView(ViewMatchers.withText("Timezone: Japan Time (Asia/Tokyo)")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
         Espresso.onView(ViewMatchers.withText("Greenwich sidereal time")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
     }
@@ -91,14 +91,14 @@ public class MainActivityTest {
         Espresso.onView(ViewMatchers.withText("January 1, 2026")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
         // Sun
-        Espresso.onView(ViewMatchers.withText("Azimuth 118°05' (ESE)")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
-        Espresso.onView(ViewMatchers.withText("S Elevation +31°22'")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
-        Espresso.onView(ViewMatchers.withText("Azimuth 241°58' (WSW)")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+        Espresso.onView(ViewMatchers.withText("Azimuth \u200e118\u200e°05\u200e' (ESE)")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+        Espresso.onView(ViewMatchers.withText("S Elevation \u200e+31\u200e°22\u200e'")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+        Espresso.onView(ViewMatchers.withText("Azimuth \u200e241\u200e°58\u200e' (WSW)")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
         // Moon
-        Espresso.onView(ViewMatchers.withText("Azimuth 56°29' (ENE)")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+        Espresso.onView(ViewMatchers.withText("Azimuth \u200e56\u200e°29\u200e' (ENE)")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
         Espresso.onView(ViewMatchers.withText("12.1")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
-        Espresso.onView(ViewMatchers.withText("Azimuth 302°05' (WNW)")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+        Espresso.onView(ViewMatchers.withText("Azimuth \u200e302\u200e°05\u200e' (WNW)")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
         if (android.text.format.DateFormat.is24HourFormat(ApplicationProvider.getApplicationContext())) {
             // Sun
