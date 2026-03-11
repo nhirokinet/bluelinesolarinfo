@@ -29,7 +29,6 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 
@@ -87,7 +86,7 @@ public class SolarInfoTodayMediumProvider extends AppWidgetProvider {
         Sun sun = new Sun();
         try {
             Instant sunrise = AstronomicalObjectCalculator.calculateRiseWithin24h(sun, startOfDay, locationOnEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP);
-            remoteViews.setTextViewText(R.id.suninfo_widget_sunrise, AppTimeFormat.instantToStringForWidget(sunrise, localZone, timeFormat24Hours, locale));
+            remoteViews.setTextViewText(R.id.suninfo_widget_sunrise, AppTimeFormat.instantToHmStringForEventTime(sunrise, localZone, timeFormat24Hours, locale));
         } catch (AstronomicalPhenomenonComputationException e) {
             remoteViews.setTextViewText(R.id.suninfo_widget_sunrise, context.getString(R.string.widget_error_string));
         } catch (UnsupportedDateRangeException e) {
@@ -96,7 +95,7 @@ public class SolarInfoTodayMediumProvider extends AppWidgetProvider {
 
         try {
             Instant sunset = AstronomicalObjectCalculator.calculateSetWithin24h(sun, startOfDay, locationOnEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP);
-            remoteViews.setTextViewText(R.id.suninfo_widget_sunset, AppTimeFormat.instantToStringForWidget(sunset, localZone, timeFormat24Hours, locale));
+            remoteViews.setTextViewText(R.id.suninfo_widget_sunset, AppTimeFormat.instantToHmStringForEventTime(sunset, localZone, timeFormat24Hours, locale));
         } catch (AstronomicalPhenomenonComputationException e) {
             remoteViews.setTextViewText(R.id.suninfo_widget_sunset, context.getString(R.string.widget_error_string));
         } catch (UnsupportedDateRangeException e) {
