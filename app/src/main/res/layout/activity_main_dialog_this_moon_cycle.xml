@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -24,7 +25,14 @@
                 android:text="@string/moon_phase_0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
+                android:layout_gravity="center_vertical"
+                />
+            <net.nhiroki.androidlib.bluelineastroandroidlib.views.MoonPhaseView
+                app:moonPhaseDeg="0.0"
+                android:layout_width="12sp"
+                android:layout_height="12sp"
+                android:layout_marginStart="8sp"
+                android:layout_gravity="center_vertical"
                 />
             <TextView
                 android:id="@+id/main_activity_dialog_this_lunar_cycle_moon_phase_0_date"
@@ -40,7 +48,14 @@
                 android:text="@string/moon_phase_90"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
+                android:layout_gravity="center_vertical"
+                />
+            <net.nhiroki.androidlib.bluelineastroandroidlib.views.MoonPhaseView
+                app:moonPhaseDeg="90.0"
+                android:layout_width="12sp"
+                android:layout_height="12sp"
+                android:layout_marginStart="8sp"
+                android:layout_gravity="center_vertical"
                 />
             <TextView
                 android:id="@+id/main_activity_dialog_this_lunar_cycle_moon_phase_90_date"
@@ -56,7 +71,14 @@
                 android:text="@string/moon_phase_180"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
+                android:layout_gravity="center_vertical"
+                />
+            <net.nhiroki.androidlib.bluelineastroandroidlib.views.MoonPhaseView
+                app:moonPhaseDeg="180.0"
+                android:layout_width="12sp"
+                android:layout_height="12sp"
+                android:layout_marginStart="8sp"
+                android:layout_gravity="center_vertical"
                 />
             <TextView
                 android:id="@+id/main_activity_dialog_this_lunar_cycle_moon_phase_180_date"
@@ -72,7 +94,14 @@
                 android:text="@string/moon_phase_270"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
+                android:layout_gravity="center_vertical"
+                />
+            <net.nhiroki.androidlib.bluelineastroandroidlib.views.MoonPhaseView
+                app:moonPhaseDeg="270.0"
+                android:layout_width="12sp"
+                android:layout_height="12sp"
+                android:layout_marginStart="8sp"
+                android:layout_gravity="center_vertical"
                 />
             <TextView
                 android:id="@+id/main_activity_dialog_this_lunar_cycle_moon_phase_270_date"
@@ -88,7 +117,14 @@
                 android:text="@string/moon_phase_0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
+                android:layout_gravity="center_vertical"
+                />
+            <net.nhiroki.androidlib.bluelineastroandroidlib.views.MoonPhaseView
+                app:moonPhaseDeg="0.0"
+                android:layout_width="12sp"
+                android:layout_height="12sp"
+                android:layout_marginStart="8sp"
+                android:layout_gravity="center_vertical"
                 />
             <TextView
                 android:id="@+id/main_activity_dialog_this_lunar_cycle_moon_phase_360_date"
