@@ -237,16 +237,16 @@ public class MainActivity extends AppCompatActivity {
 
             try {
                 Instant prevNewMoon = MoonTool.calculatePreviousTimeOfMoonPhaseByDeg(endOfTheDay, 0.0);
-                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_this_lunar_cycle_moon_phase_0_date)).setText(AppTimeFormat.fullDateTimeForEvent(prevNewMoon, this.currentDisplayedZoneId, timeFormat24Hour, locale));
+                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_this_lunar_cycle_moon_phase_0_date)).setText(AppTimeFormat.fullDateTimeForEventForList(prevNewMoon, this.currentDisplayedZoneId, timeFormat24Hour, locale));
 
                 Instant time90Deg = MoonTool.calculateNextTimeOfMoonPhaseByDeg(prevNewMoon, 90.0);
-                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_this_lunar_cycle_moon_phase_90_date)).setText(AppTimeFormat.fullDateTimeForEvent(time90Deg, this.currentDisplayedZoneId, timeFormat24Hour, locale));
+                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_this_lunar_cycle_moon_phase_90_date)).setText(AppTimeFormat.fullDateTimeForEventForList(time90Deg, this.currentDisplayedZoneId, timeFormat24Hour, locale));
                 Instant time180Deg = MoonTool.calculateNextTimeOfMoonPhaseByDeg(time90Deg, 180.0);
-                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_this_lunar_cycle_moon_phase_180_date)).setText(AppTimeFormat.fullDateTimeForEvent(time180Deg, this.currentDisplayedZoneId, timeFormat24Hour, locale));
+                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_this_lunar_cycle_moon_phase_180_date)).setText(AppTimeFormat.fullDateTimeForEventForList(time180Deg, this.currentDisplayedZoneId, timeFormat24Hour, locale));
                 Instant time270Deg = MoonTool.calculateNextTimeOfMoonPhaseByDeg(time180Deg, 270.0);
-                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_this_lunar_cycle_moon_phase_270_date)).setText(AppTimeFormat.fullDateTimeForEvent(time270Deg, this.currentDisplayedZoneId, timeFormat24Hour, locale));
+                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_this_lunar_cycle_moon_phase_270_date)).setText(AppTimeFormat.fullDateTimeForEventForList(time270Deg, this.currentDisplayedZoneId, timeFormat24Hour, locale));
                 Instant time360Deg = MoonTool.calculateNextTimeOfMoonPhaseByDeg(time270Deg, 0.0);
-                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_this_lunar_cycle_moon_phase_360_date)).setText(AppTimeFormat.fullDateTimeForEvent(time360Deg, this.currentDisplayedZoneId, timeFormat24Hour, locale));
+                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_this_lunar_cycle_moon_phase_360_date)).setText(AppTimeFormat.fullDateTimeForEventForList(time360Deg, this.currentDisplayedZoneId, timeFormat24Hour, locale));
 
             } catch (AstronomicalPhenomenonComputationException e) {
                 throw new RuntimeException(e);
@@ -279,13 +279,13 @@ public class MainActivity extends AppCompatActivity {
 
             try {
                 Instant nextEquinox0 = SunTool.calculateNextTimeOfEclipticLongitudeDeg(startOfTheYear, 0.0);
-                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_sun_this_year_equinox_0_date)).setText(AppTimeFormat.fullDateTimeHourPrecisionForEvent(nextEquinox0, this.currentDisplayedZoneId, timeFormat24Hour, locale));
+                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_sun_this_year_equinox_0_date)).setText(AppTimeFormat.fullDateTimeHourPrecisionForEventForList(nextEquinox0, this.currentDisplayedZoneId, timeFormat24Hour, locale));
                 Instant nextEquinox90 = SunTool.calculateNextTimeOfEclipticLongitudeDeg(nextEquinox0, 90.0);
-                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_sun_this_year_equinox_90_date)).setText(AppTimeFormat.fullDateTimeHourPrecisionForEvent(nextEquinox90, this.currentDisplayedZoneId, timeFormat24Hour, locale));
+                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_sun_this_year_equinox_90_date)).setText(AppTimeFormat.fullDateTimeHourPrecisionForEventForList(nextEquinox90, this.currentDisplayedZoneId, timeFormat24Hour, locale));
                 Instant nextEquinox180 = SunTool.calculateNextTimeOfEclipticLongitudeDeg(nextEquinox90, 180.0);
-                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_sun_this_year_equinox_180_date)).setText(AppTimeFormat.fullDateTimeHourPrecisionForEvent(nextEquinox180, this.currentDisplayedZoneId, timeFormat24Hour, locale));
+                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_sun_this_year_equinox_180_date)).setText(AppTimeFormat.fullDateTimeHourPrecisionForEventForList(nextEquinox180, this.currentDisplayedZoneId, timeFormat24Hour, locale));
                 Instant nextEquinox270 = SunTool.calculateNextTimeOfEclipticLongitudeDeg(nextEquinox180, 270.0);
-                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_sun_this_year_equinox_270_date)).setText(AppTimeFormat.fullDateTimeHourPrecisionForEvent(nextEquinox270, this.currentDisplayedZoneId, timeFormat24Hour, locale));
+                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_sun_this_year_equinox_270_date)).setText(AppTimeFormat.fullDateTimeHourPrecisionForEventForList(nextEquinox270, this.currentDisplayedZoneId, timeFormat24Hour, locale));
             } catch (AstronomicalPhenomenonComputationException e) {
                 throw new RuntimeException(e);
             }
@@ -674,7 +674,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (nextEventTime != null) {
                     ((TextView) findViewById(R.id.main_view_solar_info_today_sun_next_event_title)).setText(nextEventIsRise ? R.string.main_activity_solar_info_today_next_event_sunrise : R.string.main_activity_solar_info_today_next_event_sunset);
-                    ((TextView) findViewById(R.id.main_view_solar_info_today_sun_next_event_time)).setText(AppTimeFormat.fullDateTimeForEvent(nextEventTime, zoneId, timeFormat24Hour, locale));
+                    ((TextView) findViewById(R.id.main_view_solar_info_today_sun_next_event_time)).setText(AppTimeFormat.fullDateTimeForEventNatural(nextEventTime, zoneId, timeFormat24Hour, locale));
 
                     findViewById(R.id.main_view_solar_info_today_sun_next_event_title).setVisibility(View.VISIBLE);
                     findViewById(R.id.main_view_solar_info_today_sun_next_event_time).setVisibility(View.VISIBLE);
@@ -805,7 +805,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (nextEventTime != null) {
                     ((TextView) findViewById(R.id.main_view_solar_info_today_moon_next_event_title)).setText(nextEventIsRise ? R.string.main_activity_solar_info_today_next_event_moonrise : R.string.main_activity_solar_info_today_next_event_moonset);
-                    ((TextView) findViewById(R.id.main_view_solar_info_today_moon_next_event_time)).setText(AppTimeFormat.fullDateTimeForEvent(nextEventTime, zoneId, timeFormat24Hour, locale));
+                    ((TextView) findViewById(R.id.main_view_solar_info_today_moon_next_event_time)).setText(AppTimeFormat.fullDateTimeForEventNatural(nextEventTime, zoneId, timeFormat24Hour, locale));
 
                     findViewById(R.id.main_view_solar_info_today_moon_next_event_title).setVisibility(View.VISIBLE);
                     findViewById(R.id.main_view_solar_info_today_moon_next_event_time).setVisibility(View.VISIBLE);
