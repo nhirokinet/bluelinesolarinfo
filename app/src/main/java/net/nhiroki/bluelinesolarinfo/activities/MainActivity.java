@@ -577,7 +577,7 @@ public class MainActivity extends AppCompatActivity {
             if (sunrise != null && sunrise.isAfter(endOfTheDay)) {
                 sunrise = null;
             }
-            ((TextView) findViewById(R.id.main_view_solar_info_today_sunrise_time)).setText(AppTimeFormat.instantToStringForMainActivity(sunrise, zoneId, timeFormat24Hour, locale));
+            ((TextView) findViewById(R.id.main_view_solar_info_today_sunrise_time)).setText(AppTimeFormat.instantToHmStringForEventTime(sunrise, zoneId, timeFormat24Hour, locale));
             if (sunrise != null) {
                 double sunAzimuthDeg = Math.toDegrees(AstronomicalObjectCalculator.calculateAzimuthRad(sun, sunrise, locationOnTheEarth));
                 if (Double.isNaN(sunAzimuthDeg)) {
@@ -597,7 +597,7 @@ public class MainActivity extends AppCompatActivity {
             if (sunculmination != null && sunculmination.isAfter(endOfTheDay)) {
                 sunculmination = null;
             }
-            ((TextView) findViewById(R.id.main_view_solar_info_today_sun_culmination_time)).setText(AppTimeFormat.instantToStringForMainActivity(sunculmination, zoneId, timeFormat24Hour, locale));
+            ((TextView) findViewById(R.id.main_view_solar_info_today_sun_culmination_time)).setText(AppTimeFormat.instantToHmStringForEventTime(sunculmination, zoneId, timeFormat24Hour, locale));
             if (sunculmination != null) {
                 double sunElevationRadForJudge = AstronomicalObjectCalculator.calculateElevationRad(sun, sunculmination, locationOnTheEarth, AstronomicalObjectCalculator.ViewPoint.CENTER_OF_THE_EARTH, AstronomicalObjectCalculator.ElevationType.ACTUAL);
                 if (sunElevationRadForJudge >= AstronomicalObjectCalculator.calculateThresholdElevationRadForRiseSet(sun, sunculmination, locationOnTheEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP)) {
@@ -626,7 +626,7 @@ public class MainActivity extends AppCompatActivity {
             if (sunset != null && sunset.isAfter(endOfTheDay)) {
                 sunset = null;
             }
-            ((TextView) findViewById(R.id.main_view_solar_info_today_sunset_time)).setText(AppTimeFormat.instantToStringForMainActivity(sunset, zoneId, timeFormat24Hour, locale));
+            ((TextView) findViewById(R.id.main_view_solar_info_today_sunset_time)).setText(AppTimeFormat.instantToHmStringForEventTime(sunset, zoneId, timeFormat24Hour, locale));
             if (sunset != null) {
                 double sunAzimuthDeg = Math.toDegrees(AstronomicalObjectCalculator.calculateAzimuthRad(sun, sunset, locationOnTheEarth));
                 if (Double.isNaN(sunAzimuthDeg)) {
@@ -707,7 +707,7 @@ public class MainActivity extends AppCompatActivity {
             if (moonrise != null && moonrise.isAfter(endOfTheDay)) {
                 moonrise = null;
             }
-            ((TextView) findViewById(R.id.main_view_solar_info_today_moonrise_time)).setText(AppTimeFormat.instantToStringForMainActivity(moonrise, zoneId, timeFormat24Hour, locale));
+            ((TextView) findViewById(R.id.main_view_solar_info_today_moonrise_time)).setText(AppTimeFormat.instantToHmStringForEventTime(moonrise, zoneId, timeFormat24Hour, locale));
             if (moonrise != null) {
                 double moonAzimuthDeg = Math.toDegrees(AstronomicalObjectCalculator.calculateAzimuthRad(moon, moonrise, locationOnTheEarth));
                 if (Double.isNaN(moonAzimuthDeg)) {
@@ -727,7 +727,7 @@ public class MainActivity extends AppCompatActivity {
             if (moonculmination != null && moonculmination.isAfter(endOfTheDay)) {
                 moonculmination = null;
             }
-            ((TextView) findViewById(R.id.main_view_solar_info_today_moon_culmination_time)).setText(AppTimeFormat.instantToStringForMainActivity(moonculmination, zoneId, timeFormat24Hour, locale));
+            ((TextView) findViewById(R.id.main_view_solar_info_today_moon_culmination_time)).setText(AppTimeFormat.instantToHmStringForEventTime(moonculmination, zoneId, timeFormat24Hour, locale));
             if (moonculmination != null) {
                 double moonElevationRadForJudge = AstronomicalObjectCalculator.calculateElevationRad(moon, moonculmination, locationOnTheEarth, AstronomicalObjectCalculator.ViewPoint.CENTER_OF_THE_EARTH, AstronomicalObjectCalculator.ElevationType.ACTUAL);
 
@@ -757,7 +757,7 @@ public class MainActivity extends AppCompatActivity {
             if (moonset != null && moonset.isAfter(endOfTheDay)) {
                 moonset = null;
             }
-            ((TextView) findViewById(R.id.main_view_solar_info_today_moonset_time)).setText(AppTimeFormat.instantToStringForMainActivity(moonset, zoneId, timeFormat24Hour, locale));
+            ((TextView) findViewById(R.id.main_view_solar_info_today_moonset_time)).setText(AppTimeFormat.instantToHmStringForEventTime(moonset, zoneId, timeFormat24Hour, locale));
             if (moonset != null) {
                 double moonAzimuthDeg = Math.toDegrees(AstronomicalObjectCalculator.calculateAzimuthRad(moon, moonset, locationOnTheEarth));
                 if (Double.isNaN(moonAzimuthDeg)) {

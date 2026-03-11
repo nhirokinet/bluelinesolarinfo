@@ -1,11 +1,6 @@
 package net.nhiroki.bluelinesolarinfo.stringformats;
 
-import android.content.Context;
-
-import net.nhiroki.bluelinesolarinfo.R;
-
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -13,7 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 public class AppTimeFormat {
-    public static String instantToStringForMainActivity(Instant instant, ZoneId zoneId, boolean timeFormat24Hours, Locale locale) {
+    public static String instantToHmStringForEventTime(Instant instant, ZoneId zoneId, boolean timeFormat24Hours, Locale locale) {
         if (instant == null) {
             DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, "Hm"), locale);
             String format2312 = LocalTime.of(23, 4, 0).format(timeFormatter);
@@ -43,49 +38,6 @@ public class AppTimeFormat {
             return "24:00";
         }
         return instant.plusSeconds(30).atZone(zoneId).format(timeFormatter);
-    }
-
-    public static String instantToStringForWidget(Instant instant, ZoneId zoneId, boolean timeFormat24Hours, Locale locale) {
-        if (instant == null) {
-            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, "Hm"), locale);
-            String format2312 = LocalTime.of(23, 4, 0).format(timeFormatter);
-            if (format2312.length() == 5 && format2312.startsWith("23") && format2312.endsWith("04")) {
-                return "--" + format2312.charAt(2) + "--";
-            }
-            if (format2312.length() == 7 && format2312.startsWith("23 ") && format2312.endsWith(" 04")) {
-                return "-- " + format2312.charAt(3) + " --";
-            }
-            // Fallback
-            return "--:--";
-        }
-
-        if (timeFormat24Hours) {
-            String ourPattern = "%02d:%02d";
-            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, "Hm"), locale);
-            String format2312 = LocalTime.of(23, 4, 0).format(timeFormatter);
-            if (format2312.length() == 5 && format2312.startsWith("23") && format2312.endsWith("04")) {
-                ourPattern = "%02d" + format2312.charAt(2) + "%02d";
-            }
-            if (format2312.length() == 7 && format2312.startsWith("23 ") && format2312.endsWith(" 04")) {
-                ourPattern = "%02d " + format2312.charAt(3) + " %02d";
-            }
-            LocalTime localTime = instant.atZone(zoneId).toLocalTime();
-            // explicitly show 24:00 if the nearest minute is the end of the day
-            int secOfDay;
-            if (localTime.toSecondOfDay() >= 86370) {
-                secOfDay = 86400;
-            } else {
-                LocalTime localTimeRounded = instant.plusSeconds(30).atZone(zoneId).toLocalTime();
-                secOfDay = localTimeRounded.toSecondOfDay();
-            }
-            int hour = secOfDay / 3600;
-            int min = (secOfDay % 3600) / 60;
-            return String.format(ourPattern, hour, min);
-
-        } else {
-            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, "hma"), locale);
-            return ZonedDateTime.ofInstant(instant.plusSeconds(30), zoneId).format(timeFormatter);
-        }
     }
 
     public static String instantToHmsStringForRealtime(LocalTime localTime, boolean timeFormat24Hours, Locale locale) {

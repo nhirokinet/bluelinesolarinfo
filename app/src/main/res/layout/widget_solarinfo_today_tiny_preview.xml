@@ -16,22 +16,29 @@
         android:textColor="@color/widget_text_color"
         android:textStyle="bold"
         />
-    <TextView
-        android:id="@+id/suninfo_widget_sunrise"
-        android:text="@string/widget_solar_info_today_preview_text_sunrise_time_on_widget"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/widget_text_color"
-        />
-    <TextView
-        android:id="@+id/suninfo_widget_sunset"
-        android:text="@string/widget_solar_info_today_preview_text_sunset_time_on_widget"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/widget_text_color"
-        />
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="right"
+        >
+        <TextView
+            android:id="@+id/suninfo_widget_sunrise"
+            android:text="@string/widget_solar_info_today_preview_text_sunrise_time_on_widget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/widget_text_color"
+            />
+        <TextView
+            android:id="@+id/suninfo_widget_sunset"
+            android:text="@string/widget_solar_info_today_preview_text_sunset_time_on_widget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/widget_text_color"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
