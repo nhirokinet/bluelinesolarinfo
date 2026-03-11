@@ -1,6 +1,7 @@
 package net.nhiroki.androidlib.bluelineastroandroidlib.views;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
@@ -8,42 +9,54 @@ import android.util.TypedValue;
 import android.view.View;
 
 import net.nhiroki.androidlib.bluelineastroandroidlib.moonphase.MoonPhaseRenderer;
+import net.nhiroki.bluelinesolarinfo.R;
 
 
+// app/src/main/res/values/moonphaseview_attr.xml is required
 public class MoonPhaseView extends View {
-    private double moonPhaseDeg = 0.0;
-    private boolean moonPhaseSet = false;
+    private float moonPhaseDeg = -1.0f;
 
     private int circlePaintAlpha = 50;
 
 
     public MoonPhaseView(Context context) {
         super(context);
+        init(context, null);
     }
 
     public MoonPhaseView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
+        init(context, attributeSet);
     }
 
     public MoonPhaseView(Context context, AttributeSet attributeSet, int defStyleAttr) {
         super(context, attributeSet, defStyleAttr);
+        init(context, attributeSet);
     }
 
     public MoonPhaseView(Context context, AttributeSet attributeSet, int defStyleAttr, int defStyleRes) {
         super(context, attributeSet, defStyleAttr, defStyleRes);
+        init(context, attributeSet);
     }
 
-    public void setMoonPhaseDeg(double moonPhaseDeg) {
+    public void setMoonPhaseDeg(float moonPhaseDeg) {
         this.moonPhaseDeg = moonPhaseDeg;
-        this.moonPhaseSet = true;
         this.invalidate();
+    }
+
+    private void init(Context context, AttributeSet attributeSet) {
+        if (attributeSet != null) {
+            TypedArray arr = context.obtainStyledAttributes(attributeSet, R.styleable.MoonPhaseView);
+            moonPhaseDeg = arr.getFloat(R.styleable.MoonPhaseView_moonPhaseDeg, -1.0f);
+            arr.recycle();
+        }
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if (! this.moonPhaseSet) {
+        if (this.moonPhaseDeg < -0.01) {
             return;
         }
 

@@ -694,7 +694,7 @@ public class MainActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.main_view_solar_info_now_equation_of_time)).setText(getString(R.string.main_activity_solar_info_today_equation_of_time_format, equationOfTimeSign, euqationOfTimeSecAbs / 60, euqationOfTimeSecAbs % 60));
 
             double moonPhaseDeg = MoonTool.calculateMoonPhaseDeg(midOfTheDay);
-            ((MoonPhaseView) findViewById(R.id.main_view_solar_info_today_moon_phase_view)).setMoonPhaseDeg(moonPhaseDeg);
+            ((MoonPhaseView) findViewById(R.id.main_view_solar_info_today_moon_phase_view)).setMoonPhaseDeg((float) moonPhaseDeg);
 
             Instant prevNewMoon = MoonTool.calculatePreviousTimeOfMoonPhaseByDeg(midOfTheDay, 0.0);
             double daysAfterPrevNewMoon = ((double)(midOfTheDay.toEpochMilli() - prevNewMoon.toEpochMilli())) / 86400000.0;
