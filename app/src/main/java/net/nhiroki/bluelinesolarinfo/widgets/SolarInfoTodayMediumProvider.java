@@ -39,6 +39,14 @@ public class SolarInfoTodayMediumProvider extends AppWidgetProvider {
         updateAllWidgets(context, appWidgetManager, appWidgetIds);
     }
 
+    @Override
+    public void onDeleted(Context context, int[] appWidgetIds) {
+        super.onDeleted(context, appWidgetIds);
+        for (int appWidgetId: appWidgetIds) {
+            AppPreferences.deleteRegionWidgetConfig(context, appWidgetId);
+        }
+    }
+
     public static void updateAllWidgets(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         for (int appWidgetId: appWidgetIds) {
             updateWidget(context, appWidgetManager, appWidgetId);
@@ -129,8 +137,10 @@ public class SolarInfoTodayMediumProvider extends AppWidgetProvider {
 
         Intent intentForClick = new Intent(context, MainActivity.class);
         intentForClick.putExtra(MainActivity.EXTRA_REGION_ID, region.getId());
-        PendingIntent pendingIntent = PendingIntent.getActivities(context, MainActivity.getRequestCodeForOpeningByWidget(appWidgetId), new Intent[]{intentForClick}, PendingIntent.FLAG_IMMUTABLE);
+        intentForClick.putExtra(MainActivity.EXTRA_FROM_APPWIDGETID, appWidgetId);
+        PendingIntent pendingIntent = PendingIntent.getActivities(context, 0, new Intent[]{intentForClick}, PendingIntent.FLAG_IMMUTABLE);
         remoteViews.setOnClickPendingIntent(R.id.widget_suninfo_root, pendingIntent);
+
         appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
     }
 }
