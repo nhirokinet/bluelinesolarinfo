@@ -24,9 +24,9 @@ public class DataStore extends SQLiteOpenHelper {
         super(context, DATABASE_FILENAME, null, DATABASE_VERSION);
     }
 
-    public static DataStore getInstance(Context context) {
+    public static synchronized DataStore getInstance(Context context) {
         if (singleton == null) {
-            singleton = new DataStore(context);
+            singleton = new DataStore(context.getApplicationContext());
         }
         return singleton;
     }

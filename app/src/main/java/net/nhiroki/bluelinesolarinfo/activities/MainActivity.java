@@ -52,8 +52,8 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     public final static String EXTRA_REGION_ID = "region_id";
+    public final static String EXTRA_FROM_APPWIDGETID = "from_appwidgetid";
     public final static String EXTRA_TARGET_TIME_UNIX_MILLISEC = "target_time_unix_millisec";
-    public final static int REQUEST_CODE_FOR_OPENING_BY_WIDGET = 0x10000000;
 
     private enum LocationMeasureStatus { UNKNOWN, NO_PERMISSION, FETCHING, SUCCESS, ERROR };
 
@@ -97,10 +97,6 @@ public class MainActivity extends AppCompatActivity {
     private LocalDate currentDisplayedDate = null;
     private ZoneId currentDisplayedZoneId = null;
 
-
-    public static int getRequestCodeForOpeningByWidget(int appWidgetId) {
-        return REQUEST_CODE_FOR_OPENING_BY_WIDGET | (appWidgetId & 0xfffffff);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

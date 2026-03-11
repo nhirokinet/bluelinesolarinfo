@@ -54,4 +54,9 @@ public class AppPreferences {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_WIDGET_NAME, Context.MODE_PRIVATE);
         sharedPreferences.edit().putString(KEY_WIDGET_CONFIG_PREFIX + widgetId, String.valueOf(config.regionId)).apply();
     }
+
+    public static void deleteRegionWidgetConfig(Context context, int widgetId) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_WIDGET_NAME, Context.MODE_PRIVATE);
+        sharedPreferences.edit().remove(KEY_WIDGET_CONFIG_PREFIX + widgetId).apply();
+    }
 }
