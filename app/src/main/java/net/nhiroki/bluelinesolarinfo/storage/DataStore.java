@@ -12,6 +12,7 @@ import net.nhiroki.bluelinesolarinfo.region.RegionOnTheEarth;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class DataStore extends SQLiteOpenHelper {
     private static final String DATABASE_FILENAME = "app-data.sqlite";
@@ -20,8 +21,14 @@ public class DataStore extends SQLiteOpenHelper {
     private static final String PROP_KEY_DEFAULT_REGION_ID = "default_region_id";
     private static DataStore singleton;
 
+    // To support background job without disk access
+    private Map<Long, RegionOnTheEarth> regionCache;
+
+
     private DataStore(Context context) {
         super(context, DATABASE_FILENAME, null, DATABASE_VERSION);
+
+        this.regionCache = new java.util.HashMap<>();
     }
 
     public static synchronized DataStore getInstance(Context context) {
@@ -56,6 +63,9 @@ public class DataStore extends SQLiteOpenHelper {
     }
 
     public RegionOnTheEarth getRegionById(long id) {
+        if (regionCache.containsKey(id)) {
+            return regionCache.get(id);
+        }
         Cursor cursor = getReadableDatabase().rawQuery("SELECT id, name, timezone, longitude, latitude, elevation FROM regions WHERE id = ?", new String[]{Long.toString(id)});
         if (cursor.moveToNext()) {
             long regionId = cursor.getLong(0);
@@ -66,7 +76,10 @@ public class DataStore extends SQLiteOpenHelper {
             double elevation = cursor.getDouble(5);
 
             cursor.close();
-            return new RegionOnTheEarth(regionId, name, zoneId, new net.nhiroki.lib.bluelineastrolib.location.LocationOnTheEarth(longitude, latitude, elevation));
+            RegionOnTheEarth ret =  new RegionOnTheEarth(regionId, name, zoneId, new net.nhiroki.lib.bluelineastrolib.location.LocationOnTheEarth(longitude, latitude, elevation));
+            this.regionCache.put(id, ret);
+            return ret;
+
         } else {
             cursor.close();
             return null;
@@ -138,7 +151,11 @@ public class DataStore extends SQLiteOpenHelper {
         contentValues.put("longitude", region.getLocationOnTheEarth().getLongitudeDeg());
         contentValues.put("latitude", region.getLocationOnTheEarth().getLatitudeDeg());
         contentValues.put("elevation", region.getLocationOnTheEarth().getElevationMeters());
-        return getWritableDatabase().insert("regions", null, contentValues);
+
+        long id = getWritableDatabase().insert("regions", null, contentValues);
+        RegionOnTheEarth regionSaved = this.getRegionById(id);
+        this.regionCache.put(id, regionSaved);
+        return id;
     }
 
     public void updateRegion(RegionOnTheEarth region) {
@@ -149,9 +166,13 @@ public class DataStore extends SQLiteOpenHelper {
         contentValues.put("latitude", region.getLocationOnTheEarth().getLatitudeDeg());
         contentValues.put("elevation", region.getLocationOnTheEarth().getElevationMeters());
         getWritableDatabase().update("regions", contentValues, "id = ?", new String[]{Long.toString(region.getId())});
+
+        this.regionCache.put(region.getId(), region);
     }
 
     public void removeRegionById(long id) {
         getWritableDatabase().delete("regions", "id = ?", new String[]{Long.toString(id)});
+
+        this.regionCache.remove(id);
     }
 }
