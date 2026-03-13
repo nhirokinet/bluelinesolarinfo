@@ -87,7 +87,7 @@ public class SolarInfoTodayTinyProvider extends AppWidgetProvider {
         Instant midOfDay = dayMidLocal.toInstant();
 
         Locale locale = context.getResources().getConfiguration().locale;
-        String dateFormat = DateFormat.getBestDateTimePattern(locale, "MMdd");
+        String dateFormat = DateFormat.getBestDateTimePattern(locale, "Md");
         remoteViews.setTextViewText(R.id.suninfo_widget_date, new SimpleDateFormat(dateFormat, locale).format(new Date(nowLocal.getYear() - 1900, nowLocal.getMonthValue() - 1, nowLocal.getDayOfMonth())));
 
         Sun sun = new Sun();
