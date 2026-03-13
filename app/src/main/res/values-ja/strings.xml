@@ -29,10 +29,15 @@
     <string name="direction_short_16_area_14">北西</string>
     <string name="direction_short_16_area_15">北北西</string>
 
-    <string name="equinox_name_0">春分</string>
-    <string name="equinox_name_90">夏至</string>
-    <string name="equinox_name_180">秋分</string>
-    <string name="equinox_name_270">冬至</string>
+    <string name="event_name_sun_ecliptic_longitude_0_north">春分</string>
+    <string name="event_name_sun_ecliptic_longitude_90_north">夏至</string>
+    <string name="event_name_sun_ecliptic_longitude_180_north">秋分</string>
+    <string name="event_name_sun_ecliptic_longitude_270_north">冬至</string>
+
+    <string name="event_name_sun_ecliptic_longitude_0_south">秋分（春分）</string>
+    <string name="event_name_sun_ecliptic_longitude_90_south">冬至（夏至）</string>
+    <string name="event_name_sun_ecliptic_longitude_180_south">春分（秋分）</string>
+    <string name="event_name_sun_ecliptic_longitude_270_south">夏至（冬至）</string>
 
     <string name="moon_phase_0">新月</string>
     <string name="moon_phase_90">上弦</string>
