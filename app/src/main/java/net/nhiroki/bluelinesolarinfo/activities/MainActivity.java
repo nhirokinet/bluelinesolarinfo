@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
     private LocalDate currentDisplayedDate = null;
     private ZoneId currentDisplayedZoneId = null;
+    private LocationOnTheEarth currentDisplayedLocationOnTheEarth = null;
 
 
     @Override
@@ -273,6 +274,19 @@ public class MainActivity extends AppCompatActivity {
             Instant startOfTheYear = LocalDate.of(year, 1, 1).atStartOfDay(this.currentDisplayedZoneId).toInstant();
             ((TextView) dialogView.findViewById(R.id.main_activity_dialog_sun_this_year_title_year)).setText(LocalDate.of(year, 1, 1).format(DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, "yyyy"), locale)));
 
+            if (this.currentDisplayedLocationOnTheEarth.getLatitudeDeg() >= 0.0) {
+                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_sun_this_year_event_0_label)).setText(R.string.event_name_sun_ecliptic_longitude_0_north);
+                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_sun_this_year_event_90_label)).setText(R.string.event_name_sun_ecliptic_longitude_90_north);
+                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_sun_this_year_event_180_label)).setText(R.string.event_name_sun_ecliptic_longitude_180_north);
+                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_sun_this_year_event_270_label)).setText(R.string.event_name_sun_ecliptic_longitude_270_north);
+
+            } else {
+                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_sun_this_year_event_0_label)).setText(R.string.event_name_sun_ecliptic_longitude_0_south);
+                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_sun_this_year_event_90_label)).setText(R.string.event_name_sun_ecliptic_longitude_90_south);
+                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_sun_this_year_event_180_label)).setText(R.string.event_name_sun_ecliptic_longitude_180_south);
+                ((TextView) dialogView.findViewById(R.id.main_activity_dialog_sun_this_year_event_270_label)).setText(R.string.event_name_sun_ecliptic_longitude_270_south);
+
+            }
             try {
                 Instant nextEquinox0 = SunTool.calculateNextTimeOfEclipticLongitudeDeg(startOfTheYear, 0.0);
                 ((TextView) dialogView.findViewById(R.id.main_activity_dialog_sun_this_year_equinox_0_date)).setText(AppTimeFormat.fullDateTimeHourPrecisionForEventForList(nextEquinox0, this.currentDisplayedZoneId, timeFormat24Hour, locale));
@@ -508,6 +522,7 @@ public class MainActivity extends AppCompatActivity {
 
         this.currentDisplayedDate = date;
         this.currentDisplayedZoneId = zoneId;
+        this.currentDisplayedLocationOnTheEarth = locationOnTheEarth;
 
         String todayString = date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG).withLocale(getResources().getConfiguration().getLocales().get(0)));
         if (date.equals(today)) {

@@ -33,10 +33,15 @@
     <string name="direction_short_16_area_14">NW</string>
     <string name="direction_short_16_area_15">NNW</string>
 
-    <string name="equinox_name_0">March equinox</string>
-    <string name="equinox_name_90">June solstice</string>
-    <string name="equinox_name_180">September equinox</string>
-    <string name="equinox_name_270">December solstice</string>
+    <string name="event_name_sun_ecliptic_longitude_0_north">March equinox</string>
+    <string name="event_name_sun_ecliptic_longitude_90_north">June solstice</string>
+    <string name="event_name_sun_ecliptic_longitude_180_north">September equinox</string>
+    <string name="event_name_sun_ecliptic_longitude_270_north">December solstice</string>
+
+    <string name="event_name_sun_ecliptic_longitude_0_south">March equinox</string>
+    <string name="event_name_sun_ecliptic_longitude_90_south">June solstice</string>
+    <string name="event_name_sun_ecliptic_longitude_180_south">September equinox</string>
+    <string name="event_name_sun_ecliptic_longitude_270_south">December solstice</string>
 
     <string name="moon_phase_0">New moon</string>
     <string name="moon_phase_90">First quarter</string>
