@@ -36,27 +36,43 @@ public class WidgetUpdateWorker extends Worker {
     }
 
     public static void updateAllWidgets(Context context) {
-        Instant nextUpdate = Instant.now().plusSeconds(172800);
+        Instant nextUpdate = null;
 
         for (int widgetID: AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, SolarInfoTodayTinyProvider.class))) {
             Instant updateForThis = SolarInfoTodayTiny.updateWidget(context, AppWidgetManager.getInstance(context), widgetID);
-            if (updateForThis != null) {
-                nextUpdate = nextUpdate.isBefore(updateForThis) ? nextUpdate : updateForThis;
+            if (nextUpdate == null) {
+                nextUpdate = updateForThis;
+            } else {
+                if (updateForThis != null) {
+                    nextUpdate = nextUpdate.isBefore(updateForThis) ? nextUpdate : updateForThis;
+                }
             }
         }
 
         for (int widgetID: AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, SolarInfoTodayMediumProvider.class))) {
             Instant updateForThis = SolarInfoTodayMedium.updateWidget(context, AppWidgetManager.getInstance(context), widgetID);
-            if (updateForThis != null) {
-                nextUpdate = nextUpdate.isBefore(updateForThis) ? nextUpdate : updateForThis;
+            if (nextUpdate == null) {
+                nextUpdate = updateForThis;
+            } else {
+                if (updateForThis != null) {
+                    nextUpdate = nextUpdate.isBefore(updateForThis) ? nextUpdate : updateForThis;
+                }
             }
+        }
+
+        WorkManager workManager = WorkManager.getInstance(context);
+        workManager.cancelAllWorkByTag(WORK_TAG_FOR_WIDGETS_UPDATE);
+
+        if (nextUpdate == null) {
+            Log.d(WidgetUpdateWorker.class.getName(), "No widgets to update. Not scheduling next update.");
+            return;
         }
 
         nextUpdate = nextUpdate.plusMillis(MILLISECONDS_WAIT_AFTER_IDEAL_UPDATE);
 
-        WorkManager workManager = WorkManager.getInstance(context);
-
-        workManager.cancelAllWorkByTag(WORK_TAG_FOR_WIDGETS_UPDATE);
+        if (nextUpdate.isBefore(Instant.now().plusSeconds(30))) {
+            nextUpdate = Instant.now().plusSeconds(30);
+        }
 
         Duration durationUntilNext = Duration.between(Instant.now(), nextUpdate);
         long durationUntilNextMillis = durationUntilNext.toMillis();
