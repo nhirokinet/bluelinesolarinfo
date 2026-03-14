@@ -39,14 +39,14 @@ public class WidgetUpdateWorker extends Worker {
         Instant nextUpdate = Instant.now().plusSeconds(172800);
 
         for (int widgetID: AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, SolarInfoTodayTinyProvider.class))) {
-            Instant updateForThis = SolarInfoTodayTinyProvider.updateWidget(context, AppWidgetManager.getInstance(context), widgetID);
+            Instant updateForThis = SolarInfoTodayTiny.updateWidget(context, AppWidgetManager.getInstance(context), widgetID);
             if (updateForThis != null) {
                 nextUpdate = nextUpdate.isBefore(updateForThis) ? nextUpdate : updateForThis;
             }
         }
 
         for (int widgetID: AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, SolarInfoTodayMediumProvider.class))) {
-            Instant updateForThis = SolarInfoTodayMediumProvider.updateWidget(context, AppWidgetManager.getInstance(context), widgetID);
+            Instant updateForThis = SolarInfoTodayMedium.updateWidget(context, AppWidgetManager.getInstance(context), widgetID);
             if (updateForThis != null) {
                 nextUpdate = nextUpdate.isBefore(updateForThis) ? nextUpdate : updateForThis;
             }
