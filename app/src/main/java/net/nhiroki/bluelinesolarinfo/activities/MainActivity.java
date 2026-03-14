@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private enum LocationMeasureStatus { UNKNOWN, NO_PERMISSION, FETCHING, SUCCESS, ERROR };
 
     private final static int REQUEST_CODE_FOR_REGION_SETTING = 1001;
+    public final static int REQUEST_CODE_FOR_OPENING_BY_WIDGET = 0x10000000;
 
     private static final int[] direction16StrResIds = new int[] {
             R.string.direction_short_16_area_0,
@@ -373,6 +374,10 @@ public class MainActivity extends AppCompatActivity {
         this.currentLocation = null;
         this.locationMeasureStatus = LocationMeasureStatus.UNKNOWN;
         updateSolarInfo();
+    }
+
+    public static int getRequestCodeForOpeningByWidget(int appWidgetId) {
+        return REQUEST_CODE_FOR_OPENING_BY_WIDGET | (appWidgetId & 0xfffffff);
     }
 
     private ZoneId previousZoneIdForRefresh = null;
