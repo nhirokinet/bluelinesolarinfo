@@ -150,6 +150,7 @@
         \n- Coroutines support libraries for Kotlin
         \n- kotlinx-coroutines-android
         \n- Google Guava
+        \n- JSpecify
     </string>
     <string name="license_apache_license_v2.0_name" translatable="false">Apache License, Version 2.0</string>
     <string name="license_apache_license_v2.0_url" translatable="false">https://www.apache.org/licenses/LICENSE-2.0.txt</string>
