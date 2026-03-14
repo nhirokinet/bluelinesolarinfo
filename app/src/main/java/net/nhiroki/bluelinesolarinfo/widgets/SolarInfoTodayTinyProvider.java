@@ -36,7 +36,7 @@ public class SolarInfoTodayTinyProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
-        updateAllWidgets(context, appWidgetManager, appWidgetIds);
+        WidgetUpdateWorker.updateAllWidgets(context);
     }
 
     @Override
@@ -47,12 +47,6 @@ public class SolarInfoTodayTinyProvider extends AppWidgetProvider {
         }
     }
 
-    public static void updateAllWidgets(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        for (int appWidgetId: appWidgetIds) {
-            updateWidget(context, appWidgetManager, appWidgetId);
-        }
-    }
-
     private static void showError(RemoteViews remoteViews, Context context) {
         remoteViews.setTextViewText(R.id.suninfo_widget_date, context.getString(R.string.widget_error_string));
         remoteViews.setTextViewText(R.id.suninfo_widget_sunrise, context.getString(R.string.widget_error_string));
@@ -60,20 +54,20 @@ public class SolarInfoTodayTinyProvider extends AppWidgetProvider {
         remoteViews.setTextViewText(R.id.suninfo_moon_days, context.getString(R.string.widget_error_string));
     }
 
-    public static void updateWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
+    public static Instant updateWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_solarinfo_today_tiny);
 
         AppPreferences.RegionBasedWidgetConfig widgetConfig = AppPreferences.getRegionBasedWidgetConfig(context, appWidgetId);
         if (widgetConfig == null) {
             showError(remoteViews, context);
             appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
-            return;
+            return null;
         }
         RegionOnTheEarth region = DataStore.getInstance(context).getRegionById(widgetConfig.getRegionId());
         if (region == null) {
             showError(remoteViews, context);
             appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
-            return;
+            return null;
         }
         LocationOnTheEarth locationOnEarth = region.getLocationOnTheEarth();
         ZoneId localZone = region.getZoneId();
@@ -141,5 +135,7 @@ public class SolarInfoTodayTinyProvider extends AppWidgetProvider {
         remoteViews.setOnClickPendingIntent(R.id.widget_suninfo_root, pendingIntent);
 
         appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
+
+        return nowLocal.withHour(23).withMinute(59).withSecond(59).withNano(0).plusSeconds(1).toInstant();
     }
 }

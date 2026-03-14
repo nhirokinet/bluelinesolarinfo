@@ -2,7 +2,7 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:minHeight="50sp"
     android:minWidth="50sp"
-    android:updatePeriodMillis="3600000"
+    android:updatePeriodMillis="21600000"
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen"
     android:previewLayout="@layout/widget_solarinfo_today_tiny_preview"
