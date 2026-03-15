@@ -172,9 +172,9 @@
     <string name="widget_solar_info_today_initial_text_location">-</string>
     <string name="widget_solar_info_today_preview_text_location">Tokyo</string>
     <string name="widget_solar_info_today_initial_text_date_on_widget_without_dow">--/--</string>
-    <string name="widget_solar_info_today_preview_text_date_on_widget_without_dow">04/21</string>
+    <string name="widget_solar_info_today_preview_text_date_on_widget_without_dow">4/21</string>
     <string name="widget_solar_info_today_initial_text_date_on_widget_with_dow">---, --/--</string>
-    <string name="widget_solar_info_today_preview_text_date_on_widget_with_dow">Tue, 04/21</string>
+    <string name="widget_solar_info_today_preview_text_date_on_widget_with_dow">Tue, Apr 21</string>
     <string name="widget_solar_info_today_initial_text_time_on_widget">--:--</string>
     <string name="widget_solar_info_today_preview_text_sunrise_time_on_widget">05:01</string>
     <string name="widget_solar_info_today_preview_text_sunset_time_on_widget">18:19</string>
