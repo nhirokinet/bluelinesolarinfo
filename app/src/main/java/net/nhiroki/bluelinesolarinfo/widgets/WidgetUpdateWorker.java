@@ -7,13 +7,18 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import com.google.common.util.concurrent.ListenableFuture;
+
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 public class WidgetUpdateWorker extends Worker {
@@ -61,7 +66,21 @@ public class WidgetUpdateWorker extends Worker {
         }
 
         WorkManager workManager = WorkManager.getInstance(context);
-        workManager.cancelAllWorkByTag(WORK_TAG_FOR_WIDGETS_UPDATE);
+        ListenableFuture<List<WorkInfo>> workersInfo = workManager.getWorkInfosByTag(WORK_TAG_FOR_WIDGETS_UPDATE);
+
+        try {
+            for (WorkInfo workInfo: workersInfo.get()) {
+                // RUNNING one may be oneself
+                if (workInfo.getState().equals(WorkInfo.State.ENQUEUED)) {
+                    Log.d(WidgetUpdateWorker.class.getName(), "Canceling ENQUEUED widget update worker: " + workInfo.getId());
+                    workManager.cancelWorkById(workInfo.getId());
+                }
+            }
+        } catch (ExecutionException e) {
+            Log.e(WidgetUpdateWorker.class.getName(), "Failed to get scheduled widget update workers. Skipping cancelling existing ones.", e);
+        } catch (InterruptedException e) {
+            Log.e(WidgetUpdateWorker.class.getName(), "Failed to get scheduled widget update workers. Skipping cancelling existing ones.", e);
+        }
 
         if (nextUpdate == null) {
             Log.d(WidgetUpdateWorker.class.getName(), "No widgets to update. Not scheduling next update.");
