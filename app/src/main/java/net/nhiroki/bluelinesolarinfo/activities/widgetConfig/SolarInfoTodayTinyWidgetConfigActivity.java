@@ -17,6 +17,7 @@ import net.nhiroki.bluelinesolarinfo.region.RegionOnTheEarth;
 import net.nhiroki.bluelinesolarinfo.storage.AppPreferences;
 import net.nhiroki.bluelinesolarinfo.storage.DataStore;
 import net.nhiroki.bluelinesolarinfo.widgets.SolarInfoTodayTiny;
+import net.nhiroki.bluelinesolarinfo.widgets.WidgetUpdateWorker;
 
 import java.util.List;
 
@@ -99,7 +100,6 @@ public class SolarInfoTodayTinyWidgetConfigActivity extends AppCompatActivity {
     }
 
     private void updateWidgets() {
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this.getApplicationContext());
-        SolarInfoTodayTiny.updateWidget(this.getApplicationContext(), appWidgetManager, this.appWidgetId);
+        WidgetUpdateWorker.updateAllWidgets(this.getApplicationContext());
     }
 }
