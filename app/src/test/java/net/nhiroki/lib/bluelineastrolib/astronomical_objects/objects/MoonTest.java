@@ -57,6 +57,10 @@ public class MoonTest {
         // 1.0609deg at 1999/11/14 00:00 UTC, from p 130 of 日の出・日の入りの計算 天体の出没時刻の求め方 by 長沢 工
         // https://www.chijinshokan.co.jp/Books/ISBN4-8052-0634-9.htm
         assertEquals(1.0609, moon.calculateEclipticLatitudeDeg(Instant.parse("1999-11-14T00:00:00Z")), 1e-4);
+
+        // Code to check the behavior if the result is negative
+        // Current code is not working properly
+        assertEquals(360.0 - 4.63, moon.calculateEclipticLatitudeDeg(Instant.parse("2026-03-08T00:00:00Z")), 0.01);
     }
 
     @Test
