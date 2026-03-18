@@ -1,6 +1,7 @@
 package net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects;
 
 import net.nhiroki.lib.bluelineastrolib.astronomical_objects.AstronomicalObject;
+import net.nhiroki.lib.bluelineastrolib.coordinates.CelestialCoordinatesWithRightAscension;
 import net.nhiroki.lib.bluelineastrolib.earth.Earth;
 import net.nhiroki.lib.bluelineastrolib.earth.TimePointOnTheEarth;
 import net.nhiroki.lib.bluelineastrolib.exceptions.AstronomicalPhenomenonComputationException;
@@ -16,6 +17,11 @@ public class Moon implements AstronomicalObject {
     // https://en.wikipedia.org/wiki/Moon
     private static final double MEAN_RADIUS_KM = 1737.4;
 
+
+    @Override
+    public CelestialCoordinatesWithRightAscension calculateCurrentCelestialCoordinates(Instant t) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
+        return CelestialCoordinatesWithRightAscension.ofRadians(this.calculateRightAscensionRad(t), this.calculateDeclinationRad(t));
+    }
 
     @Override
     public double calculateRightAscensionRad(Instant t) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {

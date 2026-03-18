@@ -1,6 +1,6 @@
 package net.nhiroki.bluelinesolarinfo.region;
 
-import net.nhiroki.lib.bluelineastrolib.location.LocationOnTheEarth;
+import net.nhiroki.lib.bluelineastrolib.coordinates.LocationOnTheEarth;
 
 import java.time.ZoneId;
 

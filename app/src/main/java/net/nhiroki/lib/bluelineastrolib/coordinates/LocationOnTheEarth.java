@@ -1,4 +1,4 @@
-package net.nhiroki.lib.bluelineastrolib.location;
+package net.nhiroki.lib.bluelineastrolib.coordinates;
 
 
 /**
@@ -11,6 +11,18 @@ public class LocationOnTheEarth {
 
 
     /**
+     * Create LocationOnTheEarth instance with longitude and latitude in degrees and elevation in meters.
+     *
+     * @param longitudeDeg Astronomical longitude in degrees from -180.0 to 180.0 (positive indicates east)
+     * @param latitudeDeg Astronomical latitude in degrees from -90.0 to 90.0 (positive indicates north)
+     * @param elevationMeters Elevation from horizon in meters
+     * @return LocationOnTheEarth instance with the specified coordinates
+     */
+    public static LocationOnTheEarth ofDegreesMeters(double longitudeDeg, double latitudeDeg, double elevationMeters) {
+        return new LocationOnTheEarth(longitudeDeg, latitudeDeg, elevationMeters);
+    }
+
+    /**
      * Constructor of LocationOnTheEarth.
      *
      * @param longitudeDeg Astronomical longitude in degrees from -180.0 to 180.0 (positive indicates east)
@@ -21,18 +33,6 @@ public class LocationOnTheEarth {
         this.longitudeDeg = longitudeDeg;
         this.latitudeDeg = latitudeDeg;
         this.elevationMeters = elevationMeters;
-    }
-
-    /**
-     * Create LocationOnTheEarth instance with longitude and latitude in degrees and elevation in meters.
-     *
-     * @param longitudeDeg Astronomical longitude in degrees from -180.0 to 180.0 (positive indicates east)
-     * @param latitudeDeg Astronomical latitude in degrees from -90.0 to 90.0 (positive indicates north)
-     * @param elevationMeters Elevation from horizon in meters
-     * @return LocationOnTheEarth instance with the specified coordinates
-     */
-    public static LocationOnTheEarth ofDegreesMeters(double longitudeDeg, double latitudeDeg, double elevationMeters) {
-        return new LocationOnTheEarth(longitudeDeg, latitudeDeg, elevationMeters);
     }
 
     public String toString() {

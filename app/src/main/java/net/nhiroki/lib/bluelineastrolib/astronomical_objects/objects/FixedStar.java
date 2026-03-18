@@ -1,6 +1,7 @@
 package net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects;
 
 import net.nhiroki.lib.bluelineastrolib.astronomical_objects.AstronomicalObject;
+import net.nhiroki.lib.bluelineastrolib.coordinates.CelestialCoordinatesWithRightAscension;
 
 import java.time.Instant;
 
@@ -9,34 +10,26 @@ import java.time.Instant;
  * An astronomical object fixed on the equatorial coordinate system.
  */
 public class FixedStar implements AstronomicalObject {
-    private final double rightAscensionRad;
-    private final double declinationRad;
+    private final CelestialCoordinatesWithRightAscension celestialCoordinates;
 
 
-    private FixedStar(double rightAscensionRad, double declinationRad) {
-        this.rightAscensionRad = rightAscensionRad;
-        this.declinationRad = declinationRad;
+    public FixedStar(CelestialCoordinatesWithRightAscension celestialCoordinates) {
+        this.celestialCoordinates = celestialCoordinates;
     }
 
-    /**
-     * Create a FixedStar instance with specified equatorial coordinates in radians.
-     *
-     * @param rightAscensionRad Right ascension in radians.
-     * @param declinationRad Declination in radians.
-     * @return FixedStar instance with specified equatorial coordinates.
-     */
-    public static FixedStar ofRadians(double rightAscensionRad, double declinationRad) {
-        return new FixedStar(rightAscensionRad, declinationRad);
+    @Override
+    public CelestialCoordinatesWithRightAscension calculateCurrentCelestialCoordinates(Instant t) {
+        return this.celestialCoordinates;
     }
 
     @Override
     public double calculateRightAscensionRad(Instant t) {
-        return this.rightAscensionRad;
+        return this.celestialCoordinates.getRightAscensionRad();
     }
 
     @Override
     public double calculateDeclinationRad(Instant t) {
-        return this.declinationRad;
+        return this.celestialCoordinates.getDeclinationRad();
     }
 
     @Override

@@ -1,11 +1,12 @@
 package net.nhiroki.lib.bluelineastrolib.logic;
 
 import net.nhiroki.lib.bluelineastrolib.astronomical_objects.AstronomicalObject;
+import net.nhiroki.lib.bluelineastrolib.coordinates.CelestialCoordinatesWithRightAscension;
 import net.nhiroki.lib.bluelineastrolib.earth.Earth;
 import net.nhiroki.lib.bluelineastrolib.earth.TimePointOnTheEarth;
 import net.nhiroki.lib.bluelineastrolib.exceptions.AstronomicalPhenomenonComputationException;
 import net.nhiroki.lib.bluelineastrolib.exceptions.UnsupportedDateRangeException;
-import net.nhiroki.lib.bluelineastrolib.location.LocationOnTheEarth;
+import net.nhiroki.lib.bluelineastrolib.coordinates.LocationOnTheEarth;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -491,8 +492,9 @@ public class AstronomicalObjectCalculator {
     }
 
     private static double calculateHeightRad(Instant now, LocationOnTheEarth loc, AstronomicalObject astronomicalObject) throws UnsupportedDateRangeException, AstronomicalPhenomenonComputationException {
-        double hourAngle = new TimePointOnTheEarth(now).calculateSiderealTimeRad(loc.getLongitudeRad()) - astronomicalObject.calculateRightAscensionRad(now);
-        double declination = astronomicalObject.calculateDeclinationRad(now);
+        CelestialCoordinatesWithRightAscension celestialCoordinatesWithRightAscension = astronomicalObject.calculateCurrentCelestialCoordinates(now);
+        double hourAngle = new TimePointOnTheEarth(now).calculateSiderealTimeRad(loc.getLongitudeRad()) - celestialCoordinatesWithRightAscension.getRightAscensionRad();
+        double declination = celestialCoordinatesWithRightAscension.getDeclinationRad();
         return CoordinateConversion.calculateElevationRadFromHourAngle(hourAngle, declination, loc.getLatitudeRad());
     }
 }

@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 import net.nhiroki.bluelinesolarinfo.region.RegionOnTheEarth;
-import net.nhiroki.lib.bluelineastrolib.location.LocationOnTheEarth;
+import net.nhiroki.lib.bluelineastrolib.coordinates.LocationOnTheEarth;
 
 import java.util.ArrayList;
 import java.util.List;

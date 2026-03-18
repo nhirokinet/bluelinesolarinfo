@@ -1,6 +1,6 @@
 package net.nhiroki.bluelinesolarinfo.test_data;
 
-import net.nhiroki.lib.bluelineastrolib.location.LocationOnTheEarth;
+import net.nhiroki.lib.bluelineastrolib.coordinates.LocationOnTheEarth;
 
 
 public class LocationsForTest {

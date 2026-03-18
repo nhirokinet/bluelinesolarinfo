@@ -17,7 +17,7 @@ import androidx.core.view.WindowInsetsCompat;
 import net.nhiroki.bluelinesolarinfo.R;
 import net.nhiroki.bluelinesolarinfo.region.RegionOnTheEarth;
 import net.nhiroki.bluelinesolarinfo.storage.DataStore;
-import net.nhiroki.lib.bluelineastrolib.location.LocationOnTheEarth;
+import net.nhiroki.lib.bluelineastrolib.coordinates.LocationOnTheEarth;
 
 import java.time.ZoneId;
 import java.time.format.TextStyle;

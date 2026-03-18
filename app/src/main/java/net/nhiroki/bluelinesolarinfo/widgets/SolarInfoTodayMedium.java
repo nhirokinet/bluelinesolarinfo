@@ -20,7 +20,7 @@ import net.nhiroki.bluelinesolarinfo.stringformats.AppTimeFormat;
 import net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects.Sun;
 import net.nhiroki.lib.bluelineastrolib.exceptions.AstronomicalPhenomenonComputationException;
 import net.nhiroki.lib.bluelineastrolib.exceptions.UnsupportedDateRangeException;
-import net.nhiroki.lib.bluelineastrolib.location.LocationOnTheEarth;
+import net.nhiroki.lib.bluelineastrolib.coordinates.LocationOnTheEarth;
 import net.nhiroki.lib.bluelineastrolib.logic.AstronomicalObjectCalculator;
 import net.nhiroki.lib.bluelineastrolib.tool.MoonTool;
 
