@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     height = location.hasAltitude() ? location.getAltitude() : 0.0;
                 }
-                MainActivity.this.currentLocation = new LocationOnTheEarth(location.getLongitude(), location.getLatitude(), height);
+                MainActivity.this.currentLocation = LocationOnTheEarth.ofDegreesMeters(location.getLongitude(), location.getLatitude(), height);
                 MainActivity.this.locationMeasureStatus = LocationMeasureStatus.SUCCESS;
                 MainActivity.this.locationPrevProvider = location.getProvider();
                 MainActivity.this.locationPrevAccuracy = location.getAccuracy();
@@ -452,7 +452,7 @@ public class MainActivity extends AppCompatActivity {
                 if (((CheckBox) findViewById(R.id.main_view_location_measure_config_use_elevation_checkbox)).isChecked()) {
                     locationOnTheEarth = this.currentLocation;
                 } else {
-                    locationOnTheEarth = new LocationOnTheEarth(this.currentLocation.getLongitudeDeg(), this.currentLocation.getLatitudeDeg(), 0.0);
+                    locationOnTheEarth = LocationOnTheEarth.ofDegreesMeters(this.currentLocation.getLongitudeDeg(), this.currentLocation.getLatitudeDeg(), 0.0);
                 }
             }
 

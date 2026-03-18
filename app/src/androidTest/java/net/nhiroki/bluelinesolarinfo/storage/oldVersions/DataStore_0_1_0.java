@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 import net.nhiroki.bluelinesolarinfo.region.RegionOnTheEarth;
+import net.nhiroki.lib.bluelineastrolib.location.LocationOnTheEarth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +67,7 @@ public class DataStore_0_1_0 extends SQLiteOpenHelper {
             double elevation = cursor.getDouble(5);
 
             cursor.close();
-            return new RegionOnTheEarth(regionId, name, zoneId, new net.nhiroki.lib.bluelineastrolib.location.LocationOnTheEarth(longitude, latitude, elevation));
+            return new RegionOnTheEarth(regionId, name, zoneId, LocationOnTheEarth.ofDegreesMeters(longitude, latitude, elevation));
         } else {
             cursor.close();
             return null;
@@ -108,7 +109,7 @@ public class DataStore_0_1_0 extends SQLiteOpenHelper {
             double latitude = cursor.getDouble(4);
             double elevation = cursor.getDouble(5);
 
-            ret.add(new RegionOnTheEarth(id, name, zoneId, new net.nhiroki.lib.bluelineastrolib.location.LocationOnTheEarth(longitude, latitude, elevation)));
+            ret.add(new RegionOnTheEarth(id, name, zoneId, LocationOnTheEarth.ofDegreesMeters(longitude, latitude, elevation)));
         }
         cursor.close();
         return ret;
