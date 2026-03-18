@@ -59,8 +59,7 @@ public class MoonTest {
         assertEquals(1.0609, moon.calculateEclipticLatitudeDeg(Instant.parse("1999-11-14T00:00:00Z")), 1e-4);
 
         // Code to check the behavior if the result is negative
-        // Current code is not working properly
-        assertEquals(360.0 - 4.63, moon.calculateEclipticLatitudeDeg(Instant.parse("2026-03-08T00:00:00Z")), 0.01);
+        assertEquals(-4.63, moon.calculateEclipticLatitudeDeg(Instant.parse("2026-03-08T00:00:00Z")), 0.01);
     }
 
     @Test
