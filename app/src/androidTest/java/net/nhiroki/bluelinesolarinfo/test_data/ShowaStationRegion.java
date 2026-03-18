@@ -6,6 +6,6 @@ import java.time.ZoneId;
 
 public class ShowaStationRegion extends RegionOnTheEarth {
     public ShowaStationRegion() {
-        super(0, "Showa Station", ZoneId.of("UTC"), new ShowaStationLocation());
+        super(0, "Showa Station", ZoneId.of("UTC"), LocationsForTest.getShowaStation());
     }
 }

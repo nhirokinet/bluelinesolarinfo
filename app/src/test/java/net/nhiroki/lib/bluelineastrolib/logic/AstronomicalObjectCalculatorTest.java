@@ -7,23 +7,17 @@ import java.time.ZonedDateTime;
 import org.junit.Test;
 
 import net.nhiroki.lib.bluelineastrolib.astronomical_objects.AstronomicalObject;
+import net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects.FixedStar;
 import net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects.Moon;
 import net.nhiroki.lib.bluelineastrolib.earth.Earth;
 import net.nhiroki.lib.bluelineastrolib.earth.TimePointOnTheEarth;
 import net.nhiroki.lib.bluelineastrolib.exceptions.AstronomicalPhenomenonComputationException;
 import net.nhiroki.lib.bluelineastrolib.exceptions.UnsupportedDateRangeException;
 import net.nhiroki.lib.bluelineastrolib.test_data.AstroComputingTestDataList;
-import net.nhiroki.lib.bluelineastrolib.test_data.fixedStarsForTest.Polaris;
-import net.nhiroki.lib.bluelineastrolib.test_data.fixedStarsForTest.Sirius;
+import net.nhiroki.lib.bluelineastrolib.test_data.FixedStarsForTest;
 import net.nhiroki.lib.bluelineastrolib.location.LocationOnTheEarth;
 import net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects.Sun;
-import net.nhiroki.lib.bluelineastrolib.test_data.locationsForTest.NorthPoleE0Z;
-import net.nhiroki.lib.bluelineastrolib.test_data.locationsForTest.NullIsland;
-import net.nhiroki.lib.bluelineastrolib.test_data.locationsForTest.RioDeJaneiro;
-import net.nhiroki.lib.bluelineastrolib.test_data.locationsForTest.SouthPoleE0Z;
-import net.nhiroki.lib.bluelineastrolib.test_data.locationsForTest.TokyoNAO;
-import net.nhiroki.lib.bluelineastrolib.test_data.locationsForTest.TopOfMtFuji;
-import net.nhiroki.lib.bluelineastrolib.test_data.locationsForTest.Tromsoe;
+import net.nhiroki.lib.bluelineastrolib.test_data.LocationsForTest;
 
 import static org.junit.Assert.*;
 
@@ -34,7 +28,7 @@ public class AstronomicalObjectCalculatorTest {
         // https://eco.mtk.nao.ac.jp/koyomi/dni/2024/s1302.html
         // In Tokyo (N35.6581deg, E139.7414deg), on 2024/02/29,
         // Sunrise: 06:12, Culmination 11:54, Sunset 17:35
-        LocationOnTheEarth placeToTest = new TokyoNAO();
+        LocationOnTheEarth placeToTest = LocationsForTest.getTokyoNAO();
         Sun sun = new Sun();
         Instant testDay1 = Instant.parse("2024-02-28T15:00:00Z");
 
@@ -54,7 +48,7 @@ public class AstronomicalObjectCalculatorTest {
         // https://eco.mtk.nao.ac.jp/koyomi/dni/2024/s1302.html
         // In Tokyo (N35.6581deg, E139.7414deg), on 2024/02/29,
         // Sunrise: 06:12, Culmination 11:54, Sunset 17:35
-        LocationOnTheEarth placeToTest = new TokyoNAO();
+        LocationOnTheEarth placeToTest = LocationsForTest.getTokyoNAO();
         Sun sun = new Sun();
         Instant testDay1 = Instant.parse("2024-02-28T15:00:00Z");
 
@@ -79,7 +73,7 @@ public class AstronomicalObjectCalculatorTest {
 
     @Test
     public void checkSunInfoAvailableThroughoutYearInTokyoWithTimeMeasure() throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
-        LocationOnTheEarth placeToTest = new TokyoNAO();
+        LocationOnTheEarth placeToTest = LocationsForTest.getTokyoNAO();
         Sun sun = new Sun();
 
         long calcStartTimeMs = System.currentTimeMillis();
@@ -115,7 +109,7 @@ public class AstronomicalObjectCalculatorTest {
 
     @Test
     public void checkSunInfoCalculatorSouthFunctionality() throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
-        LocationOnTheEarth placeToTest = new RioDeJaneiro();
+        LocationOnTheEarth placeToTest = LocationsForTest.getRioDeJaneiro();
         Sun sun = new Sun();
         Instant testDay1 = Instant.parse("2024-02-29T03:00:00Z");
         Instant sunriseOnTestDay1 = AstronomicalObjectCalculator.calculateRiseWithin24h(sun, testDay1, placeToTest, false, AstronomicalObjectCalculator.ReferencePoint.TOP);
@@ -128,7 +122,7 @@ public class AstronomicalObjectCalculatorTest {
 
     @Test
     public void checkFirstSunriseJapan_2011() throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
-        LocationOnTheEarth placeToTest = new TopOfMtFuji();
+        LocationOnTheEarth placeToTest = LocationsForTest.getTopOfMtFuji();
         Sun sun = new Sun();
 
         Instant testDay1 = Instant.parse("2011-12-31T15:00:00Z");
@@ -146,7 +140,7 @@ public class AstronomicalObjectCalculatorTest {
 
     @Test
     public void checkSunInfoCalculatorTromsoe() throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
-        LocationOnTheEarth placeToTest = new Tromsoe();
+        LocationOnTheEarth placeToTest = LocationsForTest.getTromsoe();
         Sun sun = new Sun();
 
         assertNotNull(AstronomicalObjectCalculator.calculateRiseWithin24h(sun, Instant.parse("2026-03-20T00:00:00Z"), placeToTest, true, AstronomicalObjectCalculator.ReferencePoint.TOP));
@@ -168,7 +162,7 @@ public class AstronomicalObjectCalculatorTest {
 
     @Test
     public void checkSunInfoCalculatorNorthPoleE0_2026() throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
-        LocationOnTheEarth placeToTest = new NorthPoleE0Z();
+        LocationOnTheEarth placeToTest = LocationsForTest.getNorthPoleE0Z();
         Sun sun = new Sun();
 
         Instant testDay1 = Instant.parse("2026-01-01T00:00:00Z");
@@ -243,7 +237,7 @@ public class AstronomicalObjectCalculatorTest {
     public void checkMoonInfoCalculatorBasicFunctionality() throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
         // https://eco.mtk.nao.ac.jp/koyomi/dni/2026/m1301.html
         // In Tokyo (N35.6581 deg, E139.7414deg)
-        LocationOnTheEarth placeToTest = new TokyoNAO();
+        LocationOnTheEarth placeToTest = LocationsForTest.getTokyoNAO();
         Moon moon = new Moon();
 
         // 2026/01/01: Moonrise: 14:04, Culmination 21:47, Moonset 04:21
@@ -285,8 +279,8 @@ public class AstronomicalObjectCalculatorTest {
 
     @Test
     public void checkSiriusBehavior() throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
-        Sirius sirius = new Sirius();
-        LocationOnTheEarth placeToTest = new TokyoNAO();
+        FixedStar sirius = FixedStarsForTest.getSirius();
+        LocationOnTheEarth placeToTest = LocationsForTest.getTokyoNAO();
 
         // 2026/02/01: Rise 16:28, Pass: 21:40:24, Set: 02:57
         // With calculating in https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/cande/riseset_rhip.cgi
@@ -302,13 +296,13 @@ public class AstronomicalObjectCalculatorTest {
 
     @Test
     public void checkPolarisBehavior() throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
-        Polaris polaris = new Polaris();
+        FixedStar polaris = FixedStarsForTest.getPolaris();
         LocationOnTheEarth locations[] = new LocationOnTheEarth[] {
-                new TokyoNAO(),
-                new TopOfMtFuji(),
-                new NorthPoleE0Z(),
-                new SouthPoleE0Z(),
-                new RioDeJaneiro(),
+                LocationsForTest.getTokyoNAO(),
+                LocationsForTest.getTopOfMtFuji(),
+                LocationsForTest.getNorthPoleE0Z(),
+                LocationsForTest.getSouthPoleE0Z(),
+                LocationsForTest.getRioDeJaneiro(),
         };
         for (LocationOnTheEarth placeToTest: locations) {
             Instant t = Instant.parse("2026-01-01T00:00:00Z");
@@ -323,7 +317,7 @@ public class AstronomicalObjectCalculatorTest {
 
         {
             // On the equator of the earth, polaris should move around the horizon, and rise and set every day.
-            LocationOnTheEarth nullIsland = new NullIsland();
+            LocationOnTheEarth nullIsland = LocationsForTest.getNullIsland();
             Instant t = Instant.parse("2026-01-01T00:00:00Z");
             for (int i = 0; i < 365; ++i) {
                 assertNotNull(AstronomicalObjectCalculator.calculateRiseWithin24h(polaris, t, nullIsland, false, AstronomicalObjectCalculator.ReferencePoint.CENTER));
@@ -337,8 +331,8 @@ public class AstronomicalObjectCalculatorTest {
 
     @Test
     public void checkNoCrashOrInfiniteLoopForBunchData() throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
-        for (AstronomicalObject astronomicalObject: AstroComputingTestDataList.listAstronomicalObjectsForTest()) {
-            for (LocationOnTheEarth locationOnTheEarth: AstroComputingTestDataList.listLocationsForTest()) {
+        for (AstronomicalObject astronomicalObject: FixedStarsForTest.listAstronomicalObjectsForTest()) {
+            for (LocationOnTheEarth locationOnTheEarth: LocationsForTest.listLocationsForTest()) {
                 Instant t = Instant.parse("2026-01-01T00:00:00Z");
                 for (int i = 0; i < 5 * 365 * 4 / 3; ++i) {
                     AstronomicalObjectCalculator.calculateRiseWithin24h(astronomicalObject, t, locationOnTheEarth,

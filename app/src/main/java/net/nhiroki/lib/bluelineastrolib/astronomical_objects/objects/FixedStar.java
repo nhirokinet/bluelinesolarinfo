@@ -6,16 +6,27 @@ import java.time.Instant;
 
 
 /**
- * An astronomical object fixed on the equotorial coordinate system.
+ * An astronomical object fixed on the equatorial coordinate system.
  */
 public class FixedStar implements AstronomicalObject {
     private final double rightAscensionRad;
     private final double declinationRad;
 
 
-    public FixedStar(double rightAscensionRad, double declinationRad) {
+    private FixedStar(double rightAscensionRad, double declinationRad) {
         this.rightAscensionRad = rightAscensionRad;
         this.declinationRad = declinationRad;
+    }
+
+    /**
+     * Create a FixedStar instance with specified equatorial coordinates in radians.
+     *
+     * @param rightAscensionRad Right ascension in radians.
+     * @param declinationRad Declination in radians.
+     * @return FixedStar instance with specified equatorial coordinates.
+     */
+    public static FixedStar ofRadians(double rightAscensionRad, double declinationRad) {
+        return new FixedStar(rightAscensionRad, declinationRad);
     }
 
     @Override

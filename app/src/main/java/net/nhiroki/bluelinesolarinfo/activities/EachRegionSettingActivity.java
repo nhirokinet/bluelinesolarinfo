@@ -101,7 +101,7 @@ public class EachRegionSettingActivity extends AppCompatActivity {
             }
 
             RegionOnTheEarth region = new RegionOnTheEarth(
-                    regionId, regionName, zoneId, new LocationOnTheEarth(longitudeDeg, latitudeDeg, elevationMeters)
+                    regionId, regionName, zoneId, LocationOnTheEarth.ofDegreesMeters(longitudeDeg, latitudeDeg, elevationMeters)
             );
             if (isNewRegion) {
                 long savedId = DataStore.getInstance(EachRegionSettingActivity.this.getApplicationContext()).createRegion(region);
