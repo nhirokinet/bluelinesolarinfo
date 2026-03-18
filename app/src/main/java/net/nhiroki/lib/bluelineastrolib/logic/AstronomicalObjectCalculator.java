@@ -37,7 +37,7 @@ public class AstronomicalObjectCalculator {
         double ret = CoordinateConversion.calculateHorizontalCoordinatesFromTheCenterOfTheEarth(CelestialCoordinatesWithHourAngle.ofRadians(hourAngle, declination), locationOnTheEarth.getLatitudeRad()).getElevationRad();
         if (viewPoint == ViewPoint.GROUND) {
             if (Math.abs(ret) < Math.PI * 0.4999999) {
-                ret = Math.atan(Math.tan(ret) - Math.tan(astronomicalObject.calculateEquatorialHorizontalParallaxRad(time)) / Math.cos(ret));
+                ret = Math.atan(Math.tan(ret) - Math.tan(astronomicalObject.calculateEquatorialHorizontalParallaxRad(time)) * Math.tan(ret));
             }
         }
         if (elevationType == ElevationType.APPARENT) {
