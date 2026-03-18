@@ -294,8 +294,6 @@ public class Moon implements AstronomicalObject {
         retDeg += 0.2806 * Math.cos(Math.toRadians( 960400.89 * T + 138.24));
         retDeg += 5.1281 * Math.cos(Math.toRadians( 483202.019 * T +   3.273));
 
-        retDeg -= Math.floor(retDeg / 360.0) * 360.0;
-
         return retDeg;
     }
 }
