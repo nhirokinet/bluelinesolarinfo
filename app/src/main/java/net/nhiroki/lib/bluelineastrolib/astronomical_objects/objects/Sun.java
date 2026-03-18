@@ -1,5 +1,6 @@
 package net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects;
 
+import net.nhiroki.lib.bluelineastrolib.coordinates.CelestialCoordinatesWithRightAscension;
 import net.nhiroki.lib.bluelineastrolib.earth.Earth;
 import net.nhiroki.lib.bluelineastrolib.earth.TimePointOnTheEarth;
 import net.nhiroki.lib.bluelineastrolib.astronomical_objects.AstronomicalObject;
@@ -20,6 +21,11 @@ public class Sun implements AstronomicalObject {
     // National Astronomical Observatory of Japan uses this value
     private static final double APPARENT_SEMI_DIAMETER_AT_1_AU_DEG_SEC = 16.0 * 60.0 + 1.18;
 
+
+    @Override
+    public CelestialCoordinatesWithRightAscension calculateCurrentCelestialCoordinates(Instant t) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
+        return CelestialCoordinatesWithRightAscension.ofRadians(this.calculateRightAscensionRad(t), this.calculateDeclinationRad(t));
+    }
 
     @Override
     public double calculateRightAscensionRad (Instant t) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {

@@ -13,9 +13,8 @@ import net.nhiroki.lib.bluelineastrolib.earth.Earth;
 import net.nhiroki.lib.bluelineastrolib.earth.TimePointOnTheEarth;
 import net.nhiroki.lib.bluelineastrolib.exceptions.AstronomicalPhenomenonComputationException;
 import net.nhiroki.lib.bluelineastrolib.exceptions.UnsupportedDateRangeException;
-import net.nhiroki.lib.bluelineastrolib.test_data.AstroComputingTestDataList;
 import net.nhiroki.lib.bluelineastrolib.test_data.FixedStarsForTest;
-import net.nhiroki.lib.bluelineastrolib.location.LocationOnTheEarth;
+import net.nhiroki.lib.bluelineastrolib.coordinates.LocationOnTheEarth;
 import net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects.Sun;
 import net.nhiroki.lib.bluelineastrolib.test_data.LocationsForTest;
 
