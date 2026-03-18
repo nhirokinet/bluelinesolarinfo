@@ -2,6 +2,8 @@ package net.nhiroki.lib.bluelineastrolib.logic;
 
 import static java.lang.Double.NaN;
 
+import net.nhiroki.lib.bluelineastrolib.coordinates.CelestialCoordinatesWithHourAngle;
+
 
 public class CoordinateConversion {
     public static double calculateHourAngleCrossingHeightRad (double heightRad, double declinationRad, double latitudeRad) {
@@ -15,12 +17,15 @@ public class CoordinateConversion {
         return Math.acos(numerator / denominator);
     }
 
-    public static double calculateElevationRadFromHourAngle(double hourAngleRad, double declinationRad, double latitudeRad) {
-        return Math.asin(Math.sin(declinationRad) * Math.sin(latitudeRad) + Math.cos(declinationRad) * Math.cos(latitudeRad) * Math.cos(hourAngleRad));
+    public static double calculateElevationRadFromHourAngle(CelestialCoordinatesWithHourAngle coordinates, double latitudeRad) {
+        return Math.asin(Math.sin(coordinates.getDeclinationRad()) * Math.sin(latitudeRad) + Math.cos(coordinates.getDeclinationRad()) * Math.cos(latitudeRad) * Math.cos(coordinates.getHourAngle()));
     }
 
     // May return NaN
-    public static double calculateAzimuthRadFromHourAngle(double hourAngleRad, double declinationRad, double latitudeRad) {
+    public static double calculateAzimuthRadFromHourAngle(CelestialCoordinatesWithHourAngle coordinates, double latitudeRad) {
+        double hourAngleRad = coordinates.getHourAngle();
+        double declinationRad = coordinates.getDeclinationRad();
+
         double numerator = - Math.cos(declinationRad) * Math.sin(hourAngleRad);
         double denominator = Math.sin(declinationRad) * Math.cos(latitudeRad) - Math.cos(declinationRad) * Math.sin(latitudeRad) * Math.cos(hourAngleRad);
 
