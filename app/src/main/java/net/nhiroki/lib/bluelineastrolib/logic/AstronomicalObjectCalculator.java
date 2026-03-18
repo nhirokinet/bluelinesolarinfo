@@ -1,6 +1,7 @@
 package net.nhiroki.lib.bluelineastrolib.logic;
 
 import net.nhiroki.lib.bluelineastrolib.astronomical_objects.AstronomicalObject;
+import net.nhiroki.lib.bluelineastrolib.coordinates.CelestialCoordinatesWithHourAngle;
 import net.nhiroki.lib.bluelineastrolib.coordinates.CelestialCoordinatesWithRightAscension;
 import net.nhiroki.lib.bluelineastrolib.earth.Earth;
 import net.nhiroki.lib.bluelineastrolib.earth.TimePointOnTheEarth;
@@ -25,7 +26,7 @@ public class AstronomicalObjectCalculator {
         double hourAngle = new TimePointOnTheEarth(time).calculateSiderealTimeRad(locationOnTheEarth.getLongitudeRad()) - astronomicalObject.calculateRightAscensionRad(time);
         double declination = astronomicalObject.calculateDeclinationRad(time);
 
-        return CoordinateConversion.calculateAzimuthRadFromHourAngle(hourAngle, declination, locationOnTheEarth.getLatitudeRad());
+        return CoordinateConversion.calculateAzimuthRadFromHourAngle(CelestialCoordinatesWithHourAngle.ofRadians(hourAngle, declination), locationOnTheEarth.getLatitudeRad());
     }
 
     public static double calculateElevationRad(AstronomicalObject astronomicalObject, Instant time,
@@ -33,7 +34,7 @@ public class AstronomicalObjectCalculator {
         double hourAngle = new TimePointOnTheEarth(time).calculateSiderealTimeRad(locationOnTheEarth.getLongitudeRad()) - astronomicalObject.calculateRightAscensionRad(time);
         double declination = astronomicalObject.calculateDeclinationRad(time);
 
-        double ret = CoordinateConversion.calculateElevationRadFromHourAngle(hourAngle, declination, locationOnTheEarth.getLatitudeRad());
+        double ret = CoordinateConversion.calculateElevationRadFromHourAngle(CelestialCoordinatesWithHourAngle.ofRadians(hourAngle, declination), locationOnTheEarth.getLatitudeRad());
         if (viewPoint == ViewPoint.GROUND) {
             if (Math.abs(ret) < Math.PI * 0.4999999) {
                 ret = Math.atan(Math.tan(ret) - Math.tan(astronomicalObject.calculateEquatorialHorizontalParallaxRad(time)) / Math.cos(ret));
@@ -495,6 +496,6 @@ public class AstronomicalObjectCalculator {
         CelestialCoordinatesWithRightAscension celestialCoordinatesWithRightAscension = astronomicalObject.calculateCurrentCelestialCoordinates(now);
         double hourAngle = new TimePointOnTheEarth(now).calculateSiderealTimeRad(loc.getLongitudeRad()) - celestialCoordinatesWithRightAscension.getRightAscensionRad();
         double declination = celestialCoordinatesWithRightAscension.getDeclinationRad();
-        return CoordinateConversion.calculateElevationRadFromHourAngle(hourAngle, declination, loc.getLatitudeRad());
+        return CoordinateConversion.calculateElevationRadFromHourAngle(CelestialCoordinatesWithHourAngle.ofRadians(hourAngle, declination), loc.getLatitudeRad());
     }
 }
