@@ -26,7 +26,7 @@ public class AstronomicalObjectCalculator {
         double hourAngle = new TimePointOnTheEarth(time).calculateSiderealTimeRad(locationOnTheEarth.getLongitudeRad()) - astronomicalObject.calculateRightAscensionRad(time);
         double declination = astronomicalObject.calculateDeclinationRad(time);
 
-        return CoordinateConversion.calculateAzimuthRadFromHourAngle(CelestialCoordinatesWithHourAngle.ofRadians(hourAngle, declination), locationOnTheEarth.getLatitudeRad());
+        return CoordinateConversion.calculateHorizontalCoordinatesFromTheCenterOfTheEarth(CelestialCoordinatesWithHourAngle.ofRadians(hourAngle, declination), locationOnTheEarth.getLatitudeRad()).getAzimuthRad();
     }
 
     public static double calculateElevationRad(AstronomicalObject astronomicalObject, Instant time,
@@ -34,7 +34,7 @@ public class AstronomicalObjectCalculator {
         double hourAngle = new TimePointOnTheEarth(time).calculateSiderealTimeRad(locationOnTheEarth.getLongitudeRad()) - astronomicalObject.calculateRightAscensionRad(time);
         double declination = astronomicalObject.calculateDeclinationRad(time);
 
-        double ret = CoordinateConversion.calculateElevationRadFromHourAngle(CelestialCoordinatesWithHourAngle.ofRadians(hourAngle, declination), locationOnTheEarth.getLatitudeRad());
+        double ret = CoordinateConversion.calculateHorizontalCoordinatesFromTheCenterOfTheEarth(CelestialCoordinatesWithHourAngle.ofRadians(hourAngle, declination), locationOnTheEarth.getLatitudeRad()).getElevationRad();
         if (viewPoint == ViewPoint.GROUND) {
             if (Math.abs(ret) < Math.PI * 0.4999999) {
                 ret = Math.atan(Math.tan(ret) - Math.tan(astronomicalObject.calculateEquatorialHorizontalParallaxRad(time)) / Math.cos(ret));
@@ -496,6 +496,6 @@ public class AstronomicalObjectCalculator {
         CelestialCoordinatesWithRightAscension celestialCoordinatesWithRightAscension = astronomicalObject.calculateCurrentCelestialCoordinates(now);
         double hourAngle = new TimePointOnTheEarth(now).calculateSiderealTimeRad(loc.getLongitudeRad()) - celestialCoordinatesWithRightAscension.getRightAscensionRad();
         double declination = celestialCoordinatesWithRightAscension.getDeclinationRad();
-        return CoordinateConversion.calculateElevationRadFromHourAngle(CelestialCoordinatesWithHourAngle.ofRadians(hourAngle, declination), loc.getLatitudeRad());
+        return CoordinateConversion.calculateHorizontalCoordinatesFromTheCenterOfTheEarth(CelestialCoordinatesWithHourAngle.ofRadians(hourAngle, declination), loc.getLatitudeRad()).getElevationRad();
     }
 }
