@@ -9,7 +9,7 @@ import java.time.Instant;
 
 public class MoonTool {
     public static double calculateMoonPhaseDeg(Instant t) {
-        double phase = new Moon().calculateEclipticLongitudeDeg(t) - new Sun().calculateEclipticLongitudeDeg(t);
+        double phase = new Moon().calculateEclipticCoordinates(t).getLongitudeDeg() - new Sun().calculateEclipticCoordinates(t).getLongitudeDeg();
         phase -= Math.floor(phase / 360.0) * 360.0;
         return phase;
     }

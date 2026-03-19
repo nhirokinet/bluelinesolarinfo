@@ -16,8 +16,6 @@ public interface AstronomicalObject {
      *
      * @param t Target time to calculate celestial coordinates
      * @return Computed celestial coordinates
-     * @throws AstronomicalPhenomenonComputationException
-     * @throws UnsupportedDateRangeException
      */
     CelestialCoordinatesWithRightAscension calculateCelestialCoordinates(Instant t) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException;
 
@@ -26,8 +24,6 @@ public interface AstronomicalObject {
      *
      * @param t Target time
      * @return Apparent radius in radian
-     * @throws AstronomicalPhenomenonComputationException
-     * @throws UnsupportedDateRangeException
      */
     double calculateApparentRadiusRad (Instant t) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException;
 
@@ -37,8 +33,6 @@ public interface AstronomicalObject {
      *
      * @param t Target time
      * @return Equatorial horizontal parallax in radian
-     * @throws AstronomicalPhenomenonComputationException
-     * @throws UnsupportedDateRangeException
      */
 
     double calculateEquatorialHorizontalParallaxRad (Instant t) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException;
@@ -50,8 +44,6 @@ public interface AstronomicalObject {
      *
      * @param t Target time
      * @return Estimated increment of hour angle per day in degrees
-     * @throws AstronomicalPhenomenonComputationException
-     * @throws UnsupportedDateRangeException
      */
     double estimatedIncrementOfRightAscensionRadPerDay(Instant t) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException;
 }

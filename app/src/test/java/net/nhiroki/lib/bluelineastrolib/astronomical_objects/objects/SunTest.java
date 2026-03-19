@@ -72,15 +72,15 @@ public class SunTest {
         // Winter solstice in 2026 is 12/21 20:50 UTC
         // 立春(315deg) in 2026 is 02/03 20:02 UTC
         // https://eco.mtk.nao.ac.jp/koyomi/yoko/2026/rekiyou262.html
-        assertEquals(315.0, sun.calculateEclipticLongitudeDeg(Instant.parse("2026-02-03T20:02:00Z")), 0.003);
-        assertEquals(  0.0, sun.calculateEclipticLongitudeDeg(Instant.parse("2026-03-20T14:46:00Z")), 0.005);
-        assertEquals( 90.0, sun.calculateEclipticLongitudeDeg(Instant.parse("2026-06-21T08:25:00Z")), 0.001);
-        assertEquals(180.0, sun.calculateEclipticLongitudeDeg(Instant.parse("2026-09-23T00:05:00Z")), 0.01);
-        assertEquals(270.0, sun.calculateEclipticLongitudeDeg(Instant.parse("2026-12-21T20:50:00Z")), 0.005);
+        assertEquals(315.0, sun.calculateEclipticCoordinates(Instant.parse("2026-02-03T20:02:00Z")).getLongitudeDeg(), 0.003);
+        assertEquals(  0.0, sun.calculateEclipticCoordinates(Instant.parse("2026-03-20T14:46:00Z")).getLatitudeRad(), 0.005);
+        assertEquals( 90.0, sun.calculateEclipticCoordinates(Instant.parse("2026-06-21T08:25:00Z")).getLongitudeDeg(), 0.001);
+        assertEquals(180.0, sun.calculateEclipticCoordinates(Instant.parse("2026-09-23T00:05:00Z")).getLongitudeDeg(), 0.01);
+        assertEquals(270.0, sun.calculateEclipticCoordinates(Instant.parse("2026-12-21T20:50:00Z")).getLongitudeDeg(), 0.005);
 
         // Sprint Equinox in 2004 is 03/20 06:49 UTC
         // https://eco.mtk.nao.ac.jp/koyomi/yoko/2004/rekiyou042.html
-        assertEquals(  0.0, sun.calculateEclipticLongitudeDeg(Instant.parse("2004-03-20T06:49:00Z")), 0.005);
+        assertEquals(  0.0, sun.calculateEclipticCoordinates(Instant.parse("2004-03-20T06:49:00Z")).getLongitudeDeg(), 0.005);
     }
 
     @Test
@@ -89,7 +89,7 @@ public class SunTest {
 
         Instant t = Instant.parse("1980-01-01T00:00:00Z");
         for (int i = 0; i < 365 * 24 * 70; ++i) {
-            double diff = sun.calculateEclipticLongitudeDeg(t) - calculateEclipticLongitudeDegBySuirobuKubo1980(t);
+            double diff = sun.calculateEclipticCoordinates(t).getLongitudeDeg() - calculateEclipticLongitudeDegBySuirobuKubo1980(t);
             diff -= Math.floor((diff + 180.0) / 360.0) * 360.0;
             assertEquals(0.0, diff, 0.8 / 60.0);
 

@@ -16,7 +16,6 @@ import net.nhiroki.bluelinesolarinfo.R;
 import net.nhiroki.bluelinesolarinfo.region.RegionOnTheEarth;
 import net.nhiroki.bluelinesolarinfo.storage.AppPreferences;
 import net.nhiroki.bluelinesolarinfo.storage.DataStore;
-import net.nhiroki.bluelinesolarinfo.widgets.SolarInfoTodayTiny;
 import net.nhiroki.bluelinesolarinfo.widgets.WidgetUpdateWorker;
 
 import java.util.List;

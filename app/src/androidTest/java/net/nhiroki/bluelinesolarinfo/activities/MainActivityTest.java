@@ -4,7 +4,6 @@ import android.app.LocaleManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.LocaleList;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.os.LocaleListCompat;

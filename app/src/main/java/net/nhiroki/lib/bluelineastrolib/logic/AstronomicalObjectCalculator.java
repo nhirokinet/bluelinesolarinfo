@@ -81,8 +81,6 @@ public class AstronomicalObjectCalculator {
      * @param horizonByElevation If true, horizon with regard of height is standard of rise/set. If false, horizon is handled as 0 degree height.
      * @param referencePoint     Which rim or center to refer
      * @return Rise, or null if not within 24 hours
-     * @throws AstronomicalPhenomenonComputationException
-     * @throws UnsupportedDateRangeException
      */
     public static Instant calculateRiseWithin24h(AstronomicalObject astronomicalObject, Instant start,
                                                  LocationOnTheEarth locationOnTheEarth, boolean horizonByElevation,
@@ -110,8 +108,6 @@ public class AstronomicalObjectCalculator {
      * @param horizonByElevation If true, horizon with regard of height is standard of rise/set. If false, horizon is handled as 0 degree height.
      * @param referencePoint     Which rim or center to refer
      * @return Set, or null if not within 24 hours
-     * @throws AstronomicalPhenomenonComputationException
-     * @throws UnsupportedDateRangeException
      */
     public static Instant calculateSetWithin24h(AstronomicalObject astronomicalObject, Instant start,
                                                 LocationOnTheEarth locationOnTheEarth, boolean horizonByElevation,
@@ -137,8 +133,6 @@ public class AstronomicalObjectCalculator {
      * @param start              Start point of calculation
      * @param locationOnTheEarth Target location
      * @return Culmination, or null if not within 24 hours
-     * @throws AstronomicalPhenomenonComputationException
-     * @throws UnsupportedDateRangeException
      */
     public static Instant calculateCulminationWithin24h(AstronomicalObject astronomicalObject, Instant start,
                                                         LocationOnTheEarth locationOnTheEarth) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
@@ -168,8 +162,6 @@ public class AstronomicalObjectCalculator {
      * @param considerEquatorialHorizontalParallax Whether equatorial horizontal parallax should be considered into the calculation. Set true if unsure.
      * @param heightStandardRad The standard height to be considered as rise/set, including refraction of the air.
      * @return The time of the event, or null if not within 24 hours
-     * @throws AstronomicalPhenomenonComputationException
-     * @throws UnsupportedDateRangeException
      */
     private static Instant calculateEventWithin24h(final AstronomicalObject astronomicalObject,
                                                    final EventDirectionType eventDirectionType,
@@ -367,8 +359,6 @@ public class AstronomicalObjectCalculator {
      * @param considerEquatorialHorizontalParallax Whether equatorial horizontal parallax should be considered into the calculation. Set true if unsure.
      * @param heightStandardRad The standard height to be considered as rise/set, including refraction of the air.
      * @return Array of times of event. Empty if the event does not happen.
-     * @throws AstronomicalPhenomenonComputationException
-     * @throws UnsupportedDateRangeException
      */
     public static Instant[] calculateAllEvents(final AstronomicalObject astronomicalObject,
                                                final EventDirectionType eventDirectionType,

@@ -47,7 +47,7 @@ public class MoonTest {
         // 294.6433deg at 1999/11/14 00:00 UTC, from p 129 of 日の出・日の入りの計算 天体の出没時刻の求め方 by 長沢 工
         // https://www.chijinshokan.co.jp/Books/ISBN4-8052-0634-9.htm
         // Based formula is similar but not the same, so the result does not match exactly.
-        assertEquals(294.6433, moon.calculateEclipticLongitudeDeg(Instant.parse("1999-11-14T00:00:00Z")), 0.005);
+        assertEquals(294.6433, moon.calculateEclipticCoordinates(Instant.parse("1999-11-14T00:00:00Z")).getLongitudeDeg(), 0.005);
     }
 
     @Test
@@ -56,10 +56,10 @@ public class MoonTest {
 
         // 1.0609deg at 1999/11/14 00:00 UTC, from p 130 of 日の出・日の入りの計算 天体の出没時刻の求め方 by 長沢 工
         // https://www.chijinshokan.co.jp/Books/ISBN4-8052-0634-9.htm
-        assertEquals(1.0609, moon.calculateEclipticLatitudeDeg(Instant.parse("1999-11-14T00:00:00Z")), 1e-4);
+        assertEquals(1.0609, moon.calculateEclipticCoordinates(Instant.parse("1999-11-14T00:00:00Z")).getLatitudeDeg(), 1e-4);
 
         // Code to check the behavior if the result is negative
-        assertEquals(-4.63, moon.calculateEclipticLatitudeDeg(Instant.parse("2026-03-08T00:00:00Z")), 0.01);
+        assertEquals(-4.63, moon.calculateEclipticCoordinates(Instant.parse("2026-03-08T00:00:00Z")).getLatitudeDeg(), 0.01);
     }
 
     @Test
