@@ -27,13 +27,13 @@ public class CoordinateConversion {
 
     @Deprecated
     public static double calculateElevationRadFromHourAngle(CelestialCoordinatesWithHourAngle coordinates, double latitudeRad) {
-        return Math.asin(Math.sin(coordinates.getDeclinationRad()) * Math.sin(latitudeRad) + Math.cos(coordinates.getDeclinationRad()) * Math.cos(latitudeRad) * Math.cos(coordinates.getHourAngle()));
+        return Math.asin(Math.sin(coordinates.getDeclinationRad()) * Math.sin(latitudeRad) + Math.cos(coordinates.getDeclinationRad()) * Math.cos(latitudeRad) * Math.cos(coordinates.getHourAngleRad()));
     }
 
     // May return NaN
     @Deprecated
     public static double calculateAzimuthRadFromHourAngle(CelestialCoordinatesWithHourAngle coordinates, double latitudeRad) {
-        double hourAngleRad = coordinates.getHourAngle();
+        double hourAngleRad = coordinates.getHourAngleRad();
         double declinationRad = coordinates.getDeclinationRad();
 
         double numerator = - Math.cos(declinationRad) * Math.sin(hourAngleRad);

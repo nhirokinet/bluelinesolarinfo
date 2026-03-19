@@ -33,6 +33,7 @@ import net.nhiroki.bluelinesolarinfo.stringformats.AppTimeFormat;
 import net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects.Moon;
 import net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects.Sun;
 import net.nhiroki.lib.bluelineastrolib.coordinates.CelestialCoordinatesWithHourAngle;
+import net.nhiroki.lib.bluelineastrolib.coordinates.CelestialCoordinatesWithRightAscension;
 import net.nhiroki.lib.bluelineastrolib.earth.TimePointOnTheEarth;
 import net.nhiroki.lib.bluelineastrolib.exceptions.AstronomicalPhenomenonComputationException;
 import net.nhiroki.lib.bluelineastrolib.exceptions.UnsupportedDateRangeException;
@@ -867,9 +868,9 @@ public class MainActivity extends AppCompatActivity {
             double localSideralTimeDeg = nowOnTheEarth.calculateSiderealTimeDeg(locationOnTheEarth.getLongitudeDeg());
             ((TextView) findViewById(R.id.main_view_solar_info_now_local_sidereal_time)).setText(AppTimeFormat.degTo24HStr(localSideralTimeDeg, locale));
 
-            double sunHourAngle = nowOnTheEarth.calculateSiderealTimeRad(locationOnTheEarth.getLongitudeRad()) - sun.calculateRightAscensionRad(now);
-            double sunDeclination = sun.calculateDeclinationRad(now);
-            double sunAzimuthRad = CoordinateConversion.calculateAzimuthRadFromHourAngle(CelestialCoordinatesWithHourAngle.ofRadians(sunHourAngle, sunDeclination), locationOnTheEarth.getLatitudeRad());
+            CelestialCoordinatesWithRightAscension sunCelestialCoordinatesWithRightAscension = sun.calculateCelestialCoordinates(now);
+            CelestialCoordinatesWithHourAngle sunCelestialCoordinatesWithHourAngle = CelestialCoordinatesWithHourAngle.fromCelestialCoordinatesWithRightAscension(sunCelestialCoordinatesWithRightAscension, nowOnTheEarth, locationOnTheEarth);
+            double sunAzimuthRad = CoordinateConversion.calculateAzimuthRadFromHourAngle(sunCelestialCoordinatesWithHourAngle, locationOnTheEarth.getLatitudeRad());
             if (Double.isNaN(sunAzimuthRad)) {
                 ((TextView) findViewById(R.id.main_view_solar_info_now_sun_azimuth)).setText(R.string.unit_angle_dm_invalid_3digits);
                 ((TextView) findViewById(R.id.main_view_solar_info_now_sun_azimuth_str)).setText("");
@@ -891,9 +892,9 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
-            double moonHourAngle = nowOnTheEarth.calculateSiderealTimeRad(locationOnTheEarth.getLongitudeRad()) - moon.calculateRightAscensionRad(now);
-            double moonDeclination = moon.calculateDeclinationRad(now);
-            double moonAzimuthRad = CoordinateConversion.calculateAzimuthRadFromHourAngle(CelestialCoordinatesWithHourAngle.ofRadians(moonHourAngle, moonDeclination), locationOnTheEarth.getLatitudeRad());
+            CelestialCoordinatesWithRightAscension moonCelestialCoordinatesWithRightAscension = moon.calculateCelestialCoordinates(now);
+            CelestialCoordinatesWithHourAngle moonCelestialCoordinatesWithHourAngle = CelestialCoordinatesWithHourAngle.fromCelestialCoordinatesWithRightAscension(moonCelestialCoordinatesWithRightAscension, nowOnTheEarth, locationOnTheEarth);
+            double moonAzimuthRad = CoordinateConversion.calculateAzimuthRadFromHourAngle(moonCelestialCoordinatesWithHourAngle, locationOnTheEarth.getLatitudeRad());
             if (Double.isNaN(moonAzimuthRad)) {
                 ((TextView) findViewById(R.id.main_view_solar_info_now_moon_azimuth)).setText(R.string.unit_angle_dm_invalid_3digits);
                 ((TextView) findViewById(R.id.main_view_solar_info_now_moon_azimuth_str)).setText("");

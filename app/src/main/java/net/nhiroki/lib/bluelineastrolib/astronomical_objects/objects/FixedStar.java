@@ -18,18 +18,8 @@ public class FixedStar implements AstronomicalObject {
     }
 
     @Override
-    public CelestialCoordinatesWithRightAscension calculateCurrentCelestialCoordinates(Instant t) {
+    public CelestialCoordinatesWithRightAscension calculateCelestialCoordinates(Instant t) {
         return this.celestialCoordinates;
-    }
-
-    @Override
-    public double calculateRightAscensionRad(Instant t) {
-        return this.celestialCoordinates.getRightAscensionRad();
-    }
-
-    @Override
-    public double calculateDeclinationRad(Instant t) {
-        return this.celestialCoordinates.getDeclinationRad();
     }
 
     @Override
