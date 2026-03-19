@@ -19,12 +19,11 @@ public class Moon implements AstronomicalObject {
 
 
     @Override
-    public CelestialCoordinatesWithRightAscension calculateCurrentCelestialCoordinates(Instant t) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
+    public CelestialCoordinatesWithRightAscension calculateCelestialCoordinates(Instant t) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
         return CelestialCoordinatesWithRightAscension.ofRadians(this.calculateRightAscensionRad(t), this.calculateDeclinationRad(t));
     }
 
-    @Override
-    public double calculateRightAscensionRad(Instant t) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
+    private double calculateRightAscensionRad(Instant t) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
         double eclipticTilt = Earth.calculateEclipticTiltRad(t);
 
         double longitude = this.calculateEclipticLongitudeRad(t);
@@ -57,8 +56,7 @@ public class Moon implements AstronomicalObject {
         return ret;
     }
 
-    @Override
-    public double calculateDeclinationRad(Instant t) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
+    private double calculateDeclinationRad(Instant t) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
         double eclipticTilt = Earth.calculateEclipticTiltRad(t);
 
         double longitude = this.calculateEclipticLongitudeRad(t);

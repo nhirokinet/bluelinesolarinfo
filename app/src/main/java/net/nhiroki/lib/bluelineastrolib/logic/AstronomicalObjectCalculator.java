@@ -23,18 +23,18 @@ public class AstronomicalObjectCalculator {
 
     public static double calculateAzimuthRad(AstronomicalObject astronomicalObject, Instant time,
                                              LocationOnTheEarth locationOnTheEarth) throws UnsupportedDateRangeException, AstronomicalPhenomenonComputationException {
-        double hourAngle = new TimePointOnTheEarth(time).calculateSiderealTimeRad(locationOnTheEarth.getLongitudeRad()) - astronomicalObject.calculateRightAscensionRad(time);
-        double declination = astronomicalObject.calculateDeclinationRad(time);
+        CelestialCoordinatesWithRightAscension celestialCoordinatesWithRightAscension = astronomicalObject.calculateCelestialCoordinates(time);
+        CelestialCoordinatesWithHourAngle celestialCoordinatesWithHourAngle = CelestialCoordinatesWithHourAngle.fromCelestialCoordinatesWithRightAscension(celestialCoordinatesWithRightAscension, new TimePointOnTheEarth(time), locationOnTheEarth);
 
-        return CoordinateConversion.calculateHorizontalCoordinatesFromTheCenterOfTheEarth(CelestialCoordinatesWithHourAngle.ofRadians(hourAngle, declination), locationOnTheEarth.getLatitudeRad()).getAzimuthRad();
+        return CoordinateConversion.calculateHorizontalCoordinatesFromTheCenterOfTheEarth(celestialCoordinatesWithHourAngle, locationOnTheEarth.getLatitudeRad()).getAzimuthRad();
     }
 
     public static double calculateElevationRad(AstronomicalObject astronomicalObject, Instant time,
                                                LocationOnTheEarth locationOnTheEarth, ViewPoint viewPoint, ElevationType elevationType) throws UnsupportedDateRangeException, AstronomicalPhenomenonComputationException {
-        double hourAngle = new TimePointOnTheEarth(time).calculateSiderealTimeRad(locationOnTheEarth.getLongitudeRad()) - astronomicalObject.calculateRightAscensionRad(time);
-        double declination = astronomicalObject.calculateDeclinationRad(time);
+        CelestialCoordinatesWithRightAscension celestialCoordinatesWithRightAscension = astronomicalObject.calculateCelestialCoordinates(time);
+        CelestialCoordinatesWithHourAngle celestialCoordinatesWithHourAngle = CelestialCoordinatesWithHourAngle.fromCelestialCoordinatesWithRightAscension(celestialCoordinatesWithRightAscension, new TimePointOnTheEarth(time), locationOnTheEarth);
 
-        double ret = CoordinateConversion.calculateHorizontalCoordinatesFromTheCenterOfTheEarth(CelestialCoordinatesWithHourAngle.ofRadians(hourAngle, declination), locationOnTheEarth.getLatitudeRad()).getElevationRad();
+        double ret = CoordinateConversion.calculateHorizontalCoordinatesFromTheCenterOfTheEarth(celestialCoordinatesWithHourAngle, locationOnTheEarth.getLatitudeRad()).getElevationRad();
         if (viewPoint == ViewPoint.GROUND) {
             if (Math.abs(ret) < Math.PI * 0.4999999) {
                 ret = Math.atan(Math.tan(ret) - Math.tan(astronomicalObject.calculateEquatorialHorizontalParallaxRad(time)) / Math.cos(ret));
@@ -203,6 +203,7 @@ public class AstronomicalObjectCalculator {
         int loopCount = 0;
         while (! ok) {
             Instant estimateAtStartOfThisLoop = estimate;
+            CelestialCoordinatesWithRightAscension celestialCoordinatesWithRightAscensionAtEstimate = astronomicalObject.calculateCelestialCoordinates(estimate);
 
             if (++loopCount > 30) {
                 // Falling back to slow path
@@ -215,7 +216,7 @@ public class AstronomicalObjectCalculator {
             } else {
                 targetHourAngle = CoordinateConversion.calculateHourAngleCrossingHeightRad(
                         calculateActualCenterHeightRad(estimate, heightMeter, astronomicalObject, posReference, considerEquatorialHorizontalParallax, heightStandardRad),
-                        astronomicalObject.calculateDeclinationRad(estimate),
+                        celestialCoordinatesWithRightAscensionAtEstimate.getDeclinationRad(),
                         locationOnTheEarth.getLatitudeRad()
                 ) * signOfHourAngle;
             }
@@ -268,7 +269,7 @@ public class AstronomicalObjectCalculator {
                 // We can assume that @sign != 0 because if @sign = 0 we can assume @targetHourAngle never gets NaN, it is just 0.0
                 double targetHourAngleAtStart = CoordinateConversion.calculateHourAngleCrossingHeightRad(
                         calculateActualCenterHeightRad(start, heightMeter, astronomicalObject, posReference, considerEquatorialHorizontalParallax, heightStandardRad),
-                        astronomicalObject.calculateDeclinationRad(start),
+                        astronomicalObject.calculateCelestialCoordinates(start).getDeclinationRad(),
                         locationOnTheEarth.getLatitudeRad()
                 ) * signOfHourAngle;
                 if (! Double.isNaN(targetHourAngleAtStart)) {
@@ -277,7 +278,7 @@ public class AstronomicalObjectCalculator {
                 }
                 double targetHourAngleAtEnd = CoordinateConversion.calculateHourAngleCrossingHeightRad(
                         calculateActualCenterHeightRad(end, heightMeter, astronomicalObject, posReference, considerEquatorialHorizontalParallax, heightStandardRad),
-                        astronomicalObject.calculateDeclinationRad(end),
+                        astronomicalObject.calculateCelestialCoordinates(end).getDeclinationRad(),
                         locationOnTheEarth.getLatitudeRad()
                 ) * signOfHourAngle;
                 if (! Double.isNaN(targetHourAngleAtEnd)) {
@@ -300,9 +301,10 @@ public class AstronomicalObjectCalculator {
             }
 
             final TimePointOnTheEarth estimateTimePoint = new TimePointOnTheEarth(estimate);
-            final double hourAngle = estimateTimePoint.calculateSiderealTimeRad(locationOnTheEarth.getLongitudeRad()) - astronomicalObject.calculateRightAscensionRad(estimate);
+            final CelestialCoordinatesWithHourAngle celestialCoordinatesWithHourAngleAtEstimate = CelestialCoordinatesWithHourAngle.fromCelestialCoordinatesWithRightAscension(celestialCoordinatesWithRightAscensionAtEstimate, estimateTimePoint, locationOnTheEarth);
+            final double hourAngleRad = celestialCoordinatesWithHourAngleAtEstimate.getHourAngleRad();
 
-            double diffFromNow = targetHourAngle - hourAngle;
+            double diffFromNow = targetHourAngle - hourAngleRad;
             diffFromNow -= 2.0 * Math.PI * Math.floor(diffFromNow / (2.0 * Math.PI));
             final double hourAnglePerDay = estimateTimePoint.estimatedIncrementOfSiderealTimeRadPerDay() - astronomicalObject.estimatedIncrementOfRightAscensionRadPerDay(estimate);
 
@@ -387,7 +389,8 @@ public class AstronomicalObjectCalculator {
             Instant prevTime = null;
             for (Instant now = start.minus(interval); now.isBefore(end); now = now.plus(interval)) {
                 final TimePointOnTheEarth nowTimePoint = new TimePointOnTheEarth(now);
-                double hourAngle = nowTimePoint.calculateSiderealTimeRad(locationOnTheEarth.getLongitudeRad()) - astronomicalObject.calculateRightAscensionRad(now);
+                CelestialCoordinatesWithRightAscension celestialCoordinatesWithRightAscension = astronomicalObject.calculateCelestialCoordinates(now);
+                double hourAngle = CelestialCoordinatesWithHourAngle.fromCelestialCoordinatesWithRightAscension(celestialCoordinatesWithRightAscension, nowTimePoint, locationOnTheEarth).getHourAngleRad();
                 hourAngle -= Math.floor(hourAngle / 2.0 / Math.PI) * 2.0 * Math.PI;
 
                 if (! isFirstOfTheLoop) {
@@ -400,7 +403,8 @@ public class AstronomicalObjectCalculator {
 
                         while (Math.abs(Duration.between(lo, hi).toNanos()) < twicePrevisionInNanos) {
                             final Instant mid = lo.plus(Duration.between(lo, hi).dividedBy(2));
-                            double midHourAngle = nowTimePoint.calculateSiderealTimeRad(locationOnTheEarth.getLongitudeRad()) - astronomicalObject.calculateRightAscensionRad(now);
+                            CelestialCoordinatesWithRightAscension midCelestialCoordinatesWithRightAscension = astronomicalObject.calculateCelestialCoordinates(mid);
+                            double midHourAngle = CelestialCoordinatesWithHourAngle.fromCelestialCoordinatesWithRightAscension(midCelestialCoordinatesWithRightAscension, new TimePointOnTheEarth(mid), locationOnTheEarth).getHourAngleRad();
                             midHourAngle -= Math.floor(hourAngle / 2.0 / Math.PI) * 2.0 * Math.PI;
 
                             if ((midHourAngle <= Math.PI && loHourAngle > Math.PI) ||
@@ -493,9 +497,8 @@ public class AstronomicalObjectCalculator {
     }
 
     private static double calculateHeightRad(Instant now, LocationOnTheEarth loc, AstronomicalObject astronomicalObject) throws UnsupportedDateRangeException, AstronomicalPhenomenonComputationException {
-        CelestialCoordinatesWithRightAscension celestialCoordinatesWithRightAscension = astronomicalObject.calculateCurrentCelestialCoordinates(now);
-        double hourAngle = new TimePointOnTheEarth(now).calculateSiderealTimeRad(loc.getLongitudeRad()) - celestialCoordinatesWithRightAscension.getRightAscensionRad();
-        double declination = celestialCoordinatesWithRightAscension.getDeclinationRad();
-        return CoordinateConversion.calculateHorizontalCoordinatesFromTheCenterOfTheEarth(CelestialCoordinatesWithHourAngle.ofRadians(hourAngle, declination), loc.getLatitudeRad()).getElevationRad();
+        CelestialCoordinatesWithRightAscension celestialCoordinatesWithRightAscension = astronomicalObject.calculateCelestialCoordinates(now);
+        CelestialCoordinatesWithHourAngle celestialCoordinatesWithHourAngle = CelestialCoordinatesWithHourAngle.fromCelestialCoordinatesWithRightAscension(celestialCoordinatesWithRightAscension, new TimePointOnTheEarth(now), loc);
+        return CoordinateConversion.calculateHorizontalCoordinatesFromTheCenterOfTheEarth(celestialCoordinatesWithHourAngle, loc.getLatitudeRad()).getElevationRad();
     }
 }

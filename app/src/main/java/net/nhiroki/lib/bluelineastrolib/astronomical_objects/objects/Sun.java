@@ -23,12 +23,11 @@ public class Sun implements AstronomicalObject {
 
 
     @Override
-    public CelestialCoordinatesWithRightAscension calculateCurrentCelestialCoordinates(Instant t) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
+    public CelestialCoordinatesWithRightAscension calculateCelestialCoordinates(Instant t) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
         return CelestialCoordinatesWithRightAscension.ofRadians(this.calculateRightAscensionRad(t), this.calculateDeclinationRad(t));
     }
 
-    @Override
-    public double calculateRightAscensionRad (Instant t) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
+    private double calculateRightAscensionRad (Instant t) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
         // This formula assumes ecliptic latitude of sun is 0
         // https://en.wikipedia.org/wiki/Position_of_the_Sun says that the ecliptic latitude of the Sun is very small and never exceeds 0.00033 deg (a little over 1 arcsec).
         double eclipticLongitudeRad = this.calculateEclipticLongitudeRad(t);
@@ -43,8 +42,7 @@ public class Sun implements AstronomicalObject {
         return ret;
     }
 
-    @Override
-    public double calculateDeclinationRad (Instant t) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
+    private double calculateDeclinationRad (Instant t) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
         // This formula assumes ecliptic latitude of sun is 0
         // https://en.wikipedia.org/wiki/Position_of_the_Sun says that the ecliptic latitude of the Sun is very small and never exceeds 0.00033 deg (a little over 1 arcsec).
         final double eclipticLongitudeRad = this.calculateEclipticLongitudeRad(t);
