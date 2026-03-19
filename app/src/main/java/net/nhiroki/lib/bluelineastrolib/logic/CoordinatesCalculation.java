@@ -3,20 +3,12 @@ package net.nhiroki.lib.bluelineastrolib.logic;
 import static java.lang.Double.NaN;
 
 import net.nhiroki.lib.bluelineastrolib.coordinates.CelestialCoordinatesWithHourAngle;
-import net.nhiroki.lib.bluelineastrolib.coordinates.HorizontalCoordinatesFromTheCenterOfTheEarth;
 
 
-public class CoordinateConversion {
-    public static HorizontalCoordinatesFromTheCenterOfTheEarth calculateHorizontalCoordinatesFromTheCenterOfTheEarth(CelestialCoordinatesWithHourAngle celestialCoordinatesWithHourAngle, double latitudeRad) {
-        return HorizontalCoordinatesFromTheCenterOfTheEarth.ofRadians(
-                calculateAzimuthRadFromHourAngle(celestialCoordinatesWithHourAngle, latitudeRad),
-                calculateElevationRadFromHourAngle(celestialCoordinatesWithHourAngle, latitudeRad)
-        );
-    }
-
-    public static double calculateHourAngleCrossingHeightRad (double heightRad, double declinationRad, double latitudeRad) {
+public class CoordinatesCalculation {
+    public static double calculateHourAngleRadCrossingElevationRad(double elevationRad, double declinationRad, double latitudeRad) {
         double denominator = Math.cos(declinationRad) * Math.cos(latitudeRad);
-        double numerator = Math.sin(heightRad) - Math.sin(declinationRad) * Math.sin(latitudeRad);
+        double numerator = Math.sin(elevationRad) - Math.sin(declinationRad) * Math.sin(latitudeRad);
 
         if (Math.abs(denominator) < Math.abs(numerator)) {
             return NaN;

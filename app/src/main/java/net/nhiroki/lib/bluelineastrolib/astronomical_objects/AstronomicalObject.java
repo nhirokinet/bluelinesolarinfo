@@ -34,8 +34,8 @@ public interface AstronomicalObject {
      * @param t Target time
      * @return Equatorial horizontal parallax in radian
      */
-
     double calculateEquatorialHorizontalParallaxRad (Instant t) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException;
+
     /**
      * Returns estimation of how much the right ascension of this astronomical object increases in
      * a day.

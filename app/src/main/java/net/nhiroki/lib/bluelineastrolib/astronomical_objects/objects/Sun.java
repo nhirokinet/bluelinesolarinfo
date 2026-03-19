@@ -65,7 +65,11 @@ public class Sun implements AstronomicalObject {
         return eqDeg * 240.0;
     }
 
-    public double calculateDistanceFromTheEarthAU(Instant t) {
+    public double calculateDistanceFromTheEarthKM(Instant t) {
+        return this.calculateDistanceFromTheEarthAU(t) * Sun.AU_IN_KM;
+    }
+
+    private double calculateDistanceFromTheEarthAU(Instant t) {
         // https://aa.usno.navy.mil/faq/sun_approx as of 2024/02/29
         // Almost the same formula is found in https://en.wikipedia.org/wiki/Position_of_the_Sun , with 357.528 + 0.9856003n to calculate g
         // Both pages uses distance to the Sun to calculate the longitude of the Sun.
@@ -74,10 +78,6 @@ public class Sun implements AstronomicalObject {
 
         double g = Math.toRadians(357.529 + 0.98560028 * D);
         return 1.00014 - 0.01671 * Math.cos(g) - 0.00014 * Math.cos(2.0 * g);
-    }
-
-    public double calculateDistanceFromTheEarthKM(Instant t) {
-        return this.calculateDistanceFromTheEarthAU(t) * Sun.AU_IN_KM;
     }
 
     private double calculateEclipticLongitudeRad (Instant t) {

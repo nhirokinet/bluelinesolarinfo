@@ -53,7 +53,7 @@ public class CelestialCoordinatesWithRightAscension {
             rightAscension += Math.PI;
         }
         if (rightAscension < 0.0) {
-            rightAscension += 2 * Math.PI;
+            rightAscension += 2.0 * Math.PI;
         }
         double declination = Math.asin(Math.sin(eclipticLongitudeRad) * Math.sin(eclipticTiltRad));
         return CelestialCoordinatesWithRightAscension.ofRadians(rightAscension, declination);
