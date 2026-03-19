@@ -106,12 +106,12 @@ public class Moon implements AstronomicalObject {
         return EclipticCoordinates.ofRadians(this.calculateEclipticLongitudeRad(t), this.calculateEclipticLatitudeRad(t));
     }
 
-    public double calculateDistanceFromTheEarthAU(Instant t) {
-        return Earth.calculateDistanceAUByEquatorialHorizontalParallaxRad(this.calculateEquatorialHorizontalParallaxRad(t));
-    }
-
     public double calculateDistanceFromTheEarthKM(Instant t) {
         return this.calculateDistanceFromTheEarthAU(t) * Sun.AU_IN_KM;
+    }
+
+    private double calculateDistanceFromTheEarthAU(Instant t) {
+        return Earth.calculateDistanceAUByEquatorialHorizontalParallaxRad(this.calculateEquatorialHorizontalParallaxRad(t));
     }
 
     private double calculateEclipticLongitudeRad (Instant t) {

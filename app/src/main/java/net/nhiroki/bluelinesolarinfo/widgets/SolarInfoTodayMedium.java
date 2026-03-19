@@ -21,7 +21,7 @@ import net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects.Sun;
 import net.nhiroki.lib.bluelineastrolib.exceptions.AstronomicalPhenomenonComputationException;
 import net.nhiroki.lib.bluelineastrolib.exceptions.UnsupportedDateRangeException;
 import net.nhiroki.lib.bluelineastrolib.coordinates.LocationOnTheEarth;
-import net.nhiroki.lib.bluelineastrolib.logic.AstronomicalObjectCalculator;
+import net.nhiroki.lib.bluelineastrolib.logic.AstronomicalEventsCalculation;
 import net.nhiroki.lib.bluelineastrolib.tool.MoonTool;
 
 import java.text.SimpleDateFormat;
@@ -73,7 +73,7 @@ public class SolarInfoTodayMedium {
 
         Sun sun = new Sun();
         try {
-            Instant sunrise = AstronomicalObjectCalculator.calculateRiseWithin24h(sun, startOfDay, locationOnEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP);
+            Instant sunrise = AstronomicalEventsCalculation.calculateRiseWithin24h(sun, startOfDay, locationOnEarth, true, AstronomicalEventsCalculation.ReferencePoint.TOP);
             remoteViews.setTextViewText(R.id.suninfo_widget_sunrise, AppTimeFormat.instantToHmStringForEventTime(sunrise, localZone, timeFormat24Hours, locale));
         } catch (AstronomicalPhenomenonComputationException e) {
             remoteViews.setTextViewText(R.id.suninfo_widget_sunrise, context.getString(R.string.widget_error_string));
@@ -82,7 +82,7 @@ public class SolarInfoTodayMedium {
         }
 
         try {
-            Instant sunset = AstronomicalObjectCalculator.calculateSetWithin24h(sun, startOfDay, locationOnEarth, true, AstronomicalObjectCalculator.ReferencePoint.TOP);
+            Instant sunset = AstronomicalEventsCalculation.calculateSetWithin24h(sun, startOfDay, locationOnEarth, true, AstronomicalEventsCalculation.ReferencePoint.TOP);
             remoteViews.setTextViewText(R.id.suninfo_widget_sunset, AppTimeFormat.instantToHmStringForEventTime(sunset, localZone, timeFormat24Hours, locale));
         } catch (AstronomicalPhenomenonComputationException e) {
             remoteViews.setTextViewText(R.id.suninfo_widget_sunset, context.getString(R.string.widget_error_string));
