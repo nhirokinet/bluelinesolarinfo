@@ -584,7 +584,7 @@ public class MainActivity extends AppCompatActivity {
         boolean timeFormat24Hour = android.text.format.DateFormat.is24HourFormat(this.getApplicationContext());
 
         try {
-            double sunEclipticLongittudeDegAtNoon = sun.calculateEclipticLongitudeDeg(midOfTheDay);
+            double sunEclipticLongittudeDegAtNoon = sun.calculateEclipticCoordinates(midOfTheDay).getLongitudeDeg();
             int sunEclipticLongitudeMin = (int) Math.floor(sunEclipticLongittudeDegAtNoon * 60.0);
             ((TextView) findViewById(R.id.main_view_solar_info_today_sun_ecliptic_longitude_today)).setText(getString(R.string.format_unit_angle_dm, sunEclipticLongitudeMin / 60, sunEclipticLongitudeMin % 60));
 

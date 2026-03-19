@@ -15,7 +15,7 @@ public class SunTool {
         double diffAbsPrev = 3600.0;
 
         while (true) {
-            double currentEclipticLongitudeDeg = sun.calculateEclipticLongitudeDeg(now);
+            double currentEclipticLongitudeDeg = sun.calculateEclipticCoordinates(now).getLongitudeDeg();
             double diff = eclipticLongitudeDeg - currentEclipticLongitudeDeg;
             if (diff < -180.0) {
                 diff += 360.0;

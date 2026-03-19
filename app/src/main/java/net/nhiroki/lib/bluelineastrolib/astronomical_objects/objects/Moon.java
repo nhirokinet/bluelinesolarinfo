@@ -2,6 +2,7 @@ package net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects;
 
 import net.nhiroki.lib.bluelineastrolib.astronomical_objects.AstronomicalObject;
 import net.nhiroki.lib.bluelineastrolib.coordinates.CelestialCoordinatesWithRightAscension;
+import net.nhiroki.lib.bluelineastrolib.coordinates.EclipticCoordinates;
 import net.nhiroki.lib.bluelineastrolib.earth.Earth;
 import net.nhiroki.lib.bluelineastrolib.earth.TimePointOnTheEarth;
 import net.nhiroki.lib.bluelineastrolib.exceptions.AstronomicalPhenomenonComputationException;
@@ -20,53 +21,8 @@ public class Moon implements AstronomicalObject {
 
     @Override
     public CelestialCoordinatesWithRightAscension calculateCelestialCoordinates(Instant t) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
-        return CelestialCoordinatesWithRightAscension.ofRadians(this.calculateRightAscensionRad(t), this.calculateDeclinationRad(t));
-    }
-
-    private double calculateRightAscensionRad(Instant t) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
-        double eclipticTilt = Earth.calculateEclipticTiltRad(t);
-
-        double longitude = this.calculateEclipticLongitudeRad(t);
-        double latitude = this.calculateEclipticLatitudeRad(t);
-
-        double U = Math.cos(latitude) * Math.cos(longitude);
-        double V = -Math.sin(latitude) * Math.sin(eclipticTilt) + Math.cos(latitude) * Math.sin(longitude) * Math.cos(eclipticTilt);
-
-        if (Math.abs(U) < 1e-20) {
-            if (U > 0.0) {
-                if (V > 0.0) {
-                    return Math.PI / 2.0;
-                } else {
-                    return - Math.PI / 2.0;
-                }
-            } else {
-                if (V > 0.0) {
-                    return - Math.PI / 2.0;
-                } else {
-                    return Math.PI / 2.0;
-                }
-            }
-        }
-
-        double ret = Math.atan(V / U);
-        if (U < 0.0) {
-            ret += Math.PI;
-        }
-        ret -= 2.0 * Math.PI * Math.floor(ret / (2.0 * Math.PI));
-        return ret;
-    }
-
-    private double calculateDeclinationRad(Instant t) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
-        double eclipticTilt = Earth.calculateEclipticTiltRad(t);
-
-        double longitude = this.calculateEclipticLongitudeRad(t);
-        double latitude = this.calculateEclipticLatitudeRad(t);
-
-        double U = Math.cos(latitude) * Math.cos(longitude);
-        double V = -Math.sin(latitude) * Math.sin(eclipticTilt) + Math.cos(latitude) * Math.sin(longitude) * Math.cos(eclipticTilt);
-        double W = Math.sin(latitude) * Math.cos(eclipticTilt) + Math.cos(latitude) * Math.sin(longitude) * Math.sin(eclipticTilt);
-
-        return Math.atan(W / Math.sqrt(U * U + V * V));
+        double eclipticTiltRad = Earth.calculateEclipticTiltRad(t);
+        return CelestialCoordinatesWithRightAscension.fromEclipticCoordinates(this.calculateEclipticCoordinates(t), eclipticTiltRad);
     }
 
     @Override
@@ -136,14 +92,18 @@ public class Moon implements AstronomicalObject {
     @Override
     public double estimatedIncrementOfRightAscensionRadPerDay(Instant t) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
         // Calculate directly
-        double ret = this.calculateRightAscensionRad(t.plusSeconds(43200))
-                - this.calculateRightAscensionRad(t.minusSeconds(43200));
+        double ret = this.calculateCelestialCoordinates(t.plusSeconds(43200)).getRightAscensionRad()
+                - this.calculateCelestialCoordinates(t.minusSeconds(43200)).getRightAscensionRad();
 
         // The right ascension of the moon increases about 13 degrees per day,
         // so the change in a day does not exceed 180 degrees
         ret -= Math.floor((ret + Math.PI) / (2.0 * Math.PI)) * 2.0 * Math.PI;
 
         return ret;
+    }
+
+    public EclipticCoordinates calculateEclipticCoordinates(Instant t) {
+        return EclipticCoordinates.ofRadians(this.calculateEclipticLongitudeRad(t), this.calculateEclipticLatitudeRad(t));
     }
 
     public double calculateDistanceFromTheEarthAU(Instant t) {
@@ -158,7 +118,7 @@ public class Moon implements AstronomicalObject {
         return Math.toRadians(this.calculateEclipticLongitudeDeg(t));
     }
 
-    public double calculateEclipticLongitudeDeg (Instant t) {
+    private double calculateEclipticLongitudeDeg (Instant t) {
         double T = new TimePointOnTheEarth(t).julianYearFromJ2000_0() / 100.0;
 
         // https://www1.kaiho.mlit.go.jp/kenkyu/report/rhr15/rhr15-06.pdf
@@ -241,7 +201,7 @@ public class Moon implements AstronomicalObject {
         return Math.toRadians(this.calculateEclipticLatitudeDeg(t));
     }
 
-    public double calculateEclipticLatitudeDeg (Instant t) {
+    private double calculateEclipticLatitudeDeg (Instant t) {
         double T = new TimePointOnTheEarth(t).julianYearFromJ2000_0() / 100.0;
 
         // https://www1.kaiho.mlit.go.jp/kenkyu/report/rhr15/rhr15-06.pdf

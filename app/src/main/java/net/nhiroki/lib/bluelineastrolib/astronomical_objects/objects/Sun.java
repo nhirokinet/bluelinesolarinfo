@@ -1,6 +1,7 @@
 package net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects;
 
 import net.nhiroki.lib.bluelineastrolib.coordinates.CelestialCoordinatesWithRightAscension;
+import net.nhiroki.lib.bluelineastrolib.coordinates.EclipticCoordinates;
 import net.nhiroki.lib.bluelineastrolib.earth.Earth;
 import net.nhiroki.lib.bluelineastrolib.earth.TimePointOnTheEarth;
 import net.nhiroki.lib.bluelineastrolib.astronomical_objects.AstronomicalObject;
@@ -24,29 +25,16 @@ public class Sun implements AstronomicalObject {
 
     @Override
     public CelestialCoordinatesWithRightAscension calculateCelestialCoordinates(Instant t) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
-        return CelestialCoordinatesWithRightAscension.ofRadians(this.calculateRightAscensionRad(t), this.calculateDeclinationRad(t));
+        double eclipticTiltRad = Earth.calculateEclipticTiltRad(t);
+        return CelestialCoordinatesWithRightAscension.fromEclipticWithLatitudeZero(this.calculateEclipticLongitudeRad(t), eclipticTiltRad);
     }
 
-    private double calculateRightAscensionRad (Instant t) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
-        // This formula assumes ecliptic latitude of sun is 0
-        // https://en.wikipedia.org/wiki/Position_of_the_Sun says that the ecliptic latitude of the Sun is very small and never exceeds 0.00033 deg (a little over 1 arcsec).
-        double eclipticLongitudeRad = this.calculateEclipticLongitudeRad(t);
-        eclipticLongitudeRad -= Math.floor(eclipticLongitudeRad / (2.0 * Math.PI)) * 2.0 * Math.PI;
-        double ret = Math.atan(Math.tan(eclipticLongitudeRad) * Math.cos(Earth.calculateEclipticTiltRad(t)));
-        if (eclipticLongitudeRad >= 0.5 * Math.PI && eclipticLongitudeRad < 1.5 * Math.PI) {
-            ret += Math.PI;
-        }
-        if (ret < 0.0) {
-            ret += 2 * Math.PI;
-        }
-        return ret;
-    }
-
-    private double calculateDeclinationRad (Instant t) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
-        // This formula assumes ecliptic latitude of sun is 0
-        // https://en.wikipedia.org/wiki/Position_of_the_Sun says that the ecliptic latitude of the Sun is very small and never exceeds 0.00033 deg (a little over 1 arcsec).
-        final double eclipticLongitudeRad = this.calculateEclipticLongitudeRad(t);
-        return Math.asin(Math.sin(eclipticLongitudeRad) * Math.sin(Earth.calculateEclipticTiltRad(t)));
+    @Override
+    public double estimatedIncrementOfRightAscensionRadPerDay(Instant t) {
+        // Use estimated increment of ecliptic longitude from calculateEclipticLongitudeDeg()
+        // as rough estimate
+        // 0.98564736 / 180 * pi
+        return 0.01720279169558985675;
     }
 
     @Override
@@ -58,6 +46,23 @@ public class Sun implements AstronomicalObject {
     public double calculateApparentRadiusRad (Instant t) {
         double distance = calculateDistanceFromTheEarthAU(t);
         return Math.toRadians(APPARENT_SEMI_DIAMETER_AT_1_AU_DEG_SEC / 3600.0 / distance);
+    }
+
+    public EclipticCoordinates calculateEclipticCoordinates(Instant t) {
+        // This function assumes ecliptic latitude of sun is 0
+        // https://en.wikipedia.org/wiki/Position_of_the_Sun says that the ecliptic latitude of the Sun is very small and never exceeds 0.00033 deg (a little over 1 arcsec).
+        return EclipticCoordinates.ofRadians(this.calculateEclipticLongitudeRad(t), 0.0);
+    }
+
+    public double calculateEquationOfTimeInSeconds(Instant t) throws UnsupportedDateRangeException, AstronomicalPhenomenonComputationException {
+        // https://aa.usno.navy.mil/faq/sun_approx as of 2026/03/02
+        double D = new TimePointOnTheEarth(t).julianYearFromJ2000_0() * 365.25;
+        double q = 280.459 + 0.98564736 * D;
+
+        double eqDeg = q - Math.toDegrees(this.calculateRightAscensionRad(t));
+        eqDeg -= 360.0 * Math.floor((eqDeg + 180.0) / 360.0);
+
+        return eqDeg * 240.0;
     }
 
     public double calculateDistanceFromTheEarthAU(Instant t) {
@@ -79,7 +84,7 @@ public class Sun implements AstronomicalObject {
         return Math.toRadians(this.calculateEclipticLongitudeDeg(t));
     }
 
-    public double calculateEclipticLongitudeDeg (Instant t) {
+    private double calculateEclipticLongitudeDeg (Instant t) {
         // https://aa.usno.navy.mil/faq/sun_approx as of 2024/02/29
         // About precision, the page links to the file: https://aa.usno.navy.mil/graphics/sun_lonlat.pdf
         // Which looks like we can expect precision of roughly 30 arcsecs in 1950-2050, and roughly 50 arcsecs in 1800-2200 (both peak error is a little larger).
@@ -96,22 +101,18 @@ public class Sun implements AstronomicalObject {
         return L;
     }
 
-    public double calculateEquationOfTimeInSeconds(Instant t) throws UnsupportedDateRangeException, AstronomicalPhenomenonComputationException {
-        // https://aa.usno.navy.mil/faq/sun_approx as of 2026/03/02
-        double D = new TimePointOnTheEarth(t).julianYearFromJ2000_0() * 365.25;
-        double q = 280.459 + 0.98564736 * D;
-
-        double eqDeg = q - Math.toDegrees(this.calculateRightAscensionRad(t));
-        eqDeg -= 360.0 * Math.floor((eqDeg + 180.0) / 360.0);
-
-        return eqDeg * 240.0;
-    }
-
-    @Override
-    public double estimatedIncrementOfRightAscensionRadPerDay(Instant t) {
-        // Use estimated increment of ecliptic longitude from calculateEclipticLongitudeDeg()
-        // as rough estimate
-        // 0.98564736 / 180 * pi
-        return 0.01720279169558985675;
+    private double calculateRightAscensionRad (Instant t) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
+        // This formula assumes ecliptic latitude of sun is 0
+        // https://en.wikipedia.org/wiki/Position_of_the_Sun says that the ecliptic latitude of the Sun is very small and never exceeds 0.00033 deg (a little over 1 arcsec).
+        double eclipticLongitudeRad = this.calculateEclipticLongitudeRad(t);
+        eclipticLongitudeRad -= Math.floor(eclipticLongitudeRad / (2.0 * Math.PI)) * 2.0 * Math.PI;
+        double ret = Math.atan(Math.tan(eclipticLongitudeRad) * Math.cos(Earth.calculateEclipticTiltRad(t)));
+        if (eclipticLongitudeRad >= 0.5 * Math.PI && eclipticLongitudeRad < 1.5 * Math.PI) {
+            ret += Math.PI;
+        }
+        if (ret < 0.0) {
+            ret += 2 * Math.PI;
+        }
+        return ret;
     }
 }

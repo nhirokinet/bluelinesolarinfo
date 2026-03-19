@@ -125,6 +125,7 @@ public class TimePointOnTheEarth {
         return retVal;
     }
 
+    @SuppressWarnings("SameReturnValue")
     public double estimatedIncrementOfSiderealTimeRadPerDay() {
         // 1.0027379 * 2 * pi
         return 6.30038804023211344976;
