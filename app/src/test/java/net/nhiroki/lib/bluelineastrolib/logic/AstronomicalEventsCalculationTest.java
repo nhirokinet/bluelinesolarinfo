@@ -21,7 +21,7 @@ import net.nhiroki.lib.bluelineastrolib.test_data.LocationsForTest;
 import static org.junit.Assert.*;
 
 
-public class AstronomicalObjectCalculatorTest {
+public class AstronomicalEventsCalculationTest {
     @Test
     public void checkSunInfoCalculatorBasicFunctionality() throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
         // https://eco.mtk.nao.ac.jp/koyomi/dni/2024/s1302.html
