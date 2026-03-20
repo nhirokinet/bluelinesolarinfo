@@ -9,13 +9,13 @@ import java.time.Instant;
 public class Earth {
     // https://eco.mtk.nao.ac.jp/koyomi/wiki/C2E7B5A42FB6FEC0DE.html
     // National Astronomical Observatory of Japan uses this value
-    public static final double ATMOSPHERIC_REFRACTION_AT_HORIZON_DEC_SEC = 35.0 * 60.0 + 8.0;
+    public static final double ATMOSPHERIC_REFRACTION_AT_HORIZON_ARCSEC = 35.0 * 60.0 + 8.0;
 
     // 8.794148 +/- 0.000007 adopted by IAU in 1976 looks like used frequently
-    private static final double MEAN_EQUATORIAL_HORIZONTAL_PARALLAX_AT_1_AU_SUN_DEG_SEC = 8.794148;
+    private static final double MEAN_EQUATORIAL_HORIZONTAL_PARALLAX_AT_1_AU_SUN_ARCSEC = 8.794148;
 
 
-    // Assumes actualElevation is not less than -1deg
+    // This function is not expected to be accurate for under the horizon
     public static double calculateAtmosphericRefractionRadFromActualElevationRad(double actualElevationRad) {
         // https://en.wikipedia.org/wiki/Atmospheric_refraction
         // Formula by Sæmundsson
@@ -63,10 +63,10 @@ public class Earth {
     }
 
     public static double calculateEquatorialHorizontalParallaxRadByDistanceAU (double distanceAU) {
-        return Math.toRadians(Earth.MEAN_EQUATORIAL_HORIZONTAL_PARALLAX_AT_1_AU_SUN_DEG_SEC / 3600.0 / distanceAU);
+        return Math.toRadians(Earth.MEAN_EQUATORIAL_HORIZONTAL_PARALLAX_AT_1_AU_SUN_ARCSEC / 3600.0 / distanceAU);
     }
 
     public static double calculateDistanceAUByEquatorialHorizontalParallaxRad (double parallaxRad) {
-        return Math.toRadians(Earth.MEAN_EQUATORIAL_HORIZONTAL_PARALLAX_AT_1_AU_SUN_DEG_SEC / 3600.0) / parallaxRad;
+        return Math.toRadians(Earth.MEAN_EQUATORIAL_HORIZONTAL_PARALLAX_AT_1_AU_SUN_ARCSEC / 3600.0) / parallaxRad;
     }
 }

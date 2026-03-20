@@ -46,7 +46,7 @@ public class CelestialCoordinatesWithRightAscension {
         return CelestialCoordinatesWithRightAscension.ofRadians(rightAscentionRad, declinationRad);
     }
 
-    public static CelestialCoordinatesWithRightAscension fromEclipticWithLatitudeZero(double eclipticLongitudeRad, double eclipticTiltRad) {
+    public static CelestialCoordinatesWithRightAscension fromEclipticLongitudeWithLatitudeZero(double eclipticLongitudeRad, double eclipticTiltRad) {
         eclipticLongitudeRad -= Math.floor(eclipticLongitudeRad / (2.0 * Math.PI)) * 2.0 * Math.PI;
         double rightAscension = Math.atan(Math.tan(eclipticLongitudeRad) * Math.cos(eclipticTiltRad));
         if (eclipticLongitudeRad >= 0.5 * Math.PI && eclipticLongitudeRad < 1.5 * Math.PI) {

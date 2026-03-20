@@ -73,13 +73,32 @@ public class TimePointOnTheEarth {
         return 0;
     }
 
+    /**
+     * Calculate the sidereal time and return it in radians.
+     * Specify 0 for Greenwich sidereal time.
+     *
+     * This function has error of about 1.3s in 2000-2100 with the sum of:
+     * - Formula itself has an error of max error 0.432 sec, RMS error 0.001512 sec, in 2000-2100
+     * - This formula handles UTC derived from Instant as the same as UT1. As long as UTC is kept within difference of 0.9s from UT1, this would cause an error of about 0.9s.
+     *
+     * @param longitudeRad Longitude in degrees
+     * @return Sidereal time in radians
+     */
     public double calculateSiderealTimeRad (double longitudeRad) throws UnsupportedDateRangeException {
         return Math.toRadians(this.calculateSiderealTimeDeg(Math.toDegrees(longitudeRad)));
     }
 
-    // This function has error of about 1.3s in 2000-2100 with the sum of:
-    // - Formula itself has an error of max error 0.432 sec, RMS error 0.001512 sec, in 2000-2100
-    // - This formula handles UTC derived from Instant as the same as UT1. As long as UTC is kept within difference of 0.9s from UT1, this would cause an error of about 0.9s.
+    /**
+     * Calculate the sidereal time and return it in degrees.
+     * Specify 0 for Greenwich sidereal time.
+     *
+     * This function has error of about 1.3s in 2000-2100 with the sum of:
+     * - Formula itself has an error of max error 0.432 sec, RMS error 0.001512 sec, in 2000-2100
+     * - This formula handles UTC derived from Instant as the same as UT1. As long as UTC is kept within difference of 0.9s from UT1, this would cause an error of about 0.9s.
+     *
+     * @param longitudeDeg Longitude in degrees
+     * @return Sidereal time in degrees
+     */
     public double calculateSiderealTimeDeg (double longitudeDeg) throws UnsupportedDateRangeException{
         // Estimation method open to public by U.S. navy
         // https://aa.usno.navy.mil/faq/GAST
@@ -138,6 +157,6 @@ public class TimePointOnTheEarth {
 
     // Dismisses the difference between UTC and UT1, which would be up to 0.9sec in the operation of leap seconds.
     public ZonedDateTime calculateApparentSolarTime(LocationOnTheEarth locationOnTheEarth) throws UnsupportedDateRangeException, AstronomicalPhenomenonComputationException {
-        return this.calculateMeanSolarTime(locationOnTheEarth).plusNanos((long) (new Sun().calculateEquationOfTimeInSeconds(this.instant) * 1000000000.0));
+        return this.calculateMeanSolarTime(locationOnTheEarth).plusNanos((long) (new Sun().calculateEquationOfTimeSec(this.instant) * 1000000000.0));
     }
 }

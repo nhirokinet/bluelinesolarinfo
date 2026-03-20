@@ -104,7 +104,7 @@ public class SunTest {
 
         Instant t = Instant.parse("1980-01-01T00:00:00Z");
         for (int i = 0; i < 365 * 24 * 70; ++i) {
-            assertEquals(calculateDistanceFromTheEarthAUBySuirobuKubo1980(t), sun.calculateDistanceFromTheEarthKM(t) / Sun.AU_IN_KM, 2e-4);
+            assertEquals(calculateDistanceFromTheEarthAUBySuirobuKubo1980(t), sun.calculateDistanceFromTheEarthAU(t), 2e-4);
 
             t = t.plusSeconds(3600);
         }
@@ -115,6 +115,7 @@ public class SunTest {
     public void calculateDistanceFromTheEarthTest() {
         Sun sun = new Sun();
         Instant t = Instant.parse("2026-01-01T00:00:00Z");
+        assertEquals(1.0, sun.calculateDistanceFromTheEarthAU(t), 0.04);
         assertEquals(149597870.7, sun.calculateDistanceFromTheEarthKM(t), 5000000.0);
     }
 }

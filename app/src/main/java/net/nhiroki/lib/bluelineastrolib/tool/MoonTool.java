@@ -14,7 +14,7 @@ public class MoonTool {
         return phase;
     }
 
-    public static Instant calculatePreviousTimeOfMoonPhaseByDeg(Instant t, double moonPhaseDeg) throws AstronomicalPhenomenonComputationException {
+    public static Instant calculatePreviousTimeOfMoonPhase(Instant t, double moonPhaseDeg) throws AstronomicalPhenomenonComputationException {
         double prevCorrectionMilliSeconds = 100.0 * 86400000.0;
 
         while (true) {
@@ -38,7 +38,7 @@ public class MoonTool {
         }
     }
 
-    public static Instant calculateNextTimeOfMoonPhaseByDeg(Instant t, double moonPhaseDeg) throws AstronomicalPhenomenonComputationException {
+    public static Instant calculateNextTimeOfMoonPhase(Instant t, double moonPhaseDeg) throws AstronomicalPhenomenonComputationException {
         double prevCorrectionMilliSeconds = 100.0 * 86400000.0;
 
         while (true) {

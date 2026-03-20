@@ -53,19 +53,19 @@ public class AstronomicalObjectCalculatorTest {
 
         Instant[] sunriseListOnTestDay1 = AstronomicalEventsCalculation.calculateAllEvents(sun, AstronomicalEventsCalculation.EventDirectionType.RISE,
                 testDay1, testDay1.plusSeconds(86400), Duration.ofMinutes(1), Duration.ofMillis(200), placeToTest, false, AstronomicalEventsCalculation.ReferencePoint.TOP,
-                true, -Math.toRadians(Earth.ATMOSPHERIC_REFRACTION_AT_HORIZON_DEC_SEC / 3600.0));
+                true, -Math.toRadians(Earth.ATMOSPHERIC_REFRACTION_AT_HORIZON_ARCSEC / 3600.0));
         assertEquals(1, sunriseListOnTestDay1.length);
         assertEquals(Instant.parse("2024-02-28T21:12:00Z").getEpochSecond(), sunriseListOnTestDay1[0].getEpochSecond(), 30.0);
 
         Instant[] culminationListOnTestDay1 = AstronomicalEventsCalculation.calculateAllEvents(sun, AstronomicalEventsCalculation.EventDirectionType.CULMINATION,
                 testDay1, testDay1.plusSeconds(86400), Duration.ofMinutes(1), Duration.ofMillis(200), placeToTest, false, AstronomicalEventsCalculation.ReferencePoint.TOP,
-                true, -Math.toRadians(Earth.ATMOSPHERIC_REFRACTION_AT_HORIZON_DEC_SEC / 3600.0));
+                true, -Math.toRadians(Earth.ATMOSPHERIC_REFRACTION_AT_HORIZON_ARCSEC / 3600.0));
         assertEquals(1, culminationListOnTestDay1.length);
         assertEquals(Instant.parse("2024-02-29T02:54:00Z").getEpochSecond(), culminationListOnTestDay1[0].getEpochSecond(), 30.0);
 
         Instant[] sunsetListOnTestDay1 = AstronomicalEventsCalculation.calculateAllEvents(sun, AstronomicalEventsCalculation.EventDirectionType.SET,
                 testDay1, testDay1.plusSeconds(86400), Duration.ofMinutes(1), Duration.ofMillis(200), placeToTest, false, AstronomicalEventsCalculation.ReferencePoint.TOP,
-                true, -Math.toRadians(Earth.ATMOSPHERIC_REFRACTION_AT_HORIZON_DEC_SEC / 3600.0));
+                true, -Math.toRadians(Earth.ATMOSPHERIC_REFRACTION_AT_HORIZON_ARCSEC / 3600.0));
         assertEquals(1, sunsetListOnTestDay1.length);
         assertEquals(Instant.parse("2024-02-29T08:35:00Z").getEpochSecond(), sunsetListOnTestDay1[0].getEpochSecond(), 30.0);
     }

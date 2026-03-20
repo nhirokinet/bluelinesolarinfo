@@ -110,7 +110,7 @@ public class Moon implements AstronomicalObject {
         return this.calculateDistanceFromTheEarthAU(t) * Sun.AU_IN_KM;
     }
 
-    private double calculateDistanceFromTheEarthAU(Instant t) {
+    public double calculateDistanceFromTheEarthAU(Instant t) {
         return Earth.calculateDistanceAUByEquatorialHorizontalParallaxRad(this.calculateEquatorialHorizontalParallaxRad(t));
     }
 
