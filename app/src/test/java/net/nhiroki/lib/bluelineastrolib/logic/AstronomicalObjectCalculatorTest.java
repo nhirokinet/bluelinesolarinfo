@@ -186,8 +186,8 @@ public class AstronomicalObjectCalculatorTest {
         Instant sunriseOnTestDay3 = AstronomicalEventsCalculation.calculateRiseWithin24h(sun, testDay3, placeToTest, false, AstronomicalEventsCalculation.ReferencePoint.TOP);
         // Vernal equinox in 2026 is 2026/03/20 14:45 UTC
         // https://ja.wikipedia.org/wiki/%E6%98%A5%E5%88%86
-        // Sunrise on North Pole in vernal equinox should be a bit earlier
-        // Sunset on North pole in autumnal equinox should be a bit later
+        // Sunrise on the North Pole in vernal equinox should be a bit earlier
+        // Sunset on the North Pole in autumnal equinox should be a bit later
         // timeanddate.com reports that sunrise is at 2026/003/18 12:18
         // https://www.timeanddate.com/sun/@89.99999,0.00000?month=3&year=2026
         // However in this case the slightest difference of sun height which is regarded as "sunrise" changes time so much
@@ -216,7 +216,7 @@ public class AstronomicalObjectCalculatorTest {
         Instant sunsetOnTestDay4 = AstronomicalEventsCalculation.calculateSetWithin24h(sun, testDay4, placeToTest, false, AstronomicalEventsCalculation.ReferencePoint.TOP);
         // Autumnal equinox in 2026 is 2026/09/23 00:05 UTC
         // https://ja.wikipedia.org/wiki/%E7%A7%8B%E5%88%86
-        // Sunset on North pole in autumnal equinox should be a bit later
+        // Sunset on the North Pole in autumnal equinox should be a bit later
         // timeanddate.com reports that sunset is at 2026/09/25 03:14
         // https://www.timeanddate.com/sun/@89.99999,0.00000?month=9&year=2026
         // However in this case the slightest difference of sun height which is regarded as "sunset" changes time so much
@@ -355,7 +355,7 @@ public class AstronomicalObjectCalculatorTest {
 
                         t = t.plusSeconds(21600 + 86400 * 10);
                     }
-                    t = t.plusSeconds( 86400l * 365l * 4000l);
+                    t = t.plusSeconds(86400L * 365L * 4000L);
                 }
                 assertEquals("+21985-12-09T00:00:00Z", t.toString());
             }

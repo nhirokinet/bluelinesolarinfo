@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     public final static String EXTRA_FROM_APPWIDGETID = "from_appwidgetid";
     public final static String EXTRA_TARGET_TIME_UNIX_MILLISEC = "target_time_unix_millisec";
 
-    private enum LocationMeasureStatus { UNKNOWN, NO_PERMISSION, FETCHING, SUCCESS, ERROR };
+    private enum LocationMeasureStatus { UNKNOWN, NO_PERMISSION, FETCHING, SUCCESS, ERROR }
 
     private final static int REQUEST_CODE_FOR_REGION_SETTING = 1001;
     public final static int REQUEST_CODE_FOR_OPENING_BY_WIDGET = 0x10000000;
@@ -424,7 +424,7 @@ public class MainActivity extends AppCompatActivity {
                     this.locationPrevProvider = "";
                     this.locationPrevAccuracy = 1000000.0;
                     for (String provider : this.locationManager.getProviders(true)) {
-                        this.locationManager.requestLocationUpdates(provider, 3000l, 1.0f, this.locationListener);
+                        this.locationManager.requestLocationUpdates(provider, 3000L, 1.0f, this.locationListener);
                     }
                     this.locationListenerInUse = true;
                 }
@@ -462,7 +462,7 @@ public class MainActivity extends AppCompatActivity {
             findViewById(R.id.main_view_location_measure_config_area).setVisibility(View.GONE);
             findViewById(R.id.main_view_first_guide_area).setVisibility(View.GONE);
             findViewById(R.id.main_view_nolocpriv_guide_area).setVisibility(View.GONE);
-            boolean regionRegistered = DataStore.getInstance(getApplicationContext()).getRegions().size() > 0;
+            boolean regionRegistered = !DataStore.getInstance(getApplicationContext()).getRegions().isEmpty();
             findViewById(R.id.main_view_first_guide_area).setVisibility(regionRegistered ? View.GONE : View.VISIBLE);
 
             ((TextView) findViewById(R.id.main_view_region_text)).setText(regionOnTheEarth.getName());

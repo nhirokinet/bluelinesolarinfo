@@ -23,7 +23,7 @@ public class DataStore extends SQLiteOpenHelper {
     private static DataStore singleton;
 
     // To support background job without disk access
-    private Map<Long, RegionOnTheEarth> regionCache;
+    private final Map<Long, RegionOnTheEarth> regionCache;
 
 
     private DataStore(Context context) {

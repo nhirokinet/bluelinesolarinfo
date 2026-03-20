@@ -25,7 +25,7 @@ public class WidgetUpdateWorker extends Worker {
     private static final String WORK_TAG_FOR_WIDGETS_UPDATE = "widgets_update";
     private static final int MILLISECONDS_WAIT_AFTER_IDEAL_UPDATE = 2000;
 
-    private Context context;
+    private final Context context;
 
     public WidgetUpdateWorker(Context context, WorkerParameters workerParameters) {
         super(context, workerParameters);

@@ -16,7 +16,7 @@ import net.nhiroki.bluelinesolarinfo.R;
 public class MoonPhaseView extends View {
     private float moonPhaseDeg = -1.0f;
 
-    private int circlePaintAlpha = 50;
+    private final int circlePaintAlpha = 50;
 
 
     public MoonPhaseView(Context context) {

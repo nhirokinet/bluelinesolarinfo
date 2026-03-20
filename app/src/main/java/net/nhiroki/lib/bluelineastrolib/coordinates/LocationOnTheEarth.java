@@ -5,9 +5,9 @@ package net.nhiroki.lib.bluelineastrolib.coordinates;
  * LocationOnTheEarth describes the coordinate for astronomical calculation.
  */
 public class LocationOnTheEarth {
-    private double longitudeDeg;
-    private double latitudeDeg;
-    private double elevationMeters;
+    private final double longitudeDeg;
+    private final double latitudeDeg;
+    private final double elevationMeters;
 
 
     /**

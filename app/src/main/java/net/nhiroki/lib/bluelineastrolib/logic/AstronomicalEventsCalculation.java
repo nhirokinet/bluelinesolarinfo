@@ -16,8 +16,8 @@ import java.util.ArrayList;
 
 
 public class AstronomicalEventsCalculation {
-    public enum EventDirectionType { RISE, CULMINATION, SET };
-    public enum ReferencePoint { TOP, CENTER, BOTTOM };
+    public enum EventDirectionType { RISE, CULMINATION, SET }
+    public enum ReferencePoint { TOP, CENTER, BOTTOM }
 
 
     /**
@@ -126,9 +126,8 @@ public class AstronomicalEventsCalculation {
         }
 
         Instant estimate = start.plusSeconds(43200);
-        boolean ok = false;
         int loopCount = 0;
-        while (! ok) {
+        while (true) {
             Instant estimateAtStartOfThisLoop = estimate;
             CelestialCoordinatesWithRightAscension celestialCoordinatesWithRightAscensionAtEstimate = astronomicalObject.calculateCelestialCoordinates(estimate);
 
@@ -260,7 +259,7 @@ public class AstronomicalEventsCalculation {
                 break;
             }
 
-            if (Math.abs(Duration.between(estimate, estimateAtStartOfThisLoop).toMillis()) < 200l) {
+            if (Math.abs(Duration.between(estimate, estimateAtStartOfThisLoop).toMillis()) < 200L) {
                 return estimate;
             }
         }
@@ -306,7 +305,7 @@ public class AstronomicalEventsCalculation {
 
         ArrayList<Instant> ret = new ArrayList<>();
 
-        final long twicePrevisionInNanos = precision.toNanos() * 2l;
+        final long twicePrevisionInNanos = precision.toNanos() * 2L;
 
         if (eventDirectionType == EventDirectionType.CULMINATION) {
             double prevHourAngle = 0.0;
