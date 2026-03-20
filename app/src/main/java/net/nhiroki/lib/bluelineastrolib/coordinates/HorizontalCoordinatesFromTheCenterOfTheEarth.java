@@ -2,6 +2,13 @@ package net.nhiroki.lib.bluelineastrolib.coordinates;
 
 import static java.lang.Double.NaN;
 
+import net.nhiroki.lib.bluelineastrolib.astronomical_objects.AstronomicalObject;
+import net.nhiroki.lib.bluelineastrolib.earth.TimePointOnTheEarth;
+import net.nhiroki.lib.bluelineastrolib.exceptions.AstronomicalPhenomenonComputationException;
+import net.nhiroki.lib.bluelineastrolib.exceptions.UnsupportedDateRangeException;
+
+import java.time.Instant;
+
 public class HorizontalCoordinatesFromTheCenterOfTheEarth {
     private double azimuthRad;
     private double elevationRad;
@@ -22,13 +29,33 @@ public class HorizontalCoordinatesFromTheCenterOfTheEarth {
         );
     }
 
+    public static HorizontalCoordinatesFromTheCenterOfTheEarth ofAstronomicalObject(AstronomicalObject astronomicalObject, Instant time,
+                                                                                    LocationOnTheEarth locationOnTheEarth) throws UnsupportedDateRangeException, AstronomicalPhenomenonComputationException {
+        CelestialCoordinatesWithRightAscension celestialCoordinatesWithRightAscension = astronomicalObject.calculateCelestialCoordinates(time);
+        CelestialCoordinatesWithHourAngle celestialCoordinatesWithHourAngle = CelestialCoordinatesWithHourAngle.fromCelestialCoordinatesWithRightAscension(celestialCoordinatesWithRightAscension, new TimePointOnTheEarth(time), locationOnTheEarth);
+
+        return HorizontalCoordinatesFromTheCenterOfTheEarth.fromCelestialCoordinatesAndLocation(celestialCoordinatesWithHourAngle, locationOnTheEarth);
+    }
+
     /**
-     * Get azimuth in radians. May return NaN.
+     * Returns azimuth in radians. It may return NaN.
      *
      * @return azimuth in radians
      */
     public double getAzimuthRad() {
         return azimuthRad;
+    }
+
+    /**
+     * Returns azimuth in degrees. It may return NaN.
+     *
+     * @return azimuth in degrees
+     */
+    public double getAzimuthDeg() {
+        if (Double.isNaN(azimuthRad)) {
+            return NaN;
+        }
+        return Math.toDegrees(azimuthRad);
     }
 
     public double getElevationRad() {

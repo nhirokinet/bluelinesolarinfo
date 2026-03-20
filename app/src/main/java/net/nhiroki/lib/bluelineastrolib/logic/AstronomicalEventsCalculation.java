@@ -18,56 +18,27 @@ import java.util.ArrayList;
 public class AstronomicalEventsCalculation {
     public enum EventDirectionType { RISE, CULMINATION, SET };
     public enum ReferencePoint { TOP, CENTER, BOTTOM };
-    public enum ViewPoint { CENTER_OF_THE_EARTH, GROUND };
-    public enum ElevationType { APPARENT, ACTUAL };
 
 
-    @Deprecated
-    public static double calculateAzimuthRad(AstronomicalObject astronomicalObject, Instant time,
-                                             LocationOnTheEarth locationOnTheEarth) throws UnsupportedDateRangeException, AstronomicalPhenomenonComputationException {
-        CelestialCoordinatesWithRightAscension celestialCoordinatesWithRightAscension = astronomicalObject.calculateCelestialCoordinates(time);
-        CelestialCoordinatesWithHourAngle celestialCoordinatesWithHourAngle = CelestialCoordinatesWithHourAngle.fromCelestialCoordinatesWithRightAscension(celestialCoordinatesWithRightAscension, new TimePointOnTheEarth(time), locationOnTheEarth);
-
-        return HorizontalCoordinatesFromTheCenterOfTheEarth.fromCelestialCoordinatesAndLocation(celestialCoordinatesWithHourAngle, locationOnTheEarth).getAzimuthRad();
-    }
-
-    // Should be moved to another class
-    public static double calculateElevationRad(AstronomicalObject astronomicalObject, Instant time,
-                                               LocationOnTheEarth locationOnTheEarth, ViewPoint viewPoint, ElevationType elevationType) throws UnsupportedDateRangeException, AstronomicalPhenomenonComputationException {
-        CelestialCoordinatesWithRightAscension celestialCoordinatesWithRightAscension = astronomicalObject.calculateCelestialCoordinates(time);
-        CelestialCoordinatesWithHourAngle celestialCoordinatesWithHourAngle = CelestialCoordinatesWithHourAngle.fromCelestialCoordinatesWithRightAscension(celestialCoordinatesWithRightAscension, new TimePointOnTheEarth(time), locationOnTheEarth);
-
-        double ret = HorizontalCoordinatesFromTheCenterOfTheEarth.fromCelestialCoordinatesAndLocation(celestialCoordinatesWithHourAngle, locationOnTheEarth).getElevationRad();
-        if (viewPoint == ViewPoint.GROUND) {
-            if (Math.abs(ret) < Math.PI * 0.4999999) {
-                ret = Math.atan(Math.tan(ret) - Math.tan(astronomicalObject.calculateEquatorialHorizontalParallaxRad(time)) / Math.cos(ret));
-            }
-        }
-        if (elevationType == ElevationType.APPARENT) {
-            ret += Earth.calculateAtmosphericRefractionRadFromActualElevationRad(ret);
-        }
-        return ret;
-    }
-
-    // Interface should be reconsidered
-    public static double calculateThresholdElevationRadForRiseSet(AstronomicalObject astronomicalObject, Instant time,
-                                                                  LocationOnTheEarth locationOnTheEarth, boolean horizonByElevation,
-                                                                  ReferencePoint referencePoint) throws UnsupportedDateRangeException, AstronomicalPhenomenonComputationException {
-
-        int posReference = 0;
-        if (referencePoint == ReferencePoint.TOP) {
-            posReference = 1;
-        } else if (referencePoint == ReferencePoint.CENTER) {
-            posReference = 0;
-        } else if (referencePoint == ReferencePoint.BOTTOM) {
-            posReference = -1;
-        }
-
-        double heightMeter = horizonByElevation ? locationOnTheEarth.getElevationMeters() : 0.0;
-        return calculateActualCenterHeightRad(time, heightMeter, astronomicalObject, posReference, true,  -Math.toRadians(Earth.ATMOSPHERIC_REFRACTION_AT_HORIZON_ARCSEC / 3600.0));
-    }
-
-    // Interface should be reconsidered
+    /**
+     * Return time of rise of @estronomialObject from within 24 hours.<br>
+     * <br>
+     * If not happens within 24 hours, returns null.<br>
+     * If it happens multiple times, it is not guaranteed which is returned.<br>
+     *
+     * This function assumes that:<br>
+     * <ul>
+     *   <li>@astronomicalObject does not behave so dramatically in the equatorial coordinate system. Sun goes around once in a year, and moon in about a month, they are OK.</li>
+     *   <li>Event is expected to happen about once in 24 hours.</li>
+     * </ul>
+     *
+     * @param astronomicalObject Target astronomical object
+     * @param start              Start point of calculation
+     * @param locationOnTheEarth Target location
+     * @param horizonByElevation If true, horizon with regard of height is standard of rise/set. If false, horizon is handled as 0 degree height.
+     * @param referencePoint     Which rim or center to refer
+     * @return Rise, or null if not within 24 hours
+     */
     public static Instant calculateRiseWithin24h(AstronomicalObject astronomicalObject, Instant start,
                                                  LocationOnTheEarth locationOnTheEarth, boolean horizonByElevation,
                                                  ReferencePoint referencePoint) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
@@ -76,7 +47,25 @@ public class AstronomicalEventsCalculation {
         );
     }
 
-    // Interface should be reconsidered
+    /**
+     * Return time of set of @estronomialObject from within 24 hours.<br>
+     * <br>
+     * If not happens within 24 hours, returns null.<br>
+     * If it happens multiple times, it is not guaranteed which is returned.<br>
+     *
+     * This function assumes that:<br>
+     * <ul>
+     *   <li>@astronomicalObject does not behave so dramatically in the equatorial coordinate system. Sun goes around once in a year, and moon in about a month, they are OK.</li>
+     *   <li>Event is expected to happen about once in 24 hours.</li>
+     * </ul>
+     *
+     * @param astronomicalObject Target astronomical object
+     * @param start              Start point of calculation
+     * @param locationOnTheEarth Target location
+     * @param horizonByElevation If true, horizon with regard of height is standard of rise/set. If false, horizon is handled as 0 degree height.
+     * @param referencePoint     Which rim or center to refer
+     * @return Set, or null if not within 24 hours
+     */
     public static Instant calculateSetWithin24h(AstronomicalObject astronomicalObject, Instant start,
                                                 LocationOnTheEarth locationOnTheEarth, boolean horizonByElevation,
                                                 ReferencePoint referencePoint) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
@@ -85,7 +74,23 @@ public class AstronomicalEventsCalculation {
         );
     }
 
-    // Interface should be reconsidered
+    /**
+     * Return time of culmination of @estronomialObject from within 24 hours.<br>
+     * <br>
+     * If not happens within 24 hours, returns null.<br>
+     * If it happens multiple times, it is not guaranteed which is returned.<br>
+     *
+     * This function assumes that:<br>
+     * <ul>
+     *   <li>@astronomicalObject does not behave so dramatically in the equatorial coordinate system. Sun goes around once in a year, and moon in about a month, they are OK.</li>
+     *   <li>Event is expected to happen about once in 24 hours.</li>
+     * </ul>
+     *
+     * @param astronomicalObject Target astronomical object
+     * @param start              Start point of calculation
+     * @param locationOnTheEarth Target location
+     * @return Culmination, or null if not within 24 hours
+     */
     public static Instant calculateCulminationWithin24h(AstronomicalObject astronomicalObject, Instant start,
                                                         LocationOnTheEarth locationOnTheEarth) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
         return calculateEventWithin24h(astronomicalObject, EventDirectionType.CULMINATION, start, locationOnTheEarth, false, ReferencePoint.CENTER,
@@ -93,7 +98,6 @@ public class AstronomicalEventsCalculation {
         );
     }
 
-    // Interface should be reconsidered
     private static Instant calculateEventWithin24h(final AstronomicalObject astronomicalObject,
                                                    final EventDirectionType eventDirectionType,
                                                    final Instant start,
