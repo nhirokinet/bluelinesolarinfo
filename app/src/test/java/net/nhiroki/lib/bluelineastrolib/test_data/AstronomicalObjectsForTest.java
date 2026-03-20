@@ -7,13 +7,13 @@ import net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects.Sun;
 import net.nhiroki.lib.bluelineastrolib.coordinates.CelestialCoordinatesWithRightAscension;
 
 
-public class FixedStarsForTest {
+public class AstronomicalObjectsForTest {
     public static AstronomicalObject[] listAstronomicalObjectsForTest() {
         return new AstronomicalObject[] {
                 new Sun(),
                 new Moon(),
-                FixedStarsForTest.getPolaris(),
-                FixedStarsForTest.getSirius(),
+                AstronomicalObjectsForTest.getPolaris(),
+                AstronomicalObjectsForTest.getSirius(),
         };
     }
 

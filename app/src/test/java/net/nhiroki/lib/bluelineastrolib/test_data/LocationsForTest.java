@@ -6,14 +6,14 @@ import net.nhiroki.lib.bluelineastrolib.coordinates.LocationOnTheEarth;
 public class LocationsForTest {
     public static LocationOnTheEarth[] listLocationsForTest() {
         return new LocationOnTheEarth[] {
+                LocationsForTest.getTokyoNAO(),
+                LocationsForTest.getTopOfMtFuji(),
+                LocationsForTest.getRioDeJaneiro(),
                 LocationsForTest.getNorthPoleE0Z(),
                 LocationsForTest.getNorthPoleE135Z(),
                 LocationsForTest.getNullIsland(),
-                LocationsForTest.getRioDeJaneiro(),
                 LocationsForTest.getShowaStation(),
                 LocationsForTest.getSouthPoleE0Z(),
-                LocationsForTest.getTokyoNAO(),
-                LocationsForTest.getTopOfMtFuji(),
                 LocationsForTest.getTromsoe(),
         };
     }

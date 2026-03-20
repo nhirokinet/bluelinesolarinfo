@@ -33,8 +33,8 @@ public class HorizontalCoordinatesFromGround {
         return new HorizontalCoordinatesFromGround(astronomicalObject, time, locationOnTheEarth, horizontalCoordinatesFromTheCenterOfTheEarth.getAzimuthRad(), actualElevationRad);
     }
 
-    public static HorizontalCoordinatesFromGround ofAstronomicalObject(AstronomicalObject astronomicalObject, Instant time,
-                                                                       LocationOnTheEarth locationOnTheEarth)
+    public static HorizontalCoordinatesFromGround calculatePositionOfAstronomicalObject(AstronomicalObject astronomicalObject, Instant time,
+                                                                                        LocationOnTheEarth locationOnTheEarth)
             throws UnsupportedDateRangeException, AstronomicalPhenomenonComputationException {
 
         HorizontalCoordinatesFromTheCenterOfTheEarth fromTheCenterOfTheEarth = HorizontalCoordinatesFromTheCenterOfTheEarth.ofAstronomicalObject(astronomicalObject, time, locationOnTheEarth);
