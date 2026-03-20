@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         this.refreshHandler = new Handler(Looper.getMainLooper());
-        this.refreshRunnable = () -> MainActivity.this.periodicRefresh();
+        this.refreshRunnable = MainActivity.this::periodicRefresh;
 
         findViewById(R.id.main_view_date_view).setOnClickListener(view -> {
             LocalDate date = targetDate;
@@ -156,14 +156,10 @@ public class MainActivity extends AppCompatActivity {
             builder.create().show();
         });
 
-        findViewById(R.id.main_view_first_guide_add_region_button).setOnClickListener(view -> {
-            startActivity(new android.content.Intent(this, EachRegionSettingActivity.class));
-        });
+        findViewById(R.id.main_view_first_guide_add_region_button).setOnClickListener(view -> startActivity(new Intent(this, EachRegionSettingActivity.class)));
 
-        findViewById(R.id.main_view_nolocpriv_guide_add_location_privilege_button).setOnClickListener(view -> {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION},
-                    REQUEST_CODE_FOR_REGION_SETTING);
-        });
+        findViewById(R.id.main_view_nolocpriv_guide_add_location_privilege_button).setOnClickListener(view -> ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION},
+                REQUEST_CODE_FOR_REGION_SETTING));
 
         this.locationListener = new LocationListener() {
             @Override
@@ -205,9 +201,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onProviderEnabled(String provider) { }
-
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) { }
         };
 
         ((CheckBox) findViewById(R.id.main_view_location_measure_config_use_elevation_checkbox)).setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -714,7 +707,7 @@ public class MainActivity extends AppCompatActivity {
 
             Instant prevNewMoon = MoonTool.calculatePreviousTimeOfMoonPhase(midOfTheDay, 0.0);
             double daysAfterPrevNewMoon = ((double)(midOfTheDay.toEpochMilli() - prevNewMoon.toEpochMilli())) / 86400000.0;
-            ((TextView) findViewById(R.id.main_view_solar_info_today_moon_phase_days_text)).setText(String.format("%.1f", daysAfterPrevNewMoon));
+            ((TextView) findViewById(R.id.main_view_solar_info_today_moon_phase_days_text)).setText(String.format(locale, "%.1f", daysAfterPrevNewMoon));
 
             Instant moonrise = AstronomicalEventsCalculation.calculateRiseWithin24h(moon, startOfTheDay, locationOnTheEarth, true, AstronomicalEventsCalculation.ReferencePoint.CENTER);
             if (moonrise == null && endOfTheDay.isAfter(startOfTheDay.plusSeconds(86400))) {
@@ -833,9 +826,7 @@ public class MainActivity extends AppCompatActivity {
                 findViewById(R.id.main_view_solar_info_today_moon_next_event_title).setVisibility(View.GONE);
                 findViewById(R.id.main_view_solar_info_today_moon_next_event_time).setVisibility(View.GONE);
             }
-        } catch (AstronomicalPhenomenonComputationException e) {
-            throw new RuntimeException(e);
-        } catch (UnsupportedDateRangeException e) {
+        } catch (AstronomicalPhenomenonComputationException | UnsupportedDateRangeException e) {
             throw new RuntimeException(e);
         }
     }
@@ -907,9 +898,7 @@ public class MainActivity extends AppCompatActivity {
                 ((TextView) findViewById(R.id.main_view_solar_info_now_moon_elevation)).setText(R.string.main_activity_solar_info_now_invisible_culmination_label);
             }
 
-        } catch (UnsupportedDateRangeException e) {
-            throw new RuntimeException(e);
-        } catch (AstronomicalPhenomenonComputationException e) {
+        } catch (UnsupportedDateRangeException | AstronomicalPhenomenonComputationException e) {
             throw new RuntimeException(e);
         }
 

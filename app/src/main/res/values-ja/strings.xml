@@ -82,7 +82,6 @@
     <string name="main_activity_solar_info_today_next_event_moonrise">次の月出：</string>
     <string name="main_activity_solar_info_today_next_event_moonset">次の月入：</string>
 
-    <string name="main_activity_solar_info_now_hms_24h_format">%1$02d:%2$02d:%3$02d</string>
     <string name="main_activity_solar_info_now_localtime">現地時間</string>
     <string name="main_activity_solar_info_now_mean_solar_time">地方平均太陽時</string>
     <string name="main_activity_solar_info_now_apparent_solar_time">視太陽時</string>
@@ -138,7 +137,6 @@
     <string name="config_widget_solar_info_today_title">ウィジェット設定</string>
     <string name="config_widget_solar_info_today_region">地域</string>
     <string name="config_widget_solar_info_today_change_button">変更</string>
-    <string name="config_widget_solar_info_today_region_select_dialog_title">ウィジェットで使用する地域の選択</string>
     <string name="config_widget_solar_info_today_no_region">（地域なし）</string>
     <string name="config_widget_solar_info_today_warn_no_region_yet">地域が追加されていません。ウィジェットを使用するには地域を追加する必要があります。</string>
     <string name="config_widget_solar_info_today_ok_button">OK</string>

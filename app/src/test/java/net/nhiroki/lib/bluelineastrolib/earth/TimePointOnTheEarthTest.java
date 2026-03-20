@@ -40,16 +40,16 @@ public class TimePointOnTheEarthTest {
     @Test
     public void calculateSiderealTimeDegTest() throws UnsupportedDateRangeException {
         // Sprint Equinox in 2026 is 03/20 14:46 UTC
-        //    Equation time is about -7min, so apparent solar time in E0deg is about 14:39
+        //    Equation time is about -7min, so apparent solar time in E0 deg is about 14:39
         //    So sidereal time should be about 02h39m
         // Summer solstice in 2026 is 06/21 08:25 UTC
-        //    Equation time is about -2min, so apparent solar time in E0deg is about 08:23
+        //    Equation time is about -2min, so apparent solar time in E0 deg is about 08:23
         //    So sidereal time should be about 02h23m
         // Autumnal Equinox in 2026 is 09/23 00:05 UTC
-        //    Equation time is about +7min, so apparent solar time in E0deg is about 00:11
+        //    Equation time is about +7min, so apparent solar time in E0 deg is about 00:11
         //    So sidereal time should be about 00h11m
         // Winter solstice in 2026 is 12/21 20:50 UTC
-        //    Equation time is about +1min, so apparent solar time in E0deg is about 20:51
+        //    Equation time is about +1min, so apparent solar time in E0 deg is about 20:51
         //    So sidereal time should be about 02h51m
         // https://eco.mtk.nao.ac.jp/koyomi/yoko/2026/rekiyou262.html
         // https://www.nao.ac.jp/faq/a0107.html
@@ -60,7 +60,7 @@ public class TimePointOnTheEarthTest {
 
         // Sprint Equinox in 2004 is 03/20 06:49 UTC
         // https://eco.mtk.nao.ac.jp/koyomi/yoko/2004/rekiyou042.html
-        //   Equation time is about -7min, so apparent solar time in E0deg is about 06:42
+        //   Equation time is about -7min, so apparent solar time in E0 deg is about 06:42
         //   So sidereal time should be about 18h42m
         assertEquals(18.0 + 42.0 / 60.0, new TimePointOnTheEarth(Instant.parse("2004-03-20T06:49:00Z")).calculateSiderealTimeDeg(0.0) / 360.0 * 24.0, 1.0 / 60.0);
 

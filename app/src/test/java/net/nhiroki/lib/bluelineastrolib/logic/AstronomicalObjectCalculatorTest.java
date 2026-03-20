@@ -296,7 +296,7 @@ public class AstronomicalObjectCalculatorTest {
     @Test
     public void checkPolarisBehavior() throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
         FixedStar polaris = FixedStarsForTest.getPolaris();
-        LocationOnTheEarth locations[] = new LocationOnTheEarth[] {
+        LocationOnTheEarth[] locations = new LocationOnTheEarth[] {
                 LocationsForTest.getTokyoNAO(),
                 LocationsForTest.getTopOfMtFuji(),
                 LocationsForTest.getNorthPoleE0Z(),

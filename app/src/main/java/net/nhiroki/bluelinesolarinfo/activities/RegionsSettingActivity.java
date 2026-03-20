@@ -72,9 +72,7 @@ public class RegionsSettingActivity extends AppCompatActivity {
         this.listAdapter = new RegionArrayAdapter();
         ((android.widget.ListView) findViewById(R.id.regions_setting_region_list_view)).setAdapter(listAdapter);
 
-        findViewById(R.id.regions_setting_add_region_button).setOnClickListener(view -> {
-            startActivity(new android.content.Intent(this, EachRegionSettingActivity.class));
-        });
+        findViewById(R.id.regions_setting_add_region_button).setOnClickListener(view -> startActivity(new Intent(this, EachRegionSettingActivity.class)));
 
         findViewById(R.id.regions_setting_change_default_region_button).setOnClickListener(view -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);

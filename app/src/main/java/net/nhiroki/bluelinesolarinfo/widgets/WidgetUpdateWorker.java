@@ -76,9 +76,7 @@ public class WidgetUpdateWorker extends Worker {
                     workManager.cancelWorkById(workInfo.getId());
                 }
             }
-        } catch (ExecutionException e) {
-            Log.e(WidgetUpdateWorker.class.getName(), "Failed to get scheduled widget update workers. Skipping cancelling existing ones.", e);
-        } catch (InterruptedException e) {
+        } catch (ExecutionException | InterruptedException e) {
             Log.e(WidgetUpdateWorker.class.getName(), "Failed to get scheduled widget update workers. Skipping cancelling existing ones.", e);
         }
 

@@ -24,11 +24,10 @@ import net.nhiroki.lib.bluelineastrolib.coordinates.LocationOnTheEarth;
 import net.nhiroki.lib.bluelineastrolib.logic.AstronomicalEventsCalculation;
 import net.nhiroki.lib.bluelineastrolib.tool.MoonTool;
 
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Date;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 public class SolarInfoTodayMedium {
@@ -68,25 +67,21 @@ public class SolarInfoTodayMedium {
 
         Locale locale = context.getResources().getConfiguration().getLocales().get(0);
         String dateFormat = DateFormat.getBestDateTimePattern(locale, "MMMdE");
-        remoteViews.setTextViewText(R.id.suninfo_widget_date, new SimpleDateFormat(dateFormat, locale).format(new Date(nowLocal.getYear() - 1900, nowLocal.getMonthValue() - 1, nowLocal.getDayOfMonth())));
+        remoteViews.setTextViewText(R.id.suninfo_widget_date, nowLocal.format(DateTimeFormatter.ofPattern(dateFormat, locale)));
         remoteViews.setTextViewText(R.id.suninfo_widget_location, region.getName());
 
         Sun sun = new Sun();
         try {
             Instant sunrise = AstronomicalEventsCalculation.calculateRiseWithin24h(sun, startOfDay, locationOnEarth, true, AstronomicalEventsCalculation.ReferencePoint.TOP);
             remoteViews.setTextViewText(R.id.suninfo_widget_sunrise, AppTimeFormat.instantToHmStringForEventTime(sunrise, localZone, timeFormat24Hours, locale));
-        } catch (AstronomicalPhenomenonComputationException e) {
-            remoteViews.setTextViewText(R.id.suninfo_widget_sunrise, context.getString(R.string.widget_error_string));
-        } catch (UnsupportedDateRangeException e) {
+        } catch (AstronomicalPhenomenonComputationException | UnsupportedDateRangeException e) {
             remoteViews.setTextViewText(R.id.suninfo_widget_sunrise, context.getString(R.string.widget_error_string));
         }
 
         try {
             Instant sunset = AstronomicalEventsCalculation.calculateSetWithin24h(sun, startOfDay, locationOnEarth, true, AstronomicalEventsCalculation.ReferencePoint.TOP);
             remoteViews.setTextViewText(R.id.suninfo_widget_sunset, AppTimeFormat.instantToHmStringForEventTime(sunset, localZone, timeFormat24Hours, locale));
-        } catch (AstronomicalPhenomenonComputationException e) {
-            remoteViews.setTextViewText(R.id.suninfo_widget_sunset, context.getString(R.string.widget_error_string));
-        } catch (UnsupportedDateRangeException e) {
+        } catch (AstronomicalPhenomenonComputationException | UnsupportedDateRangeException e) {
             remoteViews.setTextViewText(R.id.suninfo_widget_sunset, context.getString(R.string.widget_error_string));
         }
 
@@ -95,7 +90,7 @@ public class SolarInfoTodayMedium {
         try {
             Instant prevNewMoon = MoonTool.calculatePreviousTimeOfMoonPhase(midOfDay, 0.0);
             double daysAfterNewMoon = (midOfDay.toEpochMilli() - prevNewMoon.toEpochMilli()) / 86400000.0 - 0.0;
-            remoteViews.setTextViewText(R.id.suninfo_moon_days, String.format("%2.1f", daysAfterNewMoon));
+            remoteViews.setTextViewText(R.id.suninfo_moon_days, String.format(locale, "%2.1f", daysAfterNewMoon));
         } catch (AstronomicalPhenomenonComputationException e) {
             remoteViews.setTextViewText(R.id.suninfo_moon_days, context.getString(R.string.widget_error_string));
         }

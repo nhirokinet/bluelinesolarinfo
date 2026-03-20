@@ -86,7 +86,6 @@
     <string name="main_activity_solar_info_today_next_event_moonrise">Next moonrise:</string>
     <string name="main_activity_solar_info_today_next_event_moonset">Next moonset:</string>
 
-    <string name="main_activity_solar_info_now_hms_24h_format">%1$02d:%2$02d:%3$02d</string>
     <string name="main_activity_solar_info_now_localtime">Local time</string>
     <string name="main_activity_solar_info_now_mean_solar_time">Mean solar time</string>
     <string name="main_activity_solar_info_now_apparent_solar_time">Apparent solar time</string>
@@ -158,7 +157,6 @@
     <string name="config_widget_solar_info_today_title">Configure widget</string>
     <string name="config_widget_solar_info_today_region">Region</string>
     <string name="config_widget_solar_info_today_change_button">Change</string>
-    <string name="config_widget_solar_info_today_region_select_dialog_title">Select region for the widget</string>
     <string name="config_widget_solar_info_today_no_region">(No region)</string>
     <string name="config_widget_solar_info_today_warn_no_region_yet">No region added yet. You have to add at least one before adding a widget.</string>
     <string name="config_widget_solar_info_today_ok_button">OK</string>
