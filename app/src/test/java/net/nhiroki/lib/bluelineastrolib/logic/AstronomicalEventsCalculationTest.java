@@ -9,11 +9,12 @@ import org.junit.Test;
 import net.nhiroki.lib.bluelineastrolib.astronomical_objects.AstronomicalObject;
 import net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects.FixedStar;
 import net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects.Moon;
+import net.nhiroki.lib.bluelineastrolib.coordinates.HorizontalCoordinatesFromGround;
 import net.nhiroki.lib.bluelineastrolib.earth.Earth;
 import net.nhiroki.lib.bluelineastrolib.earth.TimePointOnTheEarth;
 import net.nhiroki.lib.bluelineastrolib.exceptions.AstronomicalPhenomenonComputationException;
 import net.nhiroki.lib.bluelineastrolib.exceptions.UnsupportedDateRangeException;
-import net.nhiroki.lib.bluelineastrolib.test_data.FixedStarsForTest;
+import net.nhiroki.lib.bluelineastrolib.test_data.AstronomicalObjectsForTest;
 import net.nhiroki.lib.bluelineastrolib.coordinates.LocationOnTheEarth;
 import net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects.Sun;
 import net.nhiroki.lib.bluelineastrolib.test_data.LocationsForTest;
@@ -68,6 +69,61 @@ public class AstronomicalEventsCalculationTest {
                 true, -Math.toRadians(Earth.ATMOSPHERIC_REFRACTION_AT_HORIZON_ARCSEC / 3600.0));
         assertEquals(1, sunsetListOnTestDay1.length);
         assertEquals(Instant.parse("2024-02-29T08:35:00Z").getEpochSecond(), sunsetListOnTestDay1[0].getEpochSecond(), 30.0);
+    }
+
+    @Test
+    public void checkSunInfoCalculatorLinearSearchConsistencyCheck() throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
+        // To check bisect after linear search, setting interval to 30 minutes. This also reduces time for test.
+        // This is different from actual expected usage.
+
+        for (AstronomicalObject astronomicalObject: AstronomicalObjectsForTest.listAstronomicalObjectsForTest()) {
+            for (LocationOnTheEarth locationOnTheEarth : LocationsForTest.listLocationsForTest()) {
+                for (Instant testDay = Instant.parse("2026-01-01T00:00:00Z"); testDay.isBefore(Instant.parse("2027-01-01T00:00:00Z")); testDay = testDay.plusSeconds(86400)) {
+                    Instant[] rises = AstronomicalEventsCalculation.calculateAllEvents(astronomicalObject, AstronomicalEventsCalculation.EventDirectionType.RISE,
+                            testDay, testDay.plusSeconds(86400), Duration.ofMinutes(30), Duration.ofMillis(200), locationOnTheEarth, true, AstronomicalEventsCalculation.ReferencePoint.TOP,
+                            true, -Math.toRadians(Earth.ATMOSPHERIC_REFRACTION_AT_HORIZON_ARCSEC / 3600.0));
+                    if (Math.abs(locationOnTheEarth.getLatitudeDeg()) < 60.0 && astronomicalObject instanceof Sun) {
+                        assertEquals(1, rises.length);
+                    }
+                    for (Instant rise: rises) {
+                        assertFalse(HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(astronomicalObject, rise.minusMillis(5000), locationOnTheEarth).isTopAboveHorizon());
+                        assertTrue(HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(astronomicalObject, rise.plusMillis(5000), locationOnTheEarth).isTopAboveHorizon());
+                    }
+
+                    Instant[] sets = AstronomicalEventsCalculation.calculateAllEvents(astronomicalObject, AstronomicalEventsCalculation.EventDirectionType.SET,
+                            testDay, testDay.plusSeconds(86400), Duration.ofMinutes(30), Duration.ofMillis(200), locationOnTheEarth, true, AstronomicalEventsCalculation.ReferencePoint.TOP,
+                            true, -Math.toRadians(Earth.ATMOSPHERIC_REFRACTION_AT_HORIZON_ARCSEC / 3600.0));
+                    if (Math.abs(locationOnTheEarth.getLatitudeDeg()) < 60.0 && astronomicalObject instanceof Sun) {
+                        assertEquals(1, sets.length);
+                    }
+                    for (Instant set: sets) {
+                        assertTrue(HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(astronomicalObject, set.minusMillis(5000), locationOnTheEarth).isTopAboveHorizon());
+                        assertFalse(HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(astronomicalObject, set.plusMillis(5000), locationOnTheEarth).isTopAboveHorizon());
+                    }
+
+                    Instant[] culminations = AstronomicalEventsCalculation.calculateAllEvents(astronomicalObject, AstronomicalEventsCalculation.EventDirectionType.CULMINATION,
+                            testDay, testDay.plusSeconds(86400), Duration.ofMinutes(30), Duration.ofMillis(200), locationOnTheEarth, true, AstronomicalEventsCalculation.ReferencePoint.TOP,
+                            true, -Math.toRadians(Earth.ATMOSPHERIC_REFRACTION_AT_HORIZON_ARCSEC / 3600.0));
+                    if (astronomicalObject instanceof Sun) {
+                        assertEquals(1, culminations.length);
+                    }
+                    for (Instant culmination: culminations) {
+                        double elevationDeg = Math.toDegrees(HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(astronomicalObject, culmination, locationOnTheEarth).getActualElevationRad());
+                        double azimuthDeg = HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(astronomicalObject, culmination, locationOnTheEarth).getAzimuthDeg();
+
+                        if (Math.abs(elevationDeg) < 80.0) {
+                            if (azimuthDeg < 90.0) {
+                                assertEquals(0.0, azimuthDeg, 15.0 / 3600.0);
+                            } else if (azimuthDeg < 270.0) {
+                                assertEquals(180.0, azimuthDeg, 15.0 / 3600.0);
+                            } else {
+                                assertEquals(360.0, azimuthDeg, 15.0 / 3600.0);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Test
@@ -278,7 +334,7 @@ public class AstronomicalEventsCalculationTest {
 
     @Test
     public void checkSiriusBehavior() throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
-        FixedStar sirius = FixedStarsForTest.getSirius();
+        FixedStar sirius = AstronomicalObjectsForTest.getSirius();
         LocationOnTheEarth placeToTest = LocationsForTest.getTokyoNAO();
 
         // 2026/02/01: Rise 16:28, Pass: 21:40:24, Set: 02:57
@@ -295,7 +351,7 @@ public class AstronomicalEventsCalculationTest {
 
     @Test
     public void checkPolarisBehavior() throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
-        FixedStar polaris = FixedStarsForTest.getPolaris();
+        FixedStar polaris = AstronomicalObjectsForTest.getPolaris();
         LocationOnTheEarth[] locations = new LocationOnTheEarth[] {
                 LocationsForTest.getTokyoNAO(),
                 LocationsForTest.getTopOfMtFuji(),
@@ -330,7 +386,7 @@ public class AstronomicalEventsCalculationTest {
 
     @Test
     public void checkNoCrashOrInfiniteLoopForBunchData() throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
-        for (AstronomicalObject astronomicalObject: FixedStarsForTest.listAstronomicalObjectsForTest()) {
+        for (AstronomicalObject astronomicalObject: AstronomicalObjectsForTest.listAstronomicalObjectsForTest()) {
             for (LocationOnTheEarth locationOnTheEarth: LocationsForTest.listLocationsForTest()) {
                 Instant t = Instant.parse("2026-01-01T00:00:00Z");
                 for (int i = 0; i < 5 * 365 * 4 / 3; ++i) {

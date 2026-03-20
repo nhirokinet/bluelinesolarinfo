@@ -609,7 +609,7 @@ public class MainActivity extends AppCompatActivity {
             }
             ((TextView) findViewById(R.id.main_view_solar_info_today_sun_culmination_time)).setText(AppTimeFormat.instantToHmStringForEventTime(sunculmination, zoneId, timeFormat24Hour, locale));
             if (sunculmination != null) {
-                HorizontalCoordinatesFromGround sunAppearance = HorizontalCoordinatesFromGround.ofAstronomicalObject(sun, sunculmination, locationOnTheEarth);
+                HorizontalCoordinatesFromGround sunAppearance = HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(sun, sunculmination, locationOnTheEarth);
                 if (sunAppearance.isTopAboveHorizon()) {
                     double sunAzimuthDeg = sunAppearance.getAzimuthDeg();
                     double sunElevationDeg = sunAppearance.calculateApparentElevationDeg();
@@ -738,7 +738,7 @@ public class MainActivity extends AppCompatActivity {
             }
             ((TextView) findViewById(R.id.main_view_solar_info_today_moon_culmination_time)).setText(AppTimeFormat.instantToHmStringForEventTime(moonculmination, zoneId, timeFormat24Hour, locale));
             if (moonculmination != null) {
-                HorizontalCoordinatesFromGround moonAppearance = HorizontalCoordinatesFromGround.ofAstronomicalObject(moon, moonculmination, locationOnTheEarth);
+                HorizontalCoordinatesFromGround moonAppearance = HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(moon, moonculmination, locationOnTheEarth);
 
                 if (moonAppearance.isTopAboveHorizon()) {
                     double moonAzimuthDeg = moonAppearance.getAzimuthDeg();
@@ -856,7 +856,7 @@ public class MainActivity extends AppCompatActivity {
             double localSideralTimeDeg = nowOnTheEarth.calculateSiderealTimeDeg(locationOnTheEarth.getLongitudeDeg());
             ((TextView) findViewById(R.id.main_view_solar_info_now_local_sidereal_time)).setText(AppTimeFormat.degTo24HStr(localSideralTimeDeg, locale));
 
-            HorizontalCoordinatesFromGround sunAppearance = HorizontalCoordinatesFromGround.ofAstronomicalObject(sun, now, locationOnTheEarth);
+            HorizontalCoordinatesFromGround sunAppearance = HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(sun, now, locationOnTheEarth);
             double sunAzimuthRad = sunAppearance.getAzimuthRad();
             if (Double.isNaN(sunAzimuthRad)) {
                 ((TextView) findViewById(R.id.main_view_solar_info_now_sun_azimuth)).setText(R.string.unit_angle_dm_invalid_3digits);
@@ -878,7 +878,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
-            HorizontalCoordinatesFromGround moonAppearance = HorizontalCoordinatesFromGround.ofAstronomicalObject(moon, now, locationOnTheEarth);
+            HorizontalCoordinatesFromGround moonAppearance = HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(moon, now, locationOnTheEarth);
             double moonAzimuthRad = moonAppearance.getAzimuthRad();
             if (Double.isNaN(moonAzimuthRad)) {
                 ((TextView) findViewById(R.id.main_view_solar_info_now_moon_azimuth)).setText(R.string.unit_angle_dm_invalid_3digits);

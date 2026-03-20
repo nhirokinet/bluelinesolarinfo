@@ -324,19 +324,20 @@ public class AstronomicalEventsCalculation {
                         Instant hi = now;
                         Instant lo = prevTime;
                         double loHourAngle = prevHourAngle;
+                        loHourAngle -= Math.floor(loHourAngle / 2.0 / Math.PI) * 2.0 * Math.PI;
 
-                        while (Math.abs(Duration.between(lo, hi).toNanos()) < twicePrevisionInNanos) {
+                        while (Math.abs(Duration.between(lo, hi).toNanos()) > twicePrevisionInNanos) {
                             final Instant mid = lo.plus(Duration.between(lo, hi).dividedBy(2));
                             CelestialCoordinatesWithRightAscension midCelestialCoordinatesWithRightAscension = astronomicalObject.calculateCelestialCoordinates(mid);
                             double midHourAngle = CelestialCoordinatesWithHourAngle.fromCelestialCoordinatesWithRightAscension(midCelestialCoordinatesWithRightAscension, new TimePointOnTheEarth(mid), locationOnTheEarth).getHourAngleRad();
-                            midHourAngle -= Math.floor(hourAngle / 2.0 / Math.PI) * 2.0 * Math.PI;
+                            midHourAngle -= Math.floor(midHourAngle / 2.0 / Math.PI) * 2.0 * Math.PI;
 
                             if ((midHourAngle <= Math.PI && loHourAngle > Math.PI) ||
                                     (midHourAngle > Math.PI && loHourAngle <= Math.PI)) {
                                 hi = mid;
                             } else {
                                 lo = mid;
-                                loHourAngle = hourAngle;
+                                loHourAngle = midHourAngle;
                             }
                         }
 
@@ -377,9 +378,9 @@ public class AstronomicalEventsCalculation {
                         Instant hi = now;
                         Instant lo = prevTime;
 
-                        while (Math.abs(Duration.between(lo, hi).toNanos()) < twicePrevisionInNanos) {
+                        while (Math.abs(Duration.between(lo, hi).toNanos()) > twicePrevisionInNanos) {
                             final Instant mid = lo.plus(Duration.between(lo, hi).dividedBy(2));
-                            final double midJudgeHeight = (calculateHeightRad(start, locationOnTheEarth, astronomicalObject) - calculateActualCenterHeightRad(start, heightMeter, astronomicalObject, posReference, considerEquatorialHorizontalParallax, heightStandardRad)) * signOfDirection;
+                            final double midJudgeHeight = (calculateHeightRad(mid, locationOnTheEarth, astronomicalObject) - calculateActualCenterHeightRad(mid, heightMeter, astronomicalObject, posReference, considerEquatorialHorizontalParallax, heightStandardRad)) * signOfDirection;
 
                             if (midJudgeHeight < 0.0) {
                                 lo = mid;
