@@ -83,7 +83,7 @@ public class MainActivityTest {
     @Test
     public void testLaunch20260101() throws InterruptedException {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MainActivity.class);
-        intent.putExtra(MainActivity.EXTRA_TARGET_TIME_UNIX_MILLISEC, 1767236400000l);  // 2026/01/01 12:00 JST
+        intent.putExtra(MainActivity.EXTRA_TARGET_TIME_UNIX_MILLISEC, 1767236400000L);  // 2026/01/01 12:00 JST
         ActivityScenario<MainActivity> activity = ActivityScenario.launch(intent);
         Thread.sleep(2000);
 
@@ -148,7 +148,7 @@ public class MainActivityTest {
         Locale.setDefault(new Locale("ja", "JP"));
 
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MainActivity.class);
-        intent.putExtra(MainActivity.EXTRA_TARGET_TIME_UNIX_MILLISEC, 1767236400000l);  // 2026/01/01 12:00 JST
+        intent.putExtra(MainActivity.EXTRA_TARGET_TIME_UNIX_MILLISEC, 1767236400000L);  // 2026/01/01 12:00 JST
         ActivityScenario<MainActivity> activity = ActivityScenario.launch(intent);
         Thread.sleep(2000);
 
@@ -191,7 +191,7 @@ public class MainActivityTest {
         dataStore.setDefaultRegion(dataStore.getRegionById(northPoleID));
 
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MainActivity.class);
-        intent.putExtra(MainActivity.EXTRA_TARGET_TIME_UNIX_MILLISEC, 1767236400000l);  // 2026/01/01 03:00 UTC
+        intent.putExtra(MainActivity.EXTRA_TARGET_TIME_UNIX_MILLISEC, 1767236400000L);  // 2026/01/01 03:00 UTC
         ActivityScenario<MainActivity> activity = ActivityScenario.launch(intent);
         Thread.sleep(2000);
 
@@ -216,7 +216,7 @@ public class MainActivityTest {
         dataStore.setDefaultRegion(dataStore.getRegionById(northPoleID));
 
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MainActivity.class);
-        intent.putExtra(MainActivity.EXTRA_TARGET_TIME_UNIX_MILLISEC, 1777604400000l);  // 2026/05/01 03:00 UTC
+        intent.putExtra(MainActivity.EXTRA_TARGET_TIME_UNIX_MILLISEC, 1777604400000L);  // 2026/05/01 03:00 UTC
         ActivityScenario<MainActivity> activity = ActivityScenario.launch(intent);
         Thread.sleep(2000);
 

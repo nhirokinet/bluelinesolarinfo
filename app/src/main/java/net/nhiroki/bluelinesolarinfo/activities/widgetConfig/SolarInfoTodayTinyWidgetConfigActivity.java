@@ -74,7 +74,7 @@ public class SolarInfoTodayTinyWidgetConfigActivity extends AppCompatActivity {
         findViewById(R.id.config_widget_solar_info_today_warn_no_region_yet).setVisibility(View.GONE);
         if (this.selectedRegion == null) {
             List<RegionOnTheEarth> regionOnTheEarthList = DataStore.getInstance(SolarInfoTodayTinyWidgetConfigActivity.this.getApplicationContext()).getRegions();
-            if (regionOnTheEarthList.size() > 0) {
+            if (!regionOnTheEarthList.isEmpty()) {
                 this.selectedRegion = regionOnTheEarthList.get(0);
             }
         }
@@ -84,7 +84,7 @@ public class SolarInfoTodayTinyWidgetConfigActivity extends AppCompatActivity {
 
     private void refreshDisplay() {
         List<RegionOnTheEarth> regionOnTheEarthList = DataStore.getInstance(SolarInfoTodayTinyWidgetConfigActivity.this.getApplicationContext()).getRegions();
-        if (regionOnTheEarthList.size() > 0) {
+        if (!regionOnTheEarthList.isEmpty()) {
             findViewById(R.id.config_widget_solar_info_today_warn_no_region_yet).setVisibility(View.GONE);
         } else {
             findViewById(R.id.config_widget_solar_info_today_warn_no_region_yet).setVisibility(View.VISIBLE);

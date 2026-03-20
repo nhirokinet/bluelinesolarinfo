@@ -46,7 +46,7 @@ public class MoonToolTest {
                 }
                 t = t.plusSeconds(21600 + 86400 * 5);
             }
-            t = t.plusSeconds( 86400l * 365l * 2000l);
+            t = t.plusSeconds(86400L * 365L * 2000L);
         }
         assertEquals("+19994-12-16T18:00:00Z", t.toString());
     }

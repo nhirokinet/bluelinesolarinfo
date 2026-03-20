@@ -76,7 +76,7 @@ public class TimePointOnTheEarth {
     /**
      * Calculate the sidereal time and return it in radians.
      * Specify 0 for Greenwich sidereal time.
-     *
+     * <p>
      * This function has error of about 1.3s in 2000-2100 with the sum of:
      * - Formula itself has an error of max error 0.432 sec, RMS error 0.001512 sec, in 2000-2100
      * - This formula handles UTC derived from Instant as the same as UT1. As long as UTC is kept within difference of 0.9s from UT1, this would cause an error of about 0.9s.
@@ -91,7 +91,7 @@ public class TimePointOnTheEarth {
     /**
      * Calculate the sidereal time and return it in degrees.
      * Specify 0 for Greenwich sidereal time.
-     *
+     * <p>
      * This function has error of about 1.3s in 2000-2100 with the sum of:
      * - Formula itself has an error of max error 0.432 sec, RMS error 0.001512 sec, in 2000-2100
      * - This formula handles UTC derived from Instant as the same as UT1. As long as UTC is kept within difference of 0.9s from UT1, this would cause an error of about 0.9s.

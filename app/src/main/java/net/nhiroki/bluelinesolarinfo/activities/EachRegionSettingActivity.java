@@ -51,7 +51,7 @@ public class EachRegionSettingActivity extends AppCompatActivity {
 
         findViewById(R.id.each_region_setting_save_region_button).setOnClickListener(view -> {
             String regionName = ((TextView)findViewById(R.id.each_region_setting_region_name_edit_text)).getText().toString();
-            if (regionName.length() == 0) {
+            if (regionName.isEmpty()) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(EachRegionSettingActivity.this);
                 builder.setTitle(getString(R.string.each_region_activity_error_dialog_title));
                 builder.setMessage(getString(R.string.each_region_activity_error_dialog_message_name_empty));
@@ -195,7 +195,7 @@ public class EachRegionSettingActivity extends AppCompatActivity {
             ((TextView)findViewById(R.id.each_region_setting_elevation_edit_text)).setText("0");
             ((TextView)findViewById(R.id.each_region_setting_timezone_text_view)).setText(ZoneId.systemDefault().toString());
             ((TextView)findViewById(R.id.each_region_setting_timezone_human_view)).setText(ZoneId.systemDefault().getDisplayName(TextStyle.FULL_STANDALONE, getResources().getConfiguration().getLocales().get(0)));
-            ((CheckBox)findViewById(R.id.each_region_setting_default_region_checkbox)).setChecked(DataStore.getInstance(getApplicationContext()).getRegions().size() == 0);
+            ((CheckBox)findViewById(R.id.each_region_setting_default_region_checkbox)).setChecked(DataStore.getInstance(getApplicationContext()).getRegions().isEmpty());
         }
     }
 }

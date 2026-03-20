@@ -66,7 +66,7 @@ public class SolarInfoTodayTiny {
         ZonedDateTime dayMidLocal = nowLocal.withHour(12).withMinute(0).withSecond(0).withNano(0);
         Instant midOfDay = dayMidLocal.toInstant();
 
-        Locale locale = context.getResources().getConfiguration().locale;
+        Locale locale = context.getResources().getConfiguration().getLocales().get(0);
         String dateFormat = DateFormat.getBestDateTimePattern(locale, "Md");
         remoteViews.setTextViewText(R.id.suninfo_widget_date, new SimpleDateFormat(dateFormat, locale).format(new Date(nowLocal.getYear() - 1900, nowLocal.getMonthValue() - 1, nowLocal.getDayOfMonth())));
 
@@ -109,7 +109,7 @@ public class SolarInfoTodayTiny {
         } else {
             primaryColor = typedValue.data;
         }
-        // Must keep the same as in layout xml
+        // Must keep the same as in layout XML
         int moonBitmapSizeInPx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, context.getResources().getDisplayMetrics());
         Bitmap moonBitmap = MoonPhaseRenderer.generateBitmapOfSingleColorMoonPhase(moonBitmapSizeInPx, primaryColor, moonPhaseDeg);
         remoteViews.setImageViewBitmap(R.id.suninfo_moon_phase_bitmap, moonBitmap);

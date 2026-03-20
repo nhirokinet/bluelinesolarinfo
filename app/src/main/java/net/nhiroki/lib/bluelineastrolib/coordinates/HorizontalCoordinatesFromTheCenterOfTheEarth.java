@@ -10,8 +10,8 @@ import net.nhiroki.lib.bluelineastrolib.exceptions.UnsupportedDateRangeException
 import java.time.Instant;
 
 public class HorizontalCoordinatesFromTheCenterOfTheEarth {
-    private double azimuthRad;
-    private double elevationRad;
+    private final double azimuthRad;
+    private final double elevationRad;
 
     private HorizontalCoordinatesFromTheCenterOfTheEarth(double azimuthRad, double elevationRad) {
         this.azimuthRad = azimuthRad;

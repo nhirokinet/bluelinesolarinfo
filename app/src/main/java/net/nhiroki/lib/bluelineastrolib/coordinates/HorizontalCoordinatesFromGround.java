@@ -8,11 +8,11 @@ import net.nhiroki.lib.bluelineastrolib.exceptions.UnsupportedDateRangeException
 import java.time.Instant;
 
 public class HorizontalCoordinatesFromGround {
-    AstronomicalObject astronomicalObject;
-    Instant time;
-    LocationOnTheEarth locationOnTheEarth;
-    private double azimuthRad;
-    private double actualElevationRad;
+    private final AstronomicalObject astronomicalObject;
+    private final Instant time;
+    private final LocationOnTheEarth locationOnTheEarth;
+    private final double azimuthRad;
+    private final double actualElevationRad;
 
     private HorizontalCoordinatesFromGround(AstronomicalObject astronomicalObject, Instant time, LocationOnTheEarth locationOnTheEarth, double azimuthRad, double actualElevationRad) {
         this.astronomicalObject = astronomicalObject;

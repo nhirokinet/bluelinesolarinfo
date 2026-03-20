@@ -5,10 +5,10 @@ import net.nhiroki.lib.bluelineastrolib.coordinates.LocationOnTheEarth;
 import java.time.ZoneId;
 
 public class RegionOnTheEarth {
-    private long id;
-    private String name;
-    private ZoneId zoneId;
-    private LocationOnTheEarth locationOnTheEarth;
+    private final long id;
+    private final String name;
+    private final ZoneId zoneId;
+    private final LocationOnTheEarth locationOnTheEarth;
 
     public RegionOnTheEarth(long id, String name, ZoneId zoneId, LocationOnTheEarth locationOnTheEarth) {
         this.id = id;

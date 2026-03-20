@@ -38,7 +38,7 @@ public class SunTool {
             long estimatedMilliSecondsAfter = (long)(diff / 360.0 * 365.25 * 86400000.0);
             now = now.plusMillis(estimatedMilliSecondsAfter);
 
-            if (Math.abs(estimatedMilliSecondsAfter) < 1000l) {
+            if (Math.abs(estimatedMilliSecondsAfter) < 1000L) {
                 return now;
             }
         }
