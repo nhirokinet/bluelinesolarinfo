@@ -50,7 +50,7 @@
 
     <string name="main_activity_today_format">%1$s (today)</string>
     <string name="main_activity_current_location">Current location</string>
-    <string name="main_activity_message_location_fetching">Positioning...</string>
+    <string name="main_activity_message_location_fetching">Positioning…</string>
     <string name="main_activity_message_location_fetch_error">Failed to get the current location</string>
     <string name="main_activity_message_error_permission_location_fetch">App has no permission to get the current position</string>
     <string name="main_activity_location_coordinates_format">%1$s %2$s %3$s %4$s</string>
