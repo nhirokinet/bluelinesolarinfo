@@ -26,7 +26,7 @@ public class Sun implements AstronomicalObject {
     @Override
     public CelestialCoordinatesWithRightAscension calculateCelestialCoordinates(Instant t) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
         double eclipticTiltRad = Earth.calculateEclipticTiltRad(t);
-        return CelestialCoordinatesWithRightAscension.fromEclipticWithLatitudeZero(this.calculateEclipticLongitudeRad(t), eclipticTiltRad);
+        return CelestialCoordinatesWithRightAscension.fromEclipticLongitudeWithLatitudeZero(this.calculateEclipticLongitudeRad(t), eclipticTiltRad);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class Sun implements AstronomicalObject {
         return EclipticCoordinates.ofRadians(this.calculateEclipticLongitudeRad(t), 0.0);
     }
 
-    public double calculateEquationOfTimeInSeconds(Instant t) throws UnsupportedDateRangeException, AstronomicalPhenomenonComputationException {
+    public double calculateEquationOfTimeSec(Instant t) throws UnsupportedDateRangeException, AstronomicalPhenomenonComputationException {
         // https://aa.usno.navy.mil/faq/sun_approx as of 2026/03/02
         double D = new TimePointOnTheEarth(t).julianYearFromJ2000_0() * 365.25;
         double q = 280.459 + 0.98564736 * D;
@@ -69,7 +69,7 @@ public class Sun implements AstronomicalObject {
         return this.calculateDistanceFromTheEarthAU(t) * Sun.AU_IN_KM;
     }
 
-    private double calculateDistanceFromTheEarthAU(Instant t) {
+    public double calculateDistanceFromTheEarthAU(Instant t) {
         // https://aa.usno.navy.mil/faq/sun_approx as of 2024/02/29
         // Almost the same formula is found in https://en.wikipedia.org/wiki/Position_of_the_Sun , with 357.528 + 0.9856003n to calculate g
         // Both pages uses distance to the Sun to calculate the longitude of the Sun.

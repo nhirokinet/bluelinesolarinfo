@@ -80,6 +80,7 @@ public class MoonTest {
     public void calculateDistanceFromTheEarthTest() {
         Moon moon = new Moon();
         Instant t = Instant.parse("2026-01-01T00:00:00Z");
+        assertEquals(385000.0, moon.calculateDistanceFromTheEarthAU(t) * 149597870.7, 25000.0);
         assertEquals(385000.0, moon.calculateDistanceFromTheEarthKM(t), 25000.0);
     }
 

@@ -92,7 +92,7 @@ public class SolarInfoTodayTiny {
         double moonPhaseDeg = MoonTool.calculateMoonPhaseDeg(midOfDay);
 
         try {
-            Instant prevNewMoon = MoonTool.calculatePreviousTimeOfMoonPhaseByDeg(midOfDay, 0.0);
+            Instant prevNewMoon = MoonTool.calculatePreviousTimeOfMoonPhase(midOfDay, 0.0);
             double daysAfterNewMoon = (midOfDay.toEpochMilli() - prevNewMoon.toEpochMilli()) / 86400000.0 - 0.0;
             remoteViews.setTextViewText(R.id.suninfo_moon_days, String.format("%2.1f", daysAfterNewMoon));
         } catch (AstronomicalPhenomenonComputationException e) {

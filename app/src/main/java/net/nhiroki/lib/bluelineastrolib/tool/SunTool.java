@@ -6,7 +6,7 @@ import net.nhiroki.lib.bluelineastrolib.exceptions.AstronomicalPhenomenonComputa
 import java.time.Instant;
 
 public class SunTool {
-    public static Instant calculateNextTimeOfEclipticLongitudeDeg(Instant from, double eclipticLongitudeDeg) throws AstronomicalPhenomenonComputationException {
+    public static Instant calculateNextTimeOfEclipticLongitude(Instant from, double eclipticLongitudeDeg) throws AstronomicalPhenomenonComputationException {
         Sun sun = new Sun();
 
         Instant now = from;

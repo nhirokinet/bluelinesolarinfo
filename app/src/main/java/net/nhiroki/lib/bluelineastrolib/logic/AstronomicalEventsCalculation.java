@@ -28,7 +28,7 @@ public class AstronomicalEventsCalculation {
         CelestialCoordinatesWithRightAscension celestialCoordinatesWithRightAscension = astronomicalObject.calculateCelestialCoordinates(time);
         CelestialCoordinatesWithHourAngle celestialCoordinatesWithHourAngle = CelestialCoordinatesWithHourAngle.fromCelestialCoordinatesWithRightAscension(celestialCoordinatesWithRightAscension, new TimePointOnTheEarth(time), locationOnTheEarth);
 
-        return HorizontalCoordinatesFromTheCenterOfTheEarth.fromCelestialCoordinatesAndLatitudeRad(celestialCoordinatesWithHourAngle, locationOnTheEarth.getLatitudeRad()).getAzimuthRad();
+        return HorizontalCoordinatesFromTheCenterOfTheEarth.fromCelestialCoordinatesAndLocation(celestialCoordinatesWithHourAngle, locationOnTheEarth).getAzimuthRad();
     }
 
     // Should be moved to another class
@@ -37,7 +37,7 @@ public class AstronomicalEventsCalculation {
         CelestialCoordinatesWithRightAscension celestialCoordinatesWithRightAscension = astronomicalObject.calculateCelestialCoordinates(time);
         CelestialCoordinatesWithHourAngle celestialCoordinatesWithHourAngle = CelestialCoordinatesWithHourAngle.fromCelestialCoordinatesWithRightAscension(celestialCoordinatesWithRightAscension, new TimePointOnTheEarth(time), locationOnTheEarth);
 
-        double ret = HorizontalCoordinatesFromTheCenterOfTheEarth.fromCelestialCoordinatesAndLatitudeRad(celestialCoordinatesWithHourAngle, locationOnTheEarth.getLatitudeRad()).getElevationRad();
+        double ret = HorizontalCoordinatesFromTheCenterOfTheEarth.fromCelestialCoordinatesAndLocation(celestialCoordinatesWithHourAngle, locationOnTheEarth).getElevationRad();
         if (viewPoint == ViewPoint.GROUND) {
             if (Math.abs(ret) < Math.PI * 0.4999999) {
                 ret = Math.atan(Math.tan(ret) - Math.tan(astronomicalObject.calculateEquatorialHorizontalParallaxRad(time)) / Math.cos(ret));
@@ -49,7 +49,7 @@ public class AstronomicalEventsCalculation {
         return ret;
     }
 
-    // Should be moved to another class
+    // Interface should be reconsidered
     public static double calculateThresholdElevationRadForRiseSet(AstronomicalObject astronomicalObject, Instant time,
                                                                   LocationOnTheEarth locationOnTheEarth, boolean horizonByElevation,
                                                                   ReferencePoint referencePoint) throws UnsupportedDateRangeException, AstronomicalPhenomenonComputationException {
@@ -64,7 +64,7 @@ public class AstronomicalEventsCalculation {
         }
 
         double heightMeter = horizonByElevation ? locationOnTheEarth.getElevationMeters() : 0.0;
-        return calculateActualCenterHeightRad(time, heightMeter, astronomicalObject, posReference, true,  -Math.toRadians(Earth.ATMOSPHERIC_REFRACTION_AT_HORIZON_DEC_SEC / 3600.0));
+        return calculateActualCenterHeightRad(time, heightMeter, astronomicalObject, posReference, true,  -Math.toRadians(Earth.ATMOSPHERIC_REFRACTION_AT_HORIZON_ARCSEC / 3600.0));
     }
 
     // Interface should be reconsidered
@@ -72,7 +72,7 @@ public class AstronomicalEventsCalculation {
                                                  LocationOnTheEarth locationOnTheEarth, boolean horizonByElevation,
                                                  ReferencePoint referencePoint) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
         return calculateEventWithin24h(astronomicalObject, EventDirectionType.RISE, start, locationOnTheEarth, horizonByElevation, referencePoint,
-                true, -Math.toRadians(Earth.ATMOSPHERIC_REFRACTION_AT_HORIZON_DEC_SEC / 3600.0)
+                true, -Math.toRadians(Earth.ATMOSPHERIC_REFRACTION_AT_HORIZON_ARCSEC / 3600.0)
         );
     }
 
@@ -81,7 +81,7 @@ public class AstronomicalEventsCalculation {
                                                 LocationOnTheEarth locationOnTheEarth, boolean horizonByElevation,
                                                 ReferencePoint referencePoint) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
         return calculateEventWithin24h(astronomicalObject, EventDirectionType.SET, start, locationOnTheEarth, horizonByElevation, referencePoint,
-                true, -Math.toRadians(Earth.ATMOSPHERIC_REFRACTION_AT_HORIZON_DEC_SEC / 3600.0)
+                true, -Math.toRadians(Earth.ATMOSPHERIC_REFRACTION_AT_HORIZON_ARCSEC / 3600.0)
         );
     }
 
@@ -218,7 +218,7 @@ public class AstronomicalEventsCalculation {
                 // it would show a little bit within the change of declination, and go back again soon (rise and set soon or set and rise soon).
                 //
                 // This function assumes that @astronomicalObject does not move so dramatically in the equatorial coordinate system.
-                // Therefore returning as this does not happen, rather than going to slow path.
+                // Therefore, returning as this does not happen, rather than going to slow path.
                 // Caller must use other functions like calculateAllEvents if this would be a problem.
                 return null;
             }
@@ -283,7 +283,7 @@ public class AstronomicalEventsCalculation {
      * @param start Start point of calculation
      * @param end End point of calculation
      * @param interval Interval of calculation. If the object shows/hides only less than this interval, the event may be ignored.
-     * @param precision Expected precision of calculation. If the expected error is less than precision, calculation is finished.
+     * @param precision Expected precision of calculation. When the expected error is less than precision, calculation is finished.
      * @param locationOnTheEarth Target location
      * @param horizonByElevation If set true, horizon is a bit below the horizontal 0 degrees, with considering horizontal of @locationOnTheEarth .
      * @param referencePoint Which point (top/center/bottom) of the @astronomicalObject should be the reference
@@ -420,6 +420,6 @@ public class AstronomicalEventsCalculation {
     private static double calculateHeightRad(Instant now, LocationOnTheEarth loc, AstronomicalObject astronomicalObject) throws UnsupportedDateRangeException, AstronomicalPhenomenonComputationException {
         CelestialCoordinatesWithRightAscension celestialCoordinatesWithRightAscension = astronomicalObject.calculateCelestialCoordinates(now);
         CelestialCoordinatesWithHourAngle celestialCoordinatesWithHourAngle = CelestialCoordinatesWithHourAngle.fromCelestialCoordinatesWithRightAscension(celestialCoordinatesWithRightAscension, new TimePointOnTheEarth(now), loc);
-        return HorizontalCoordinatesFromTheCenterOfTheEarth.fromCelestialCoordinatesAndLatitudeRad(celestialCoordinatesWithHourAngle, loc.getLatitudeRad()).getElevationRad();
+        return HorizontalCoordinatesFromTheCenterOfTheEarth.fromCelestialCoordinatesAndLocation(celestialCoordinatesWithHourAngle, loc).getElevationRad();
     }
 }
