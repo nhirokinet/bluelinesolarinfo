@@ -148,12 +148,9 @@ public class EachRegionSettingActivity extends AppCompatActivity {
                 tzList[i] = zoneId.getId();
             }
 
-            DialogInterface.OnClickListener itemListener = new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    ((TextView)EachRegionSettingActivity.this.findViewById(R.id.each_region_setting_timezone_text_view)).setText(tzList[which]);
-                    ((TextView)EachRegionSettingActivity.this.findViewById(R.id.each_region_setting_timezone_human_view)).setText(ZoneId.of(tzList[which]).getDisplayName(TextStyle.FULL_STANDALONE, getResources().getConfiguration().getLocales().get(0)));
-                }
+            DialogInterface.OnClickListener itemListener = (dialog, which) -> {
+                ((TextView)EachRegionSettingActivity.this.findViewById(R.id.each_region_setting_timezone_text_view)).setText(tzList[which]);
+                ((TextView)EachRegionSettingActivity.this.findViewById(R.id.each_region_setting_timezone_human_view)).setText(ZoneId.of(tzList[which]).getDisplayName(TextStyle.FULL_STANDALONE, getResources().getConfiguration().getLocales().get(0)));
             };
             AlertDialog.Builder builder = new AlertDialog.Builder(EachRegionSettingActivity.this);
             builder.setTitle(getString(R.string.each_region_activity_dialog_timezone_select_title));
@@ -176,6 +173,8 @@ public class EachRegionSettingActivity extends AppCompatActivity {
             RegionOnTheEarth region = DataStore.getInstance(getApplicationContext()).getRegionById(regionId);
             ((TextView)findViewById(R.id.each_region_setting_region_name_edit_text)).setText(region.getName());
             LocationOnTheEarth locationOnTheEarth = region.getLocationOnTheEarth();
+            // Note: when I tried with French setting, which uses comma for separation like "1,23", EditText with android:inputType="numberDecimal|numberSigned" even did not accept input of comma.
+            // Thus, here, periods should be used in any languages.
             ((TextView)findViewById(R.id.each_region_setting_longitude_edit_text)).setText(Double.toString(locationOnTheEarth.getLongitudeDeg()));
             ((TextView)findViewById(R.id.each_region_setting_latitude_edit_text)).setText(Double.toString(locationOnTheEarth.getLatitudeDeg()));
             ((TextView)findViewById(R.id.each_region_setting_elevation_edit_text)).setText(Double.toString(locationOnTheEarth.getElevationMeters()));

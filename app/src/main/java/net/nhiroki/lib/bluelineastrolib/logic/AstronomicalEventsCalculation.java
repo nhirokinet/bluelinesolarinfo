@@ -245,7 +245,7 @@ public class AstronomicalEventsCalculation {
             }
 
             if (estimateNext.isBefore(end) && estimatePrev.isAfter(start)) {
-                if (Duration.between(estimatePrev, estimateAtStartOfThisLoop).compareTo(Duration.between(estimateAtStartOfThisLoop, estimateNext)) == -1) {
+                if (Duration.between(estimatePrev, estimateAtStartOfThisLoop).compareTo(Duration.between(estimateAtStartOfThisLoop, estimateNext)) < 0) {
                     estimate = estimatePrev;
                 } else {
                     estimate = estimateNext;

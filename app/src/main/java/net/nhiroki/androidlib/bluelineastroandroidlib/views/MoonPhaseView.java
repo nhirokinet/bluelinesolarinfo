@@ -18,6 +18,9 @@ public class MoonPhaseView extends View {
 
     private final int circlePaintAlpha = 50;
 
+    // Preallocate Paint objects for better performance
+    private final Paint paint = new Paint((Paint.ANTI_ALIAS_FLAG));
+    private final Paint backgroundPaint = new Paint((Paint.ANTI_ALIAS_FLAG));
 
     public MoonPhaseView(Context context) {
         super(context);
@@ -62,10 +65,8 @@ public class MoonPhaseView extends View {
 
         int primaryColor = this.calculatePaintedColor();
 
-        Paint paint = new Paint((Paint.ANTI_ALIAS_FLAG));
         paint.setColor(primaryColor);
         paint.setStyle(Paint.Style.FILL);
-        Paint backgroundPaint = new Paint((Paint.ANTI_ALIAS_FLAG));
         backgroundPaint.setColor(primaryColor);
         backgroundPaint.setAlpha(circlePaintAlpha);
         backgroundPaint.setStyle(Paint.Style.FILL);
