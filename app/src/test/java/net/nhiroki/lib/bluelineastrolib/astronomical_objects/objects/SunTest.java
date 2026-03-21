@@ -87,6 +87,8 @@ public class SunTest {
     public void eclipticLongitudeCompareWithSuirobuKubo1980() {
         Sun sun = new Sun();
 
+        // Formula by Suirobu Kubo 1980 is described as it is expected to retain precision for 1970-2030, so this check goes fat beyond than that.
+        // But just this test passed. Leaving this test to have one record about how these two functions matches.
         Instant t = Instant.parse("1980-01-01T00:00:00Z");
         for (int i = 0; i < 365 * 24 * 70; ++i) {
             double diff = sun.calculateEclipticCoordinates(t).getLongitudeDeg() - calculateEclipticLongitudeDegBySuirobuKubo1980(t);
@@ -96,19 +98,35 @@ public class SunTest {
             t = t.plusSeconds(3600);
         }
         assertEquals("2049-12-14T00:00:00Z", t.toString());
+        for (int i = 0; i < 365 * 24 * 151; ++i) {
+            double diff = sun.calculateEclipticCoordinates(t).getLongitudeDeg() - calculateEclipticLongitudeDegBySuirobuKubo1980(t);
+            diff -= Math.floor((diff + 180.0) / 360.0) * 360.0;
+            assertEquals(0.0, diff, 1.2 / 60.0);
+
+            t = t.plusSeconds(3600);
+        }
+        assertEquals("2200-11-08T00:00:00Z", t.toString());
     }
 
     @Test
     public void distanceFromEarthAUCompareWithSuirobuKubo1980() {
         Sun sun = new Sun();
 
+        // Formula by Suirobu Kubo 1980 is described as it is expected to retain precision for 1970-2030, so this check goes fat beyond than that.
+        // But just this test passed. Leaving this test to have one record about how these two functions matches.
         Instant t = Instant.parse("1980-01-01T00:00:00Z");
         for (int i = 0; i < 365 * 24 * 70; ++i) {
-            assertEquals(calculateDistanceFromTheEarthAUBySuirobuKubo1980(t), sun.calculateDistanceFromTheEarthAU(t), 2e-4);
+            assertEquals(calculateDistanceFromTheEarthAUBySuirobuKubo1980(t), sun.calculateDistanceFromTheEarthAU(t), 9e-5);
 
             t = t.plusSeconds(3600);
         }
         assertEquals("2049-12-14T00:00:00Z", t.toString());
+        for (int i = 0; i < 365 * 24 * 151; ++i) {
+            assertEquals(calculateDistanceFromTheEarthAUBySuirobuKubo1980(t), sun.calculateDistanceFromTheEarthAU(t), 1.5e-4);
+
+            t = t.plusSeconds(3600);
+        }
+        assertEquals("2200-11-08T00:00:00Z", t.toString());
     }
 
     @Test

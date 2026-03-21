@@ -72,6 +72,7 @@ public class Sun implements AstronomicalObject {
     public double calculateDistanceFromTheEarthAU(Instant t) {
         // https://aa.usno.navy.mil/faq/sun_approx as of 2024/02/29
         // Almost the same formula is found in https://en.wikipedia.org/wiki/Position_of_the_Sun , with 357.528 + 0.9856003n to calculate g
+        // The Wikipedia page describes that the formula is from the Astronomical Almanac.
         // Both pages uses distance to the Sun to calculate the longitude of the Sun.
         // Looks like both pages does not mention precision about this formula itself, but US Navy page mentions the precision of the longitude calculated in 1800-2200, and the Wikipedia for 1950-2050.
         double D = new TimePointOnTheEarth(t).julianYearFromJ2000_0() * 365.25;
@@ -87,6 +88,7 @@ public class Sun implements AstronomicalObject {
     private double calculateEclipticLongitudeDeg (Instant t) {
         // https://aa.usno.navy.mil/faq/sun_approx as of 2024/02/29
         // About precision, the page links to the file: https://aa.usno.navy.mil/graphics/sun_lonlat.pdf
+        // The Wikipedia page describes that the formula is from the Astronomical Almanac.
         // Which looks like we can expect precision of roughly 30 arcsecs in 1950-2050, and roughly 50 arcsecs in 1800-2200 (both peak error is a little larger).
         //
         // Almost the same formula is found in https://en.wikipedia.org/wiki/Position_of_the_Sun , except that 0.9856474 instead of 0.98564736 is used to calculate q, 357.528 + 0.9856003n to calculate g
