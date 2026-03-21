@@ -389,7 +389,8 @@ public class AstronomicalEventsCalculationTest {
 
     @Test
     public void checkFutureBehaviorTokyoSun() throws UnsupportedDateRangeException, AstronomicalPhenomenonComputationException {
-        // Asia/Tokyo has +09:18:59 before 1888.
+        // In tz database, Asia/Tokyo is registered as +09:18:59 before 1888. Looks like similar records exist for other cities even outside Japan.
+        // https://www.m3tech.blog/entry/timezone-091859
         // This function tests that the sunrise time in Local time is similar to 2026, so zoneId should be written as UTC+9 explicitly.
         ZoneId tokyoZoneId = ZoneId.ofOffset("UTC", ZoneOffset.ofHours(9));
         Sun sun = new Sun();
