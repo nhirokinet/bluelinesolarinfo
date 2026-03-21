@@ -16,6 +16,49 @@ import java.time.Instant;
 
 public class HorizontalCoordinatesFromGroundTest {
     @Test
+    public void testCalculateApparentElevationDeg() throws UnsupportedDateRangeException, AstronomicalPhenomenonComputationException {
+        {
+            // https://eco.mtk.nao.ac.jp/koyomi/dni/2026/m0101.html
+            // Culmination at elevation 17.6 degrees at 2026/01/16 9:09 JST in Nemuro
+            // In this elevation, atmospheric refraction would affect a few arcminutes.
+            // But with allowed error of 0.05 degrees, this is not covered yet with single case.
+            Instant moonCulmination = AstronomicalEventsCalculation.calculateCulminationWithin24h(new Moon(), Instant.parse("2026-01-15T15:00:00Z"), LocationsForTest.getNemuroNAO());
+            HorizontalCoordinatesFromGround coordinates = HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(new Moon(), moonCulmination, LocationsForTest.getNemuroNAO());
+            assertEquals(17.6, coordinates.calculateApparentElevationDeg(), 0.05);
+        }
+        {
+            // https://eco.mtk.nao.ac.jp/koyomi/dni/2026/m0101.html
+            Instant moonCulmination = AstronomicalEventsCalculation.calculateCulminationWithin24h(new Moon(), Instant.parse("2026-01-28T15:00:00Z"), LocationsForTest.getNemuroNAO());
+            HorizontalCoordinatesFromGround coordinates = HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(new Moon(), moonCulmination, LocationsForTest.getNemuroNAO());
+            assertEquals(74.7, coordinates.calculateApparentElevationDeg(), 0.05);
+        }
+        {
+            // https://eco.mtk.nao.ac.jp/koyomi/dni/2026/m0102.html
+            Instant moonCulmination = AstronomicalEventsCalculation.calculateCulminationWithin24h(new Moon(), Instant.parse("2026-02-10T15:00:00Z"), LocationsForTest.getNemuroNAO());
+            HorizontalCoordinatesFromGround coordinates = HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(new Moon(), moonCulmination, LocationsForTest.getNemuroNAO());
+            assertEquals(19.2, coordinates.calculateApparentElevationDeg(), 0.05);
+        }
+        {
+            // https://eco.mtk.nao.ac.jp/koyomi/dni/2026/m0102.html
+            Instant moonCulmination = AstronomicalEventsCalculation.calculateCulminationWithin24h(new Moon(), Instant.parse("2026-02-11T15:00:00Z"), LocationsForTest.getNemuroNAO());
+            HorizontalCoordinatesFromGround coordinates = HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(new Moon(), moonCulmination, LocationsForTest.getNemuroNAO());
+            assertEquals(17.7, coordinates.calculateApparentElevationDeg(), 0.05);
+        }
+        {
+            // https://eco.mtk.nao.ac.jp/koyomi/dni/2026/m0102.html
+            Instant moonCulmination = AstronomicalEventsCalculation.calculateCulminationWithin24h(new Moon(), Instant.parse("2026-02-12T15:00:00Z"), LocationsForTest.getNemuroNAO());
+            HorizontalCoordinatesFromGround coordinates = HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(new Moon(), moonCulmination, LocationsForTest.getNemuroNAO());
+            assertEquals(17.6, coordinates.calculateApparentElevationDeg(), 0.05);
+        }
+        {
+            // https://eco.mtk.nao.ac.jp/koyomi/dni/2026/m0102.html
+            Instant moonCulmination = AstronomicalEventsCalculation.calculateCulminationWithin24h(new Moon(), Instant.parse("2026-02-13T15:00:00Z"), LocationsForTest.getNemuroNAO());
+            HorizontalCoordinatesFromGround coordinates = HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(new Moon(), moonCulmination, LocationsForTest.getNemuroNAO());
+            assertEquals(18.9, coordinates.calculateApparentElevationDeg(), 0.05);
+        }
+    }
+
+    @Test
     public void testConsistencyWithRiseSet() throws UnsupportedDateRangeException, AstronomicalPhenomenonComputationException {
         Sun sun = new Sun();
         Moon moon = new Moon();

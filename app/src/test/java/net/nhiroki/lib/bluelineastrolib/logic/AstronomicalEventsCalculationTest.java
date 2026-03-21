@@ -2,6 +2,9 @@ package net.nhiroki.lib.bluelineastrolib.logic;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
 import org.junit.Test;
@@ -78,11 +81,11 @@ public class AstronomicalEventsCalculationTest {
 
         for (AstronomicalObject astronomicalObject: AstronomicalObjectsForTest.listAstronomicalObjectsForTest()) {
             for (LocationOnTheEarth locationOnTheEarth : LocationsForTest.listLocationsForTest()) {
-                for (Instant testDay = Instant.parse("2026-01-01T00:00:00Z"); testDay.isBefore(Instant.parse("2027-01-01T00:00:00Z")); testDay = testDay.plusSeconds(86400)) {
+                for (Instant testDay = Instant.parse("2025-12-31T15:00:00Z"); testDay.isBefore(Instant.parse("2027-01-01T00:00:00Z")); testDay = testDay.plusSeconds(86400)) {
                     Instant[] rises = AstronomicalEventsCalculation.calculateAllEvents(astronomicalObject, AstronomicalEventsCalculation.EventDirectionType.RISE,
                             testDay, testDay.plusSeconds(86400), Duration.ofMinutes(30), Duration.ofMillis(200), locationOnTheEarth, true, AstronomicalEventsCalculation.ReferencePoint.TOP,
                             true, -Math.toRadians(Earth.ATMOSPHERIC_REFRACTION_AT_HORIZON_ARCSEC / 3600.0));
-                    if (Math.abs(locationOnTheEarth.getLatitudeDeg()) < 60.0 && astronomicalObject instanceof Sun) {
+                    if (Math.abs(locationOnTheEarth.getLatitudeDeg()) < 50.0 && locationOnTheEarth.getLongitudeDeg() >= 120.0 && locationOnTheEarth.getLongitudeDeg() <= 150.0 && astronomicalObject instanceof Sun) {
                         assertEquals(1, rises.length);
                     }
                     for (Instant rise: rises) {
@@ -93,7 +96,7 @@ public class AstronomicalEventsCalculationTest {
                     Instant[] sets = AstronomicalEventsCalculation.calculateAllEvents(astronomicalObject, AstronomicalEventsCalculation.EventDirectionType.SET,
                             testDay, testDay.plusSeconds(86400), Duration.ofMinutes(30), Duration.ofMillis(200), locationOnTheEarth, true, AstronomicalEventsCalculation.ReferencePoint.TOP,
                             true, -Math.toRadians(Earth.ATMOSPHERIC_REFRACTION_AT_HORIZON_ARCSEC / 3600.0));
-                    if (Math.abs(locationOnTheEarth.getLatitudeDeg()) < 60.0 && astronomicalObject instanceof Sun) {
+                    if (Math.abs(locationOnTheEarth.getLatitudeDeg()) < 50.0 && locationOnTheEarth.getLongitudeDeg() >= 120.0 && locationOnTheEarth.getLongitudeDeg() <= 150.0 && astronomicalObject instanceof Sun) {
                         assertEquals(1, sets.length);
                     }
                     for (Instant set: sets) {
@@ -104,7 +107,7 @@ public class AstronomicalEventsCalculationTest {
                     Instant[] culminations = AstronomicalEventsCalculation.calculateAllEvents(astronomicalObject, AstronomicalEventsCalculation.EventDirectionType.CULMINATION,
                             testDay, testDay.plusSeconds(86400), Duration.ofMinutes(30), Duration.ofMillis(200), locationOnTheEarth, true, AstronomicalEventsCalculation.ReferencePoint.TOP,
                             true, -Math.toRadians(Earth.ATMOSPHERIC_REFRACTION_AT_HORIZON_ARCSEC / 3600.0));
-                    if (astronomicalObject instanceof Sun) {
+                    if (Math.abs(locationOnTheEarth.getLatitudeDeg()) < 50.0 && locationOnTheEarth.getLongitudeDeg() >= 120.0 && locationOnTheEarth.getLongitudeDeg() <= 150.0 && astronomicalObject instanceof Sun) {
                         assertEquals(1, culminations.length);
                     }
                     for (Instant culmination: culminations) {
@@ -385,16 +388,97 @@ public class AstronomicalEventsCalculationTest {
     }
 
     @Test
-    public void checkNoCrashOrInfiniteLoopForBunchData() throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
+    public void checkFutureBehaviorTokyoSun() throws UnsupportedDateRangeException, AstronomicalPhenomenonComputationException {
+        // Asia/Tokyo has +09:18:59 before 1888.
+        // This function tests that the sunrise time in Local time is similar to 2026, so zoneId should be written as UTC+9 explicitly.
+        ZoneId tokyoZoneId = ZoneId.ofOffset("UTC", ZoneOffset.ofHours(9));
+        Sun sun = new Sun();
+        LocationOnTheEarth tokyo = LocationsForTest.getTokyoNAO();
+
+        for (int year = 1800; year <= 2200; ++year) {
+            {
+                // Sunrise at 6:51 at azimuth 118.1 deg, culmination at 11:44 at elevation 31.4 deg, and sunset at 16:38 at azimuth 242.0 deg on 2026/01/01
+                // https://eco.mtk.nao.ac.jp/koyomi/dni/2026/s1301.html
+                LocalDate date = LocalDate.of(year, 1, 1);
+
+                Instant sunrise = AstronomicalEventsCalculation.calculateRiseWithin24h(sun, date.atStartOfDay(tokyoZoneId).toInstant(), tokyo, false, AstronomicalEventsCalculation.ReferencePoint.TOP);
+                int sunriseLocalTime = sunrise.atZone(tokyoZoneId).toLocalTime().toSecondOfDay();
+                assertEquals(6 * 3600 + 51 * 60, sunriseLocalTime, 90);
+                HorizontalCoordinatesFromGround sunrisePos = HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(sun, sunrise, tokyo);
+                assertEquals(118.1, sunrisePos.getAzimuthDeg(), 0.2);
+
+                Instant culmination = AstronomicalEventsCalculation.calculateCulminationWithin24h(sun, date.atStartOfDay(tokyoZoneId).toInstant(), tokyo);
+                int culminationLocalTime = culmination.atZone(tokyoZoneId).toLocalTime().toSecondOfDay();
+                assertEquals(11 * 3600 + 44 * 60, culminationLocalTime, 90);
+                HorizontalCoordinatesFromGround culminationPos = HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(sun, culmination, tokyo);
+                assertEquals(31.4, culminationPos.calculateApparentElevationDeg(), 0.2);
+
+                Instant sunset = AstronomicalEventsCalculation.calculateSetWithin24h(sun, date.atStartOfDay(tokyoZoneId).toInstant(), tokyo, false, AstronomicalEventsCalculation.ReferencePoint.TOP);
+                int sunsetLocalTime = sunset.atZone(tokyoZoneId).toLocalTime().toSecondOfDay();
+                assertEquals(16 * 3600 + 38 * 60, sunsetLocalTime, 90);
+                HorizontalCoordinatesFromGround sunsetPos = HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(sun, sunset, tokyo);
+                assertEquals(242.0, sunsetPos.getAzimuthDeg(), 0.2);
+            }
+            {
+                // Sunrise at 4:27 at azimuth 61.9 deg, culmination at 11:39 at elevation 76.4 deg, and sunset at 18:51 at azimuth 298.3 on 2026/01/01
+                // https://eco.mtk.nao.ac.jp/koyomi/dni/2026/s1306.html
+                LocalDate date = LocalDate.of(year, 6, 1);
+
+                Instant sunrise = AstronomicalEventsCalculation.calculateRiseWithin24h(sun, date.atStartOfDay(tokyoZoneId).toInstant(), tokyo, false, AstronomicalEventsCalculation.ReferencePoint.TOP);
+                int sunriseLocalTime = sunrise.atZone(tokyoZoneId).toLocalTime().toSecondOfDay();
+                assertEquals(4 * 3600 + 27 * 60, sunriseLocalTime, 90);
+                HorizontalCoordinatesFromGround sunrisePos = HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(sun, sunrise, tokyo);
+                assertEquals(61.9, sunrisePos.getAzimuthDeg(), 0.3);
+
+                Instant culmination = AstronomicalEventsCalculation.calculateCulminationWithin24h(sun, date.atStartOfDay(tokyoZoneId).toInstant(), tokyo);
+                int culminationLocalTime = culmination.atZone(tokyoZoneId).toLocalTime().toSecondOfDay();
+                assertEquals(11 * 3600 + 39 * 60, culminationLocalTime, 90);
+                HorizontalCoordinatesFromGround culminationPos = HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(sun, culmination, tokyo);
+                assertEquals(76.4, culminationPos.calculateApparentElevationDeg(), 0.2);
+
+                Instant sunset = AstronomicalEventsCalculation.calculateSetWithin24h(sun, date.atStartOfDay(tokyoZoneId).toInstant(), tokyo, false, AstronomicalEventsCalculation.ReferencePoint.TOP);
+                int sunsetLocalTime = sunset.atZone(tokyoZoneId).toLocalTime().toSecondOfDay();
+                assertEquals(18 * 3600 + 51 * 60, sunsetLocalTime, 90);
+                HorizontalCoordinatesFromGround sunsetPos = HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(sun, sunset, tokyo);
+                assertEquals(298.3, sunsetPos.getAzimuthDeg(), 0.3);
+            }
+        }
+    }
+
+    @Test
+    public void checkConsistencyForBunchData() throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
+        // Scope is that this function does not crash or get into infinite loop, and the result is consistent with the position calculated.
         for (AstronomicalObject astronomicalObject: AstronomicalObjectsForTest.listAstronomicalObjectsForTest()) {
             for (LocationOnTheEarth locationOnTheEarth: LocationsForTest.listLocationsForTest()) {
                 Instant t = Instant.parse("2026-01-01T00:00:00Z");
                 for (int i = 0; i < 5 * 365 * 4 / 3; ++i) {
-                    AstronomicalEventsCalculation.calculateRiseWithin24h(astronomicalObject, t, locationOnTheEarth,
+                    Instant rise = AstronomicalEventsCalculation.calculateRiseWithin24h(astronomicalObject, t, locationOnTheEarth,
                             true, AstronomicalEventsCalculation.ReferencePoint.TOP);
-                    AstronomicalEventsCalculation.calculateCulminationWithin24h(astronomicalObject, t, locationOnTheEarth);
-                    AstronomicalEventsCalculation.calculateSetWithin24h(astronomicalObject, t, locationOnTheEarth,
+                    if (rise != null) {
+                        assertFalse(HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(astronomicalObject, rise.minusMillis(2000), locationOnTheEarth).isTopAboveHorizon());
+                        assertTrue(HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(astronomicalObject, rise.plusMillis(2000), locationOnTheEarth).isTopAboveHorizon());
+                    }
+                    Instant culmination = AstronomicalEventsCalculation.calculateCulminationWithin24h(astronomicalObject, t, locationOnTheEarth);
+                    if (culmination != null) {
+                        double elevationDeg = Math.toDegrees(HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(astronomicalObject, culmination, locationOnTheEarth).getActualElevationRad());
+                        double azimuthDeg = HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(astronomicalObject, culmination, locationOnTheEarth).getAzimuthDeg();
+
+                        if (Math.abs(elevationDeg) < 80.0) {
+                            if (azimuthDeg < 90.0) {
+                                assertEquals(0.0, azimuthDeg, 15.0 / 3600.0);
+                            } else if (azimuthDeg < 270.0) {
+                                assertEquals(180.0, azimuthDeg, 15.0 / 3600.0);
+                            } else {
+                                assertEquals(360.0, azimuthDeg, 15.0 / 3600.0);
+                            }
+                        }
+                    }
+                    Instant set = AstronomicalEventsCalculation.calculateSetWithin24h(astronomicalObject, t, locationOnTheEarth,
                             true, AstronomicalEventsCalculation.ReferencePoint.TOP);
+                    if (set != null) {
+                        assertTrue(HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(astronomicalObject, set.minusMillis(2000), locationOnTheEarth).isTopAboveHorizon());
+                        assertFalse(HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(astronomicalObject, set.plusMillis(2000), locationOnTheEarth).isTopAboveHorizon());
+                    }
 
                     t = t.plusSeconds(21600 * 3);
                 }
@@ -403,11 +487,33 @@ public class AstronomicalEventsCalculationTest {
                 t = Instant.parse("-10000-01-01T00:00:00Z");
                 for (int i = 0; i < 8; ++i) {
                     for (int j = 0; j < 365 / 41 * 4; ++j) {
-                        AstronomicalEventsCalculation.calculateRiseWithin24h(astronomicalObject, t, locationOnTheEarth,
+                        Instant rise = AstronomicalEventsCalculation.calculateRiseWithin24h(astronomicalObject, t, locationOnTheEarth,
                                 true, AstronomicalEventsCalculation.ReferencePoint.TOP);
-                        AstronomicalEventsCalculation.calculateCulminationWithin24h(astronomicalObject, t, locationOnTheEarth);
-                        AstronomicalEventsCalculation.calculateSetWithin24h(astronomicalObject, t, locationOnTheEarth,
+                        if (rise != null) {
+                            assertFalse(HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(astronomicalObject, rise.minusMillis(2000), locationOnTheEarth).isTopAboveHorizon());
+                            assertTrue(HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(astronomicalObject, rise.plusMillis(2000), locationOnTheEarth).isTopAboveHorizon());
+                        }
+                        Instant culmination = AstronomicalEventsCalculation.calculateCulminationWithin24h(astronomicalObject, t, locationOnTheEarth);
+                        if (culmination != null) {
+                            double elevationDeg = Math.toDegrees(HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(astronomicalObject, culmination, locationOnTheEarth).getActualElevationRad());
+                            double azimuthDeg = HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(astronomicalObject, culmination, locationOnTheEarth).getAzimuthDeg();
+
+                            if (Math.abs(elevationDeg) < 80.0) {
+                                if (azimuthDeg < 90.0) {
+                                    assertEquals(0.0, azimuthDeg, 15.0 / 3600.0);
+                                } else if (azimuthDeg < 270.0) {
+                                    assertEquals(180.0, azimuthDeg, 15.0 / 3600.0);
+                                } else {
+                                    assertEquals(360.0, azimuthDeg, 15.0 / 3600.0);
+                                }
+                            }
+                        }
+                        Instant set = AstronomicalEventsCalculation.calculateSetWithin24h(astronomicalObject, t, locationOnTheEarth,
                                 true, AstronomicalEventsCalculation.ReferencePoint.TOP);
+                        if (set != null) {
+                            assertTrue(HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(astronomicalObject, set.minusMillis(2000), locationOnTheEarth).isTopAboveHorizon());
+                            assertFalse(HorizontalCoordinatesFromGround.calculatePositionOfAstronomicalObject(astronomicalObject, set.plusMillis(2000), locationOnTheEarth).isTopAboveHorizon());
+                        }
 
                         t = t.plusSeconds(21600 + 86400 * 10);
                     }

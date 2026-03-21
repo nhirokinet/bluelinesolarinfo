@@ -8,6 +8,7 @@ public class LocationsForTest {
         return new LocationOnTheEarth[] {
                 LocationsForTest.getTokyoNAO(),
                 LocationsForTest.getTopOfMtFuji(),
+                LocationsForTest.getNemuroNAO(),
                 LocationsForTest.getRioDeJaneiro(),
                 LocationsForTest.getNorthPoleE0Z(),
                 LocationsForTest.getNorthPoleE135Z(),
@@ -21,6 +22,11 @@ public class LocationsForTest {
     // https://eco.mtk.nao.ac.jp/koyomi/dni/2024/s1301.html
     public static LocationOnTheEarth getTokyoNAO() {
         return LocationOnTheEarth.ofDegreesMeters(139.7414, 35.6581, 0.0);
+    }
+
+    // https://eco.mtk.nao.ac.jp/koyomi/dni/2026/s0101.html
+    public static LocationOnTheEarth getNemuroNAO() {
+        return LocationOnTheEarth.ofDegreesMeters(145.5833, 43.3333, 0.0);
     }
 
     public static LocationOnTheEarth getNorthPoleE0Z() {
