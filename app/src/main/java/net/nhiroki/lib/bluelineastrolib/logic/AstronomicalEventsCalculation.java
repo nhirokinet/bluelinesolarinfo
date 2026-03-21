@@ -21,14 +21,15 @@ public class AstronomicalEventsCalculation {
 
 
     /**
-     * Return time of rise of @estronomialObject from within 24 hours.<br>
-     * <br>
-     * If not happens within 24 hours, returns null.<br>
-     * If it happens multiple times, it is not guaranteed which is returned.<br>
+     * Return time of rise of {@code astronomialObject} from within 24 hours.<br>
+     * <ul>
+     *   <li>If not happens within 24 hours, returns null.</li>
+     *   <li>If it happens multiple times, it is not guaranteed which is returned.</li>
+     * </ul>
      *
      * This function assumes that:<br>
      * <ul>
-     *   <li>@astronomicalObject does not behave so dramatically in the equatorial coordinate system. Sun goes around once in a year, and moon in about a month, they are OK.</li>
+     *   <li>{@code astronomicalObject} does not behave so dramatically in the equatorial coordinate system. Sun goes around once in a year, and moon in about a month, they are OK.</li>
      *   <li>Event is expected to happen about once in 24 hours.</li>
      * </ul>
      *
@@ -37,7 +38,7 @@ public class AstronomicalEventsCalculation {
      * @param locationOnTheEarth Target location
      * @param horizonByElevation If true, horizon with regard of height is standard of rise/set. If false, horizon is handled as 0 degree height.
      * @param referencePoint     Which rim or center to refer
-     * @return Rise, or null if not within 24 hours
+     * @return TIme of the rise, or null if not within 24 hours
      */
     public static Instant calculateRiseWithin24h(AstronomicalObject astronomicalObject, Instant start,
                                                  LocationOnTheEarth locationOnTheEarth, boolean horizonByElevation,
@@ -48,14 +49,15 @@ public class AstronomicalEventsCalculation {
     }
 
     /**
-     * Return time of set of @estronomialObject from within 24 hours.<br>
-     * <br>
-     * If not happens within 24 hours, returns null.<br>
-     * If it happens multiple times, it is not guaranteed which is returned.<br>
+     * Return time of set of {@code estronomialObject} from within 24 hours.<br>
+     * <ul>
+     *   <li>If not happens within 24 hours, returns null.</li>
+     *   <li>If it happens multiple times, it is not guaranteed which is returned.</li>
+     * </ul>
      *
      * This function assumes that:<br>
      * <ul>
-     *   <li>@astronomicalObject does not behave so dramatically in the equatorial coordinate system. Sun goes around once in a year, and moon in about a month, they are OK.</li>
+     *   <li>{@code astronomicalObject} does not behave so dramatically in the equatorial coordinate system. Sun goes around once in a year, and moon in about a month, they are OK.</li>
      *   <li>Event is expected to happen about once in 24 hours.</li>
      * </ul>
      *
@@ -64,7 +66,7 @@ public class AstronomicalEventsCalculation {
      * @param locationOnTheEarth Target location
      * @param horizonByElevation If true, horizon with regard of height is standard of rise/set. If false, horizon is handled as 0 degree height.
      * @param referencePoint     Which rim or center to refer
-     * @return Set, or null if not within 24 hours
+     * @return Time of the set, or null if not within 24 hours
      */
     public static Instant calculateSetWithin24h(AstronomicalObject astronomicalObject, Instant start,
                                                 LocationOnTheEarth locationOnTheEarth, boolean horizonByElevation,
@@ -75,21 +77,22 @@ public class AstronomicalEventsCalculation {
     }
 
     /**
-     * Return time of culmination of @estronomialObject from within 24 hours.<br>
-     * <br>
-     * If not happens within 24 hours, returns null.<br>
-     * If it happens multiple times, it is not guaranteed which is returned.<br>
+     * Return time of culmination of {@code astronomialObject} from within 24 hours.<br>
+     * <ul>
+     *   <li>If not happens within 24 hours, returns null.</li>
+     *   <li>If it happens multiple times, it is not guaranteed which is returned.</li>
+     * </ul>
      *
      * This function assumes that:<br>
      * <ul>
-     *   <li>@astronomicalObject does not behave so dramatically in the equatorial coordinate system. Sun goes around once in a year, and moon in about a month, they are OK.</li>
+     *   <li>{@code astronomicalObject} does not behave so dramatically in the equatorial coordinate system. Sun goes around once in a year, and moon in about a month, they are OK.</li>
      *   <li>Event is expected to happen about once in 24 hours.</li>
      * </ul>
      *
      * @param astronomicalObject Target astronomical object
      * @param start              Start point of calculation
      * @param locationOnTheEarth Target location
-     * @return Culmination, or null if not within 24 hours
+     * @return Time of the culmination, or null if not within 24 hours
      */
     public static Instant calculateCulminationWithin24h(AstronomicalObject astronomicalObject, Instant start,
                                                         LocationOnTheEarth locationOnTheEarth) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
@@ -98,7 +101,31 @@ public class AstronomicalEventsCalculation {
         );
     }
 
-    private static Instant calculateEventWithin24h(final AstronomicalObject astronomicalObject,
+    /**
+     * Returns the time of specified event within 24 hours from {@code start}.
+     * <ul>
+     *   <li>If not happens within 24 hours, returns null.</li>
+     *   <li>If it happens multiple times, it is not guaranteed which is returned.</li>
+     * </ul>
+     * This function assumes that:<br>
+     * <ul>
+     *   <li>{@code astronomicalObject} does not behave so dramatically in the equatorial coordinate system. Sun goes around once in a year, and moon in about a month, they are OK.</li>
+     *   <li>Event is expected to happen about once in 24 hours.</li>
+     * </ul>
+     * Unlike calculateAllEvents, if the assumptions above do not hold, it may happen to miss the event which actually happens.
+     * This function is usually faster than calculateAllEvents, but sometimes it falls back to calculateAllEvents.
+     *
+     * @param astronomicalObject Target astronomical object
+     * @param eventDirectionType Rise, set, or culmination
+     * @param start Start point of calculation. 24 hours from {@code start} will be the scope of calculation.
+     * @param locationOnTheEarth Target location
+     * @param horizonByElevation If set true, horizon is a bit below the horizontal 0 degrees, with considering horizontal of {@code locationOnTheEarth}.
+     * @param referencePoint Which point (top/center/bottom) of the {@code astronomicalObject} should be the reference
+     * @param considerEquatorialHorizontalParallax Whether equatorial horizontal parallax should be considered into the calculation. Set true if unsure.
+     * @param heightStandardRad The standard height to be considered as rise/set, including refraction of the air.
+     * @return Time of the event, or null if not within 24 hours
+     */
+    public static Instant calculateEventWithin24h(final AstronomicalObject astronomicalObject,
                                                    final EventDirectionType eventDirectionType,
                                                    final Instant start,
                                                    final LocationOnTheEarth locationOnTheEarth,
@@ -277,9 +304,9 @@ public class AstronomicalEventsCalculation {
     }
 
     /**
-     * Return time of the all events from @start to @end in the correct order.<br>
-     * This is slow function that iterates from @start to @end with the specified @interval.<br>
-     * Thus, if there is a case like that the object rise and then set within @interval, the event may be missed.<br>
+     * Return time of the all events from {@code start} to {@code end} in the correct order.<br>
+     * This is slow function that iterates from {@code start} to {@code end} with the specified {@code interval}.<br>
+     * Thus, if there is a case like that the object rise and then set within {@code interval} or vice versa, the event may be missed.<br>
      *
      * @param astronomicalObject Target astronomical object
      * @param eventDirectionType Rise, set, or culmination
@@ -288,7 +315,7 @@ public class AstronomicalEventsCalculation {
      * @param interval Interval of calculation. If the object shows/hides only less than this interval, the event may be ignored.
      * @param precision Expected precision of calculation. When the expected error is less than precision, calculation is finished.
      * @param locationOnTheEarth Target location
-     * @param horizonByElevation If set true, horizon is a bit below the horizontal 0 degrees, with considering horizontal of @locationOnTheEarth .
+     * @param horizonByElevation If set true, horizon is a bit below the horizontal 0 degrees, with considering horizontal of {@code locationOnTheEarth}.
      * @param referencePoint Which point (top/center/bottom) of the @astronomicalObject should be the reference
      * @param considerEquatorialHorizontalParallax Whether equatorial horizontal parallax should be considered into the calculation. Set true if unsure.
      * @param heightStandardRad The standard height to be considered as rise/set, including refraction of the air.
