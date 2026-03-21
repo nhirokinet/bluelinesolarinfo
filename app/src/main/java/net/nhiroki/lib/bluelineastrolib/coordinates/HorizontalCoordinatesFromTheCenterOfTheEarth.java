@@ -59,7 +59,6 @@ public class HorizontalCoordinatesFromTheCenterOfTheEarth {
     }
 
     public double getElevationRad() {
-
         return elevationRad;
     }
 

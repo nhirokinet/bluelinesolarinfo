@@ -16,10 +16,21 @@ public class Earth {
 
 
     // This function is not expected to be accurate for under the horizon
+
+    /**
+     * Calculates atmospheric refraction from the actual elevation.<br>
+     * <br>
+     * This function is based on the following formula:<br>
+     * 1.02 cot (h + 10.3 / (h + 5.11))<br>
+     * by Sæmundsson<br>
+     * <a href="https://en.wikipedia.org/wiki/Atmospheric_refraction">https://en.wikipedia.org/wiki/Atmospheric_refraction</a><br>
+     * <br>
+     * And if the given actual {@code actualElevationRad} is less than -0.8 degrees, the function returns the same value as -0.8 degree is given.
+     *
+     * @param actualElevationRad Actual elevation in radians. Logic is changed if less than -0.8 degrees.
+     * @return Atmospheric refraction in radians.
+     */
     public static double calculateAtmosphericRefractionRadFromActualElevationRad(double actualElevationRad) {
-        // https://en.wikipedia.org/wiki/Atmospheric_refraction
-        // Formula by Sæmundsson
-        // 1.02 cot (h + 10.3 / (h + 5.11))
         if (actualElevationRad < Math.toRadians(-0.8)) {
             // Not to crash calculation in high elevation mountain or too large astronomical object
             // Not to crash and not to strange value for now
@@ -28,21 +39,36 @@ public class Earth {
         return Math.toRadians(1.02 / 60.0 / Math.tan(actualElevationRad + Math.toRadians(10.3 / (Math.toDegrees(actualElevationRad) + 5.11))));
     }
 
+    /**
+     * Calculates altitude correction of horizon by elevation from the ground. This is the elevation of horizon with inverted sign.<br><br>
+     *<br>
+     * I could not find a constant that is commonly used,<br>
+     * but use sqrt(H in m) * 2.076' for now,<br>
+     * because it appears in explanation in the web page of<br>
+     * The National Radio Astronomy Observatory.<br>
+     * Looks like 2.11' and 2.12' are also used.<br>
+     * <a href="https://public.nrao.edu/ask/altitude-correction-for-time-of-sunrise-and-sunset/">https://public.nrao.edu/ask/altitude-correction-for-time-of-sunrise-and-sunset/</a><br>
+     * <a href="https://en.wikipedia.org/wiki/Sunrise_equation">https://en.wikipedia.org/wiki/Sunrise_equation</a><br>
+     * <a href="https://www.nao.ac.jp/contents/about-naoj/reports/report-naoj/p91.pdf">https://www.nao.ac.jp/contents/about-naoj/reports/report-naoj/p91.pdf</a><br>
+     *
+     * @param elevationMeters Elevation from the ground in meters.
+     * @return The elevation of horizon with inverted sign. Positive if the horizon is below 0 degree.
+     */
     public static double calculateAltitudeCorrectionOfHorizonRad (double elevationMeters) {
-        // I could not find a constant that is commonly used,
-        // but use sqrt(H in m) * 2.076' for now,
-        // because it appears in explanation in the web page of
-        // The National Radio Astronomy Observatory.
-        // Looks like 2.11' and 2.12' are also used.
-        // https://public.nrao.edu/ask/altitude-correction-for-time-of-sunrise-and-sunset/
-        // https://en.wikipedia.org/wiki/Sunrise_equation
-        // https://www.nao.ac.jp/contents/about-naoj/reports/report-naoj/p91.pdf
         return Math.sqrt(elevationMeters) * Math.toRadians(2.076 / 60.0);
     }
 
+    /**
+     * Calculates ecliptic tilt.<br>
+     * <br>
+     * This function is based on the formula from the following page:<br>
+     * <a href="https://en.wikipedia.org/wiki/Axial_tilt">https://en.wikipedia.org/wiki/Axial_tilt</a> as of 2024/02/26<br>
+     * > J. Laskar computed an expression to order T10 good to 0.02″ over 1000 years and several arcseconds over 10,000 years.
+     *
+     * @param instant Target time
+     * @return ecliptic tilt in degrees
+     */
     public static double calculateEclipticTiltDeg (Instant instant) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
-        // https://en.wikipedia.org/wiki/Axial_tilt as of 2024/02/26
-        // > J. Laskar computed an expression to order T10 good to 0.02″ over 1000 years and several arcseconds over 10,000 years.
 
         double t = new TimePointOnTheEarth(instant).julianYearFromJ2000_0() / 10000.0;
         return 23.0 + 26.0 / 60.0 + 21.448 / 3600.0
@@ -58,8 +84,18 @@ public class Earth {
                 + 2.45 / 3600.0 * t * t * t * t * t * t * t * t * t * t;
     }
 
-    public static double calculateEclipticTiltRad (Instant t) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
-        return Math.toRadians(calculateEclipticTiltDeg(t));
+    /**
+     * Calculates ecliptic tilt.<br>
+     * <br>
+     * This function is based on the formula from the following page:<br>
+     * <a href="https://en.wikipedia.org/wiki/Axial_tilt">https://en.wikipedia.org/wiki/Axial_tilt</a> as of 2024/02/26<br>
+     * > J. Laskar computed an expression to order T10 good to 0.02″ over 1000 years and several arcseconds over 10,000 years.
+     *
+     * @param instant Target time
+     * @return ecliptic tilt in degrees
+     */
+    public static double calculateEclipticTiltRad (Instant instant) throws AstronomicalPhenomenonComputationException, UnsupportedDateRangeException {
+        return Math.toRadians(calculateEclipticTiltDeg(instant));
     }
 
     public static double calculateEquatorialHorizontalParallaxRadByDistanceAU (double distanceAU) {

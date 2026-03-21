@@ -52,7 +52,7 @@ public class TimePointOnTheEarth {
     }
 
     /**
-     * Returns julian year from time point J2000.0, which increases 1.0 per 365.25 days.
+     * Returns julian year from time point J2000.0, which increases 1.0 per 365.25 days.<br>
      * If you want julian century, just divide the result by 100.0.
      *
      * @return Julian year from J2000.0
@@ -74,12 +74,14 @@ public class TimePointOnTheEarth {
     }
 
     /**
-     * Calculate the sidereal time and return it in radians.
-     * Specify 0 for Greenwich sidereal time.
-     * <p>
-     * This function has error of about 1.3s in 2000-2100 with the sum of:
-     * - Formula itself has an error of max error 0.432 sec, RMS error 0.001512 sec, in 2000-2100
-     * - This formula handles UTC derived from Instant as the same as UT1. As long as UTC is kept within difference of 0.9s from UT1, this would cause an error of about 0.9s.
+     * Calculate the sidereal time and return it in radians.<br>
+     * Specify 0 as longitude for Greenwich sidereal time.<br>
+     * <br>
+     * This function has error of about 1.3s in 2000-2100 with the sum of:<br>
+     * <ul>
+     *   <li>Formula itself has an error of max error 0.432 sec, RMS error 0.001512 sec, in 2000-2100</li>
+     *   <li>This formula handles UTC derived from Instant as the same as UT1. As long as UTC is kept within difference of 0.9s from UT1, this would cause an error of about 0.9s.</li>
+     * </ul>
      *
      * @param longitudeRad Longitude in degrees
      * @return Sidereal time in radians
@@ -89,12 +91,14 @@ public class TimePointOnTheEarth {
     }
 
     /**
-     * Calculate the sidereal time and return it in degrees.
-     * Specify 0 for Greenwich sidereal time.
-     * <p>
-     * This function has error of about 1.3s in 2000-2100 with the sum of:
-     * - Formula itself has an error of max error 0.432 sec, RMS error 0.001512 sec, in 2000-2100
-     * - This formula handles UTC derived from Instant as the same as UT1. As long as UTC is kept within difference of 0.9s from UT1, this would cause an error of about 0.9s.
+     * Calculate the sidereal time and return it in degrees.<br>
+     * Specify 0 as longitude for Greenwich sidereal time.<br>
+     * <br>
+     * This function has error of about 1.3s in 2000-2100 with the sum of:<br>
+     * <ul>
+     *   <li>Formula itself has an error of max error 0.432 sec, RMS error 0.001512 sec, in 2000-2100</li>
+     *   <li>This formula handles UTC derived from Instant as the same as UT1. As long as UTC is kept within difference of 0.9s from UT1, this would cause an error of about 0.9s.</li>
+     * </ul>
      *
      * @param longitudeDeg Longitude in degrees
      * @return Sidereal time in degrees
@@ -150,12 +154,23 @@ public class TimePointOnTheEarth {
         return 6.30038804023211344976;
     }
 
-    // Dismisses the difference between UTC and UT1, which would be up to 0.9sec in the operation of leap seconds.
+
+    /**
+     * Calculates mean solar time.
+     * This function dismisses the difference between UTC and UT1, which would be up to 0.9sec in the operation of leap seconds.
+     * @param locationOnTheEarth Target location
+     * @return Mean solar time
+     */
     public ZonedDateTime calculateMeanSolarTime(LocationOnTheEarth locationOnTheEarth) {
         return instant.plusMillis((long)(locationOnTheEarth.getLongitudeDeg() * 240000.0)).atZone(ZoneId.of("UTC"));
     }
 
-    // Dismisses the difference between UTC and UT1, which would be up to 0.9sec in the operation of leap seconds.
+    /**
+     * Calculates apparent solar time.
+     * This function dismisses the difference between UTC and UT1, which would be up to 0.9sec in the operation of leap seconds.
+     * @param locationOnTheEarth Target location
+     * @return Apparent solar time
+     */
     public ZonedDateTime calculateApparentSolarTime(LocationOnTheEarth locationOnTheEarth) throws UnsupportedDateRangeException, AstronomicalPhenomenonComputationException {
         return this.calculateMeanSolarTime(locationOnTheEarth).plusNanos((long) (new Sun().calculateEquationOfTimeSec(this.instant) * 1000000000.0));
     }
