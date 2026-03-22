@@ -34,6 +34,10 @@ public class SunTest {
         ret += 1.9147 * Math.cos(Math.toRadians( 35999.05 * T + 267.52));
         ret += 280.4659 + 36000.7695 * T;
 
+        // The above gets the value referring to the mean equinox
+        // To get apparent longitude adding this line
+        ret += -0.0057 + 0.0048 * Math.cos(Math.toRadians(1934.0 * T + 145.0));
+
         ret -= Math.floor(ret / 360.0) * 360.0;
 
         return ret;
@@ -61,26 +65,42 @@ public class SunTest {
 
     @Test
     public void calculateEclipticLongitudeDegTest() {
-        // delta is based on the result when I tested. it is not tolerance.
+        // delta is based on the result when I tested. it is not the indication of tolerance.
         // Just note that this values goes 360deg in a year, so if the time granularity is minute, delta of less than 360/365.2422/1440 does not make sense.
 
         Sun sun = new Sun();
 
-        // Sprint Equinox in 2026 is 03/20 14:46 UTC
-        // Summer solstice in 2026 is 06/21 08:25 UTC
-        // Autumnal Equinox in 2026 is 09/23 00:05 UTC
-        // Winter solstice in 2026 is 12/21 20:50 UTC
-        // 立春(315deg) in 2026 is 02/03 20:02 UTC
+        // https://eco.mtk.nao.ac.jp/koyomi/yoko/2004/rekiyou042.html
+        assertEquals(  0.0, sun.calculateEclipticCoordinates(Instant.parse("2004-03-20T06:49:00Z")).getLongitudeDeg(), 0.005);
+        assertEquals( 90.0, sun.calculateEclipticCoordinates(Instant.parse("2004-06-21T00:57:00Z")).getLongitudeDeg(), 0.005);
+        assertEquals(180.0, sun.calculateEclipticCoordinates(Instant.parse("2004-09-22T16:30:00Z")).getLongitudeDeg(), 0.002);
+        assertEquals(270.0, sun.calculateEclipticCoordinates(Instant.parse("2004-12-21T12:42:00Z")).getLongitudeDeg(), 0.002);
+
         // https://eco.mtk.nao.ac.jp/koyomi/yoko/2026/rekiyou262.html
         assertEquals(315.0, sun.calculateEclipticCoordinates(Instant.parse("2026-02-03T20:02:00Z")).getLongitudeDeg(), 0.003);
-        assertEquals(  0.0, sun.calculateEclipticCoordinates(Instant.parse("2026-03-20T14:46:00Z")).getLatitudeRad(), 0.005);
+        assertEquals(  0.0, sun.calculateEclipticCoordinates(Instant.parse("2026-03-20T14:46:00Z")).getLongitudeDeg(), 0.005);
         assertEquals( 90.0, sun.calculateEclipticCoordinates(Instant.parse("2026-06-21T08:25:00Z")).getLongitudeDeg(), 0.001);
         assertEquals(180.0, sun.calculateEclipticCoordinates(Instant.parse("2026-09-23T00:05:00Z")).getLongitudeDeg(), 0.01);
         assertEquals(270.0, sun.calculateEclipticCoordinates(Instant.parse("2026-12-21T20:50:00Z")).getLongitudeDeg(), 0.005);
+    }
 
-        // Sprint Equinox in 2004 is 03/20 06:49 UTC
+    @Test
+    public void referResultOfFormulaBySuirobuKubo1980() {
+        // delta is based on the result when I tested. it is not the indication of tolerance.
+        // Just note that this values goes 360deg in a year, so if the time granularity is minute, delta of less than 360/365.2422/1440 does not make sense.
+
         // https://eco.mtk.nao.ac.jp/koyomi/yoko/2004/rekiyou042.html
-        assertEquals(  0.0, sun.calculateEclipticCoordinates(Instant.parse("2004-03-20T06:49:00Z")).getLongitudeDeg(), 0.005);
+        assertEquals(  0.0, calculateEclipticLongitudeDegBySuirobuKubo1980(Instant.parse("2004-03-20T06:49:00Z")), 0.0003);
+        assertEquals( 90.0, calculateEclipticLongitudeDegBySuirobuKubo1980(Instant.parse("2004-06-21T00:57:00Z")), 0.0005);
+        assertEquals(180.0, calculateEclipticLongitudeDegBySuirobuKubo1980(Instant.parse("2004-09-22T16:30:00Z")), 0.0006);
+        assertEquals(270.0, calculateEclipticLongitudeDegBySuirobuKubo1980(Instant.parse("2004-12-21T12:42:00Z")), 0.0002);
+
+        // https://eco.mtk.nao.ac.jp/koyomi/yoko/2026/rekiyou262.html
+        assertEquals(315.0, calculateEclipticLongitudeDegBySuirobuKubo1980(Instant.parse("2026-02-03T20:02:00Z")), 0.002);
+        assertEquals(360.0, calculateEclipticLongitudeDegBySuirobuKubo1980(Instant.parse("2026-03-20T14:46:00Z")), 0.005);
+        assertEquals( 90.0, calculateEclipticLongitudeDegBySuirobuKubo1980(Instant.parse("2026-06-21T08:25:00Z")), 0.002);
+        assertEquals(180.0, calculateEclipticLongitudeDegBySuirobuKubo1980(Instant.parse("2026-09-23T00:05:00Z")), 0.002);
+        assertEquals(270.0, calculateEclipticLongitudeDegBySuirobuKubo1980(Instant.parse("2026-12-21T20:50:00Z")), 0.007);
     }
 
     @Test
