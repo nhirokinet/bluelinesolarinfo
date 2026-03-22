@@ -80,7 +80,7 @@ public class SunTest {
         assertEquals(315.0, sun.calculateEclipticCoordinates(Instant.parse("2026-02-03T20:02:00Z")).getLongitudeDeg(), 0.003);
         assertEquals(  0.0, sun.calculateEclipticCoordinates(Instant.parse("2026-03-20T14:46:00Z")).getLongitudeDeg(), 0.005);
         assertEquals( 90.0, sun.calculateEclipticCoordinates(Instant.parse("2026-06-21T08:25:00Z")).getLongitudeDeg(), 0.001);
-        assertEquals(180.0, sun.calculateEclipticCoordinates(Instant.parse("2026-09-23T00:05:00Z")).getLongitudeDeg(), 0.01);
+        assertEquals(180.0, sun.calculateEclipticCoordinates(Instant.parse("2026-09-23T00:05:00Z")).getLongitudeDeg(), 0.009);
         assertEquals(270.0, sun.calculateEclipticCoordinates(Instant.parse("2026-12-21T20:50:00Z")).getLongitudeDeg(), 0.005);
     }
 
