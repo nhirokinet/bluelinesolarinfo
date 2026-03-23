@@ -204,9 +204,9 @@ public class MainActivityTest {
         }
         Espresso.onView(ViewMatchers.withText("Next moonset:")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
         if (android.text.format.DateFormat.is24HourFormat(ApplicationProvider.getApplicationContext())) {
-            Espresso.onView(ViewMatchers.withText("Jan 8, 17:22")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+            Espresso.onView(ViewMatchers.withText("Jan 8, 16:21")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
         } else {
-            Espresso.onView(ViewMatchers.withText("Jan 8, 5:22 PM")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+            Espresso.onView(ViewMatchers.withText("Jan 8, 4:21 PM")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
         }
     }
 
@@ -228,9 +228,9 @@ public class MainActivityTest {
         }
         Espresso.onView(ViewMatchers.withText("Next moonrise:")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
         if (android.text.format.DateFormat.is24HourFormat(ApplicationProvider.getApplicationContext())) {
-            Espresso.onView(ViewMatchers.withText("May 12, 17:29")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+            Espresso.onView(ViewMatchers.withText("May 12, 18:28")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
         } else {
-            Espresso.onView(ViewMatchers.withText("May 12, 5:29 PM")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+            Espresso.onView(ViewMatchers.withText("May 12, 6:28 PM")).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
         }
     }
 }

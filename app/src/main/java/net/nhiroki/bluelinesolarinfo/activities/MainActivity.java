@@ -784,8 +784,8 @@ public class MainActivity extends AppCompatActivity {
 
                 Instant t = endOfTheDay.minusSeconds(1);
                 for (int i = 0; i < 270; ++i) {
-                    Instant moonriseCandidate = AstronomicalEventsCalculation.calculateRiseWithin24h(moon, t, locationOnTheEarth, true, AstronomicalEventsCalculation.ReferencePoint.TOP);
-                    Instant moonsetCandidate = AstronomicalEventsCalculation.calculateSetWithin24h(moon, t, locationOnTheEarth, true, AstronomicalEventsCalculation.ReferencePoint.TOP);
+                    Instant moonriseCandidate = AstronomicalEventsCalculation.calculateRiseWithin24h(moon, t, locationOnTheEarth, true, AstronomicalEventsCalculation.ReferencePoint.CENTER);
+                    Instant moonsetCandidate = AstronomicalEventsCalculation.calculateSetWithin24h(moon, t, locationOnTheEarth, true, AstronomicalEventsCalculation.ReferencePoint.CENTER);
 
                     if (moonriseCandidate != null || moonsetCandidate != null) {
                         if (moonriseCandidate != null && moonsetCandidate != null) {
