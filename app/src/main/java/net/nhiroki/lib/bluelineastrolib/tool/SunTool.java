@@ -1,6 +1,6 @@
 package net.nhiroki.lib.bluelineastrolib.tool;
 
-import net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects.Sun;
+import net.nhiroki.lib.bluelineastrolib.astronomicalobjects.objects.Sun;
 import net.nhiroki.lib.bluelineastrolib.exceptions.AstronomicalPhenomenonComputationException;
 
 import java.time.Instant;

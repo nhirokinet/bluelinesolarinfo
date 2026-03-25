@@ -1,9 +1,9 @@
 package net.nhiroki.lib.bluelineastrolib.test_data;
 
-import net.nhiroki.lib.bluelineastrolib.astronomical_objects.AstronomicalObject;
-import net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects.FixedStar;
-import net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects.Moon;
-import net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects.Sun;
+import net.nhiroki.lib.bluelineastrolib.astronomicalobjects.AstronomicalObject;
+import net.nhiroki.lib.bluelineastrolib.astronomicalobjects.objects.FixedStar;
+import net.nhiroki.lib.bluelineastrolib.astronomicalobjects.objects.Moon;
+import net.nhiroki.lib.bluelineastrolib.astronomicalobjects.objects.Sun;
 import net.nhiroki.lib.bluelineastrolib.coordinates.CelestialCoordinatesWithRightAscension;
 
 

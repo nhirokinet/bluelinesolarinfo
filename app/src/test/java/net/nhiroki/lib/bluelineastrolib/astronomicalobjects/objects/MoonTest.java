@@ -1,4 +1,4 @@
-package net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects;
+package net.nhiroki.lib.bluelineastrolib.astronomicalobjects.objects;
 
 import static org.junit.Assert.assertEquals;
 

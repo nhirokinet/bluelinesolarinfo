@@ -1,4 +1,4 @@
-package net.nhiroki.lib.bluelineastrolib.astronomical_objects;
+package net.nhiroki.lib.bluelineastrolib.astronomicalobjects;
 
 import net.nhiroki.lib.bluelineastrolib.coordinates.CelestialCoordinatesWithRightAscension;
 import net.nhiroki.lib.bluelineastrolib.exceptions.AstronomicalPhenomenonComputationException;

@@ -2,7 +2,7 @@ package net.nhiroki.lib.bluelineastrolib.coordinates;
 
 import static java.lang.Double.NaN;
 
-import net.nhiroki.lib.bluelineastrolib.astronomical_objects.AstronomicalObject;
+import net.nhiroki.lib.bluelineastrolib.astronomicalobjects.AstronomicalObject;
 import net.nhiroki.lib.bluelineastrolib.earth.TimePointOnTheEarth;
 import net.nhiroki.lib.bluelineastrolib.exceptions.AstronomicalPhenomenonComputationException;
 import net.nhiroki.lib.bluelineastrolib.exceptions.UnsupportedDateRangeException;

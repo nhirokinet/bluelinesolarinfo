@@ -2,8 +2,8 @@ package net.nhiroki.lib.bluelineastrolib.coordinates;
 
 import static org.junit.Assert.*;
 
-import net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects.Moon;
-import net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects.Sun;
+import net.nhiroki.lib.bluelineastrolib.astronomicalobjects.objects.Moon;
+import net.nhiroki.lib.bluelineastrolib.astronomicalobjects.objects.Sun;
 import net.nhiroki.lib.bluelineastrolib.exceptions.AstronomicalPhenomenonComputationException;
 import net.nhiroki.lib.bluelineastrolib.exceptions.UnsupportedDateRangeException;
 import net.nhiroki.lib.bluelineastrolib.logic.AstronomicalEventsCalculation;

@@ -1,6 +1,6 @@
 package net.nhiroki.lib.bluelineastrolib.logic;
 
-import net.nhiroki.lib.bluelineastrolib.astronomical_objects.AstronomicalObject;
+import net.nhiroki.lib.bluelineastrolib.astronomicalobjects.AstronomicalObject;
 import net.nhiroki.lib.bluelineastrolib.coordinates.CelestialCoordinatesWithHourAngle;
 import net.nhiroki.lib.bluelineastrolib.coordinates.CelestialCoordinatesWithRightAscension;
 import net.nhiroki.lib.bluelineastrolib.coordinates.HorizontalCoordinatesFromTheCenterOfTheEarth;
