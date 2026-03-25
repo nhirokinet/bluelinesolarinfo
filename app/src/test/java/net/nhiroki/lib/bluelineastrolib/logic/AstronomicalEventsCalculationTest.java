@@ -9,9 +9,9 @@ import java.time.ZonedDateTime;
 
 import org.junit.Test;
 
-import net.nhiroki.lib.bluelineastrolib.astronomical_objects.AstronomicalObject;
-import net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects.FixedStar;
-import net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects.Moon;
+import net.nhiroki.lib.bluelineastrolib.astronomicalobjects.AstronomicalObject;
+import net.nhiroki.lib.bluelineastrolib.astronomicalobjects.objects.FixedStar;
+import net.nhiroki.lib.bluelineastrolib.astronomicalobjects.objects.Moon;
 import net.nhiroki.lib.bluelineastrolib.coordinates.HorizontalCoordinatesFromGround;
 import net.nhiroki.lib.bluelineastrolib.earth.Earth;
 import net.nhiroki.lib.bluelineastrolib.earth.TimePointOnTheEarth;
@@ -19,7 +19,7 @@ import net.nhiroki.lib.bluelineastrolib.exceptions.AstronomicalPhenomenonComputa
 import net.nhiroki.lib.bluelineastrolib.exceptions.UnsupportedDateRangeException;
 import net.nhiroki.lib.bluelineastrolib.test_data.AstronomicalObjectsForTest;
 import net.nhiroki.lib.bluelineastrolib.coordinates.LocationOnTheEarth;
-import net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects.Sun;
+import net.nhiroki.lib.bluelineastrolib.astronomicalobjects.objects.Sun;
 import net.nhiroki.lib.bluelineastrolib.test_data.LocationsForTest;
 
 import static org.junit.Assert.*;

@@ -1,10 +1,10 @@
-package net.nhiroki.lib.bluelineastrolib.astronomical_objects.objects;
+package net.nhiroki.lib.bluelineastrolib.astronomicalobjects.objects;
 
 import net.nhiroki.lib.bluelineastrolib.coordinates.CelestialCoordinatesWithRightAscension;
 import net.nhiroki.lib.bluelineastrolib.coordinates.EclipticCoordinates;
 import net.nhiroki.lib.bluelineastrolib.earth.Earth;
 import net.nhiroki.lib.bluelineastrolib.earth.TimePointOnTheEarth;
-import net.nhiroki.lib.bluelineastrolib.astronomical_objects.AstronomicalObject;
+import net.nhiroki.lib.bluelineastrolib.astronomicalobjects.AstronomicalObject;
 import net.nhiroki.lib.bluelineastrolib.exceptions.AstronomicalPhenomenonComputationException;
 import net.nhiroki.lib.bluelineastrolib.exceptions.UnsupportedDateRangeException;
 
