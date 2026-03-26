@@ -120,6 +120,9 @@ public class TimePointOnTheEarth {
         double D_UT_TIMEOFDAY = D_UT - D_UT_INT;
 
         // Greenwich mean sidereal time
+        // This function handles D_UT_INT and D_UT_TIMEOFDAY separately, but the jump when jumping the "day" is less than 0.01 seconds:
+        //   (1.0027379 * 24.0 - 24.0 - 0.065707485828) * 3600
+        //   .007611019200
         double gsmtHours = 6.697375 + 0.065707485828 * D_UT_INT + 1.0027379 * 24.0 * D_UT_TIMEOFDAY + 0.0854103 * T + 0.0000258 * T * T;
         gsmtHours -= 24.0 * Math.floor(gsmtHours / 24.0);
 

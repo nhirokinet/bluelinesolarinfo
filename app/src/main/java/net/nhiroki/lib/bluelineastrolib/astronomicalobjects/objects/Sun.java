@@ -96,6 +96,10 @@ public class Sun implements AstronomicalObject {
         double D = new TimePointOnTheEarth(t).julianYearFromJ2000_0() * 365.25;
         double g = Math.toRadians(357.529 + 0.98560028 * D);
         double q = 280.459 + 0.98564736 * D;
+
+        // Differentiation of this formula:
+        //   deg per day: 0.98564736 + 1.915 * toRadian(0.98560028) * cos(g) + 2 * 0.020 * toRadian(0.98560028) * cos(2g)
+        //              : 0.98564736 + 0.03294177 * cos(g) + 0.000688078 * cos(2g)
         double L = q + 1.915 * Math.sin(g) + 0.020 * Math.sin(2.0 * g);
 
         L -= 360.0 * Math.floor(L / 360.0);
