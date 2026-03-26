@@ -192,6 +192,10 @@ public class Moon implements AstronomicalObject {
         retDeg += 6.2888 * Math.cos(Math.toRadians( 477198.868 * T +  44.963));
         retDeg += 218.3162 + 481267.8809 * T;
 
+        // Differentiation of this function:
+        //   deg per julian century: 481267.8809 + 6.2888 * toRadians(477198.868) * sin(~) + much smaller items
+        //   deg oer day: 13.17637234 + 1.434017103 * sin(~) + much smaller items
+        //   which is always larger than 0
         retDeg -= Math.floor(retDeg / 360.0) * 360.0;
 
         return retDeg;
@@ -257,6 +261,35 @@ public class Moon implements AstronomicalObject {
         retDeg += 0.2777 * Math.cos(Math.toRadians(   6003.15 * T +  48.31));
         retDeg += 0.2806 * Math.cos(Math.toRadians( 960400.89 * T + 138.24));
         retDeg += 5.1281 * Math.cos(Math.toRadians( 483202.019 * T +   3.273));
+
+        // Differentiation of this function:
+        //   deg per julian century: 5.1281 * toRadians(483202.019) * sin(~) + much smaller items
+        //   deg per day: 1.184056 * sin(~) + much smaller items
+        //
+        // And for analysis of peaks and valleys,
+        //   if the argument for cos in the largest 5.1281deg line is 0 degree or 180 degrees at time t,
+        //   in bc:
+        //     5.1281*(1-c(483202.019*0.5/36525*3.14159265358979/180))
+        //     .03413625290975240256
+        //     5.1281*(1-c(483202.019*0.5/36525*3.14159265358979/180))*60
+        //     2.04817517458514415360
+        //   at t +/- 12 hours, the result might have up to 2.05 arcminutes + much smaller items.
+        //   at t +/- 6 hours, the result might have up to 30.75 arcseconds + much smaller items.
+        //   Therefore, if the caller checks the ecliptic latitude for the term of both for start and end, and both did not cross the desired line,
+        //     there may be peak or valley of:
+        //       about a little more than 2 arcminutes if the term is 24 hours (up to 12 hours from the peak or the valley)
+        //       about 31 arcseconds if the term is 12 hours (up to 6 hours from the peak or the valley)
+        // Note is that this is about ecliptic latitude, so the effect of ecliptic tilt should also be considered.
+        //    in bc:
+        //      23.4*(1-c(0.5/3.14159265358979/180))*60
+        //      .00054882304230688260
+        //      23.4*s(0.5/3.14159265358979/180)*60
+        //      1.24140839436141018180
+        //    It looks like the peaks or valleys can be ignored. It's about 0.03 arcsecond.
+        //    It looks like the increase or decrease in case the declination is near 0 deg cannot eliminate this peak or valley.
+        // In computation of rise/set in current logic, if this 2 arcminutes difference would matter whether the line crosses the specified or not, it would affect the result.
+        //    However, actually, first computation is done 12h, so if the difference is less tha about 30 arcsecseconds, the calculation should start with the line of possibility.
+        //    The moon goes around every about 25 hours, so in my understandings actual error to miss rise/set would be about 30 arcseconds or like that just for computation logic, which is larger than just the precision of computing the location.
 
         return retDeg;
     }
